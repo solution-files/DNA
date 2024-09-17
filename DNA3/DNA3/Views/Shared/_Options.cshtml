@@ -1,0 +1,35 @@
+﻿<div id="optionsModal" class="modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Report Options</h5>
+				<div class="ml-auto">
+					<button type="button" class="btn btn-tool btn-sm" form="Parameters">
+						<i class="far fa-envelope" title="Attach and Send"></i>
+					</button>
+					<button type="button" class="btn btn-tool btn-sm" form="Parameters">
+						<i class="fas fa-magnifying-glass" title="Preview Report"></i>
+					</button>
+					<button type="button" class="btn btn-tool btn-sm" form="Parameters">
+						<i class="fas fa-print" title="Print Report"></i>
+					</button>
+					<a asp-action="Close" class="btn btn-tool btn-sm" data-dismiss="modal" aria-label="Close">
+						<i class="fas fa-xmark" title="Close Dialog"></i>
+					</a>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="row mb-0">
+					<div class="col-lg-6">
+						<form id="Parameters" asp-action="#" autocomplete="off">
+							<div class="form-group">
+								<label for="Code">Filter</label>
+								<input name="Code" id="Filter" class="form-control" placeholder="Filter Text" autofocus>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

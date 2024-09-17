@@ -1,0 +1,76 @@
+﻿@model IList<Activity>
+@{
+	Layout = "_Dashboard";
+	string Title = "Report";
+}
+@section CSS {
+	<style>
+		#reportViewer1 {
+			position: absolute;
+			left: 0px;
+			right: 0px;
+			top: 0px;
+			bottom: 0px;
+			overflow: hidden;
+			font-family: Verdana, Arial;
+		}
+	</style>
+}
+@section Scripts {
+
+	<script src="/api/reports/resources/js/telerikReportViewer"></script>
+	<script>
+		$(document).ready(function () {
+			$("#reportViewer1")
+				.telerik_ReportViewer({
+					serviceUrl: "/api/reports",
+					reportSource: {
+						report: "Timeline.trdp",
+						parameters: {}
+					},
+					viewMode: telerikReportViewer.ViewModes.PRINT_PREVIEW,
+					scaleMode: telerikReportViewer.ScaleModes.SPECIFIC,
+					scale: 1.0,
+					enableAccessibility: false,
+					sendEmail: { enabled: true }
+				});
+		});
+	</script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>@Title Manager</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">@Title Viewer</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+        <partial name="_Messages" />
+        <div class="card" style="height:1000px;">
+			<div class="card-body">
+				<div id="reportViewer1">
+					loading...
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+<!-- /.content-wrapper -->
+
+<!-- Report Options Dialog -->
+<partial name="_Options" />

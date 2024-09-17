@@ -1,0 +1,216 @@
+﻿@model Client
+@{
+	Layout = "_Dashboard";
+	string Title = "Client";
+}
+@section CSS {
+
+}
+@section Scripts {
+
+	<!-- Automated Form Validation -->
+	<script src="~/common/plugins/jquery-validate/jquery.validate.min.js"></script>
+	<script src="~/common/plugins/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+	<script>
+
+		// Copy Address to Clipboard
+		function CopyAddressToClipboard() {
+			navigator.clipboard.writeText(
+				$('#Company').val().toUpperCase() + '\n' +
+				$('#Address1').val() + '\n' +
+				$('#City').val() + ', ' + $('#State').val() + '  ' + $('#Zip').val()
+			);
+		}
+
+		// CopyToClipboard
+		function CopyToClipboard(element) {
+			navigator.clipboard.writeText($(element).val());
+		}
+
+		// Copy Phone to Clipboard with Formatting
+		function CopyPhoneToClipboard() {
+			navigator.clipboard.writeText($('#Phone').val());
+		}
+
+		// Copy Phone to Clipboard without Formatting
+		function CopyPhoneToClipboardUnformatted() {
+			navigator.clipboard.writeText($('#Phone').val().replace(/\D/g, ''));
+		}
+
+	</script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>@Title Detail</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">@Title Detail</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="container-fluid">
+			<partial name="_Messages" />
+			<div class="row">
+				<!-- left column -->
+				<div class="col-md-6">
+					<partial name="_Messages" />
+					<!-- general form elements -->
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">@Title</h3>
+							<div class="card-tools">
+								<button asp-action="Save" form="Master" class="btn btn-tool btn-sm">
+									<i class="far fa-floppy-disk"></i>
+								</button>
+								<button asp-action="Delete" form="Master" class="btn btn-tool btn-sm">
+									<i class="far fa-trash-can"></i>
+								</button>
+								<button asp-controller="User" asp-action="Index" asp-route-id="@Model.ClientId" form="Master" class="btn btn-tool btn-sm">
+									<i class="fas fa-users"></i>
+								</button>
+								<a href="/report/viewer.html?Report=Client.trdp" class="btn btn-tool btn-sm" target="_blank">
+									<i class="fas fa-print"></i>
+								</a>
+								<button asp-area="Dashboard" asp-controller="Client" asp-action="Verify" form="Master" class="btn btn-tool btn-sm">
+									<i class="fas fa-envelope" title="Verify Address"></i>
+								</button>
+								<a asp-action="Index" class="btn btn-tool btn-sm">
+									<i class="fas fa-xmark"></i>
+								</a>
+							</div>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						<form asp-action="#" id="Master">
+							<div class="card-body">
+								<div class="row mb-0">
+									<div class="col-lg-8">
+										<div class="form-group">
+											<label asp-for="Company">@Html.DisplayNameFor(x => x.Company)</label>
+											<input asp-for="Company" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Company)" spellcheck="false" autofocus>
+											<span asp-validation-for="Company" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="form-group">
+											<label asp-for="Avitar">@Html.DisplayNameFor(x => x.Avitar)</label>
+											<input asp-for="Avitar" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Avitar)" spellcheck="false">
+											<span asp-validation-for="Avitar" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-lg-8">
+										<div class="form-group">
+											<label asp-for="Address1">@Html.DisplayNameFor(x => x.Address1)</label>
+											<div class="input-group mb-3">
+												<input asp-for="Address1" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Address1)" data-lpignore="true" autocomplete="off" spellcheck="false">
+												<div class="input-group-append">
+													<div id="copyaddress" class="input-group-text bg-primary" onclick="CopyAddressToClipboard();"><span class="far fa-copy" title="Copy to Clipboard"></span></div>
+												</div>
+											</div>
+											<span asp-validation-for="Address1" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="form-group">
+											<label asp-for="Phone">@Html.DisplayNameFor(x => x.Phone)</label>
+											<div class="input-group mb-3">
+												<input asp-for="Phone" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Phone)" data-lpignore="true" autocomplete="off" spellcheck="false">
+												<div class="input-group-append">
+													<div id="copyphonef" class="input-group-text bg-primary" onclick="CopyPhoneToClipboard();"><span class="fas fa-copy" title="Copy with formatting"></span></div>
+													<div id="copyphoneuf" class="input-group-text bg-primary" onclick="CopyPhoneToClipboardUnformatted();"><span class="far fa-copy" title="Copy without formatting"></span></div>
+												</div>
+											</div>
+											<span asp-validation-for="Phone" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-lg-8">
+										<div class="form-group">
+											<label asp-for="Address2">@Html.DisplayNameFor(x => x.Address2)</label>
+											<input asp-for="Address2" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Address2)" spellcheck="false">
+											<span asp-validation-for="Address2" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="form-group">
+											<label asp-for="StatusId" class="mr-2">@Html.DisplayNameFor(x => x.StatusId)</label>
+											<a asp-controller="Status" asp-action="New" class="small mr-2">New</a><a asp-controller="Status" asp-action="Edit" asp-route-id="StatusId" class="small">Edit</a>
+											<select asp-for="StatusId" class="form-control" asp-items="@(new SelectList(ViewBag.StatusList, "StatusId", "Name"))" placeholder="@Html.DisplayNameFor(model => model.StatusId)" data-lpignore="true" autocomplete="off" spellcheck="false">
+												<option value="">Select Status</option>
+											</select>
+											<span asp-validation-for="StatusId" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label asp-for="City">@Html.DisplayNameFor(x => x.City)</label>
+											<input asp-for="City" class="form-control" placeholder="@Html.DisplayNameFor(x => x.City)" spellcheck="false">
+											<span asp-validation-for="City" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="form-group">
+											<label asp-for="State">@Html.DisplayNameFor(x => x.State)</label>
+											<input asp-for="State" class="form-control" placeholder="@Html.DisplayNameFor(x => x.State)" spellcheck="false">
+											<span asp-validation-for="State" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="form-group">
+											<label asp-for="Zip">@Html.DisplayNameFor(x => x.Zip)</label>
+											<input asp-for="Zip" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Zip)" spellcheck="false">
+											<span asp-validation-for="Zip" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="form-group">
+											<label asp-for="Zip1">@Html.DisplayNameFor(x => x.Zip1)</label>
+											<input asp-for="Zip1" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Zip1)" spellcheck="false">
+											<span asp-validation-for="Zip1" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-12">
+										<div class="form-group">
+											<label asp-for="Comment">@Html.DisplayNameFor(x => x.Comment)</label>
+											<input asp-for="Comment" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Comment)" spellcheck="false">
+											<span asp-validation-for="Comment" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<input asp-for="ClientId" type="hidden" />
+							<!-- /.card-body -->
+						</form>
+					</div>
+					<!-- /.card -->
+				</div>
+				<!-- / Left Column -->
+			</div>
+			<!-- / Row -->
+		</div>
+		<!-- Container Fluid -->
+	</section>
+</div>
+<!-- / Content Wrapper -->

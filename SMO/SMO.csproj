@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+		<ApplicationIcon />
+		<OutputType>Library</OutputType>
+		<StartupObject />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="171.30.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DNA3\DNA3\DNA3.csproj" />
+	  <ProjectReference Include="..\Utilities\Utilities.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,132 @@
+﻿@{
+	Layout = "_Dashboard";
+	string Title = "Upload";
+	string Plural = "Upload";
+	var asyncSettings = new Syncfusion.EJ2.Inputs.UploaderAsyncSettings { SaveUrl = "/Service/Customer/UploadFiles", ChunkSize = 500000 };
+
+}
+@section CSS {
+
+	<style>
+		.control_wrapper {
+			max-width: 800px;
+			margin: auto;
+		}
+
+		.e-upload {
+			width: 100%;
+			position: relative;
+			margin-top: 15px;
+		}
+
+		.control_wrapper .e-upload .e-upload-drag-hover {
+			margin: 0;
+		}
+	</style>
+
+}
+@section Scripts {
+
+	<script>
+		function onFileRemove(args) {
+			args.postRawFile = false;
+		}
+
+		var dropElement = document.getElementsByClassName('control-fluid')[0];
+
+		function onChange(args) {
+			var uploadObj = document.getElementById("UploadFiles")
+			uploadObj.ej2_instances[0].autoUpload = args.checked;
+			uploadObj.ej2_instances[0].clearAll();
+		}
+
+		function onChanged(args) {
+			var uploadObj = document.getElementById("UploadFiles")
+			uploadObj.ej2_instances[0].sequentialUpload = args.checked;
+			uploadObj.ej2_instances[0].clearAll();
+		}
+
+	</script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>@Title Manager</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">@Title Files</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<partial name="_Messages" />
+		<div class="card card-primary">
+			<div class="card-header border-0">
+				<h3 class="card-title">@Plural</h3>
+				<div class="card-tools">
+					<a asp-action="New" class="btn btn-tool btn-sm">
+						<i class="fa-regular fa-file" title="New Document"></i>
+					</a>
+					<a class="btn btn-tool btn-sm" onclick="DeleteSelected()">
+						<i class="fa-solid fa-trash" title="Delete Selected"></i>
+					</a>
+					<a class="btn btn-tool btn-sm" data-toggle="modal" data-target="#optionsModal">
+						<i class="fas fa-magnifying-glass" title="Find"></i>
+					</a>
+					<a asp-controller="Vendor" asp-action="UploadFiles" class="btn btn-tool btn-sm">
+						<i class="fas fa-file-import" title="Import from Excel"></i>
+					</a>
+					<a asp-controller="Vendor" asp-action="Edit" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("VendorId")" class="btn btn-tool btn-sm">
+						<i class="fas fa-xmark" title="Close"></i>
+					</a>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-lg-8 control-section">
+						<div class="control_wrapper">
+							<form method="post" enctype="multipart/form-data" asp-controller="Customer" asp-action="UploadFiles" id="Uploader">
+								<div class="form-group">
+									<div class="col-md-10">
+										<input type="file" name="UploadFiles" multiple />
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-md-10">
+										<button type="submit" class="btn btn-primary">Upload</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="col-lg-4 property-section">
+						<div id="property" title="Properties">
+							<div style="margin-left: 50px; padding-top:25px;">
+								@*<ejs-checkbox id="checkAutoUpload" label="Auto Upload" checked="false" change="onChange"></ejs-checkbox>*@
+							</div>
+							<div style="margin-left: 50px; padding-top:25px;">
+								@*<ejs-checkbox id="sequentialUpload" label="Sequential Upload" checked="false" change="onChanged"></ejs-checkbox>*@
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<form asp-action="#" id="Master">
+			</form>
+			<!-- /.card-body -->
+		</div>
+	</section>
+</div>
+<!-- /.content-wrapper -->

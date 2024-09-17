@@ -1,0 +1,60 @@
+﻿<!-- Index Pages (New, Delete, Find, Print, Others ..., Close) -->
+<a asp-action="New" class="btn btn-tool btn-sm">
+	<i class="fa-regular fa-file" title="New Document"></i>
+</a>
+<a class="btn btn-tool btn-sm" onclick="DeleteSelected()">
+	<i class="fa-solid fa-trash" title="Delete Selected"></i>
+</a>
+<a class="btn btn-tool btn-sm" data-toggle="modal" data-target="#optionsModal">
+	<i class="fas fa-magnifying-glass" title="Find"></i>
+</a>
+<button asp-area="Service" asp-controller="Customer" asp-action="Import" class="btn btn-tool btn-sm" form="Master">
+	<i class="fas fa-file-import" title="Import from Excel"></i>
+</button>
+<button asp-area="Service" asp-controller="Customer" asp-action="PureSelects" class="btn btn-tool btn-sm" form="Master">
+	<i class="fas fa-leaf" title="Reconcile Pure Selects"></i>
+</button>
+<a href="#" class="btn btn-tool btn-sm" onclick="ExportToExcel()">
+	<i class="fas fa-file-excel" title="Export to Excel"></i>
+</a>
+<a href="#" class="btn btn-tool btn-sm" onclick="ExportToPDF()">
+	<i class="fas fa-file-pdf" title="Export to PDF"></i>
+</a>
+<a href="#" class="btn btn-tool btn-sm">
+	<i class="fas fa-envelope" title="E-Mail Report"></i>
+</a>
+<a href="/report/viewer.html?Report=Customers.trdp" class="btn btn-tool btn-sm" target="_blank">
+	<i class="fas fa-print" title="Preview Report"></i>
+</a>
+<a asp-action="Close" class="btn btn-tool btn-sm">
+	<i class="fas fa-xmark" title="Close"></i>
+</a>
+
+<!-- Detail Pages (Save, Delete, Print, E-Mail, Others ..., Close) -->
+<button asp-area="Service" asp-controller="Customer" asp-action="Save" form="Master" class="btn btn-tool btn-sm">
+	<i class="far fa-floppy-disk" title="Save Record"></i>
+</button>
+<button asp-area="Service" asp-controller="Customer" asp-action="Delete" form="Master" class="btn btn-tool btn-sm">
+	<i class="far fa-trash-can" title="Delete Record"></i>
+</button>
+<button asp-area="Service" asp-controller="Workorder" asp-action="Index" asp-route-id="@Model.CustomerId" form="Master" class="btn btn-tool btn-sm">
+	<i class="fas fa-toolbox" title="Workorder History"></i>
+</button>
+<button asp-area="Service" asp-controller="Commission" asp-action="Index" asp-route-id="@Model.CustomerId" form="Master" class="btn btn-tool btn-sm">
+	<i class="fas fa-user-tie" title="Commission"></i>
+</button>
+<button asp-area="Service" asp-controller="History" asp-action="Index" asp-route-id="@Model.CustomerId" form="Master" class="btn btn-tool btn-sm">
+	<i class="fas fa-link" title="Call History"></i>
+</button>
+<a href="/report/viewer.html?Report=Envelope.trdp&RecordID=@Model.CustomerId" class="btn btn-tool btn-sm" target="_blank">
+	<i class="fas fa-envelopes-bulk" title="Preview Envelope"></i>
+</a>
+<a href="/report/viewer.html?Report=Installation Order.trdp&RecordID=@Model.CustomerId" class="btn btn-tool btn-sm" target="_blank">
+	<i class="fas fa-print" title="Preview Installation Order"></i>
+</a>
+<button asp-area="Service" asp-controller="Customer" asp-action="Verify" form="Master" class="btn btn-tool btn-sm">
+	<i class="fas fa-envelope" title="Verify Address"></i>
+</button>
+<a asp-action="Index" class="btn btn-tool btn-sm">
+	<i class="fas fa-xmark" title="Close"></i>
+</a>

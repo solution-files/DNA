@@ -1,0 +1,175 @@
+﻿@model DNA3.Models.Cart
+@using DNA3.Models;
+@{
+	Layout = "_Dashboard";
+}
+
+@section CSS {
+
+}
+
+@section Scripts {
+
+	<script src="~/common/plugins/jquery-validate/jquery.validate.js"></script>
+	<script src="~/common/plugins/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+	<script>
+		function ExportToPDF() {
+			try {
+				$("#CartGrid").data("kendoGrid").saveAsPDF();
+			} catch (ex) {
+				alert(ex);
+			}
+		}
+
+		function ExportToExcel() {
+			try {
+				$("#CartGrid").data("kendoGrid").saveAsExcel();
+			} catch (ex) {
+				alert(ex);
+			}
+		}
+	</script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>Shopping Cart</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">Shopping Cart</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="container-fluid">
+			<partial name="_Messages" />
+			<div class="row">
+				<!-- left column -->
+				<div class="col-md-8">
+					<!-- general form elements -->
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">
+								Current Order (
+								@if (Model.Items.Count == 1) {
+									@:1 Item
+								} else {
+									@Model.Items.Count @:Items
+								}
+								)
+							</h3>
+							<div class="card-tools">
+								<button asp-controller="Config" asp-action="Save" form="Master" class="btn btn-tool btn-sm">
+									<i class="far fa-floppy-disk"></i>
+								</button>
+								<a href="/report/viewer.html?Report=Shopping Cart.trdp" formaction="Master" class="btn btn-tool btn-sm" target="_blank">
+									<i class="fas fa-print"></i>
+								</a>
+								<button asp-action="Close" form="Master" class="btn btn-tool btn-sm">
+									<i class="fas fa-xmark"></i>
+								</button>
+							</div>
+						</div>
+						<!-- /.card-header -->
+						<!-- Card Body -->
+						<div class="card-body">
+							@if (Model.Items.Count() > 0) {
+								@foreach (Item item in Model.Items) {
+									<div class="row d-flex align-items-baseline bg-white">
+										<div class="col-6">
+											<h5 class="text-success mb-2 mr-2"><a asp-controller="Products" asp-action="Detail" asp-route-id="@item.ProductId">@item.Product.Name</a></h5>
+											<p class="text-muted d-none d-lg-block">@item.Product.Description</p>
+										</div>
+										<div class="col-2 text-center">
+											<a asp-controller="Cart" asp-action="Configure" asp-route-id="@item.ItemId">
+												<span><i class="fa-solid fa-gear mr-2" title="Configure"></i></span>
+											</a>
+											<a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.ItemId">
+												<span><i class="fa-regular fa-trash-can mr-2" title="Remove"></i></span>
+											</a>
+										</div>
+										<div class="col-1 text-right">
+											<h5>@item.Quantity</h5>
+										</div>
+										<div class="col-3 text-right">
+											<h5>@(item.Product.Price * item.Quantity)</h5>
+										</div>
+									</div>
+								}
+							} else {
+								<div class="row d-flex align-items-baseline bg-white">
+									<div class="col-6">
+										<h5 class="text-success mb-2 mr-2">Your cart is currently empty</h5>
+									</div>
+									<div class="col-2 text-center">
+										<span><i class="fa-solid fa-gear mr-2" title="Configure"></i></span>
+										<span><i class="fa-regular fa-trash-can mr-2" title="Remove"></i></span>
+									</div>
+									<div class="col-1 text-right">
+										<h5>0</h5>
+									</div>
+									<div class="col-3 text-right">
+										<h5>0.00</h5>
+									</div>
+								</div>
+							}
+						</div>
+						<!-- / Card Body-->
+						<!-- Card Footer -->
+						<div class="card-footer d-flex">
+							<span><a href="/home#pricing" class="text-muted my-2"><i class="fa-solid fa-left-long mr-2"></i>Continue Shopping</a></span>
+							<span class="ml-auto"><a asp-controller="Cart" asp-action="Empty" class="text-muted"><i class="fa-regular fa-trash-can mr-2"></i>Empty Cart</a></span>
+						</div>
+						<!-- / Card Footer -->
+					</div>
+					<!-- /.card -->
+				</div>
+				<!-- / Left Column -->
+				<!-- Right Column -->
+				<div class="col-md-4">
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">Cart Summary</h3>
+						</div>
+						<div class="card-body text-center">
+							<h2 class="mb-2">@ViewBag.Total.ToString("C2")</h2>
+							<p class="text-muted small">* Tax will be applied in regions where applicable. This includes but is not limited to the United States, France, and Germany</p>
+						</div>
+						<div class="card-footer d-flex justify-content-center align-items-center">
+							<a asp-controller="Checkout" asp-action="Index" class="btn btn-primary">
+								<i class="fa-solid fa-cart-shopping me-2"></i>Checkout
+							</a>
+						</div>
+					</div>
+					<div class="card card-primary">
+						<div class="card-header">
+							<h5 class="card-title">Support</h5>
+						</div>
+						<div class="card-body d-flex flex-column justify-content-center align-items-center">
+							<h3><i class="fa-solid fa-phone mr-2 mb-3"></i>@Configuration["App:Phone"]</h3>
+							<p class="text-muted text-center small">Please contact us if you have any questions or concerns. You can also reach us via <email to="support">E-Mail</email></p>
+						</div>
+					</div>
+
+				</div>
+				<!-- / Right Column -->
+			</div>
+			<!-- / Row -->
+		</div>
+		<!-- Container Fluid -->
+	</section>
+</div>
+<!-- / Content Wrapper -->

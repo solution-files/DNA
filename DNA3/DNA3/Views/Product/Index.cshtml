@@ -1,0 +1,96 @@
+﻿@model IList<Product>
+@{
+	Layout = "_Dashboard";
+	string Title = "Product";
+}
+@section CSS {
+
+}
+@section Scripts {
+
+	<script>
+
+        function SetFilterOptions() {
+            try {
+                $.ajax({
+                    type: 'GET',
+                    url: '/product',
+                    data: { Criteria: $('#FilterOptions').val() },
+                    success: function (htmlresponse) {
+                        location.reload();
+                    }
+                });
+            } catch (ex) {
+                alert(ex);
+            }
+        }
+
+        function ProductGridRowSelected(args) {
+            window.location.href = '@Url.Action("Edit", "Product")/' + args.data.ProductId;
+        }
+
+        function ExportToExcel() {
+            var gridObj = document.getElementById("ProductGrid").ej2_instances[0];
+            gridObj.excelExport();
+        }
+
+        function ExportToPDF() {
+            var gridObj = document.getElementById("ProductGrid").ej2_instances[0];
+            gridObj.pdfExport();
+        }
+
+
+	</script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>@Title Manager</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">@Title Manager</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+        <partial name="_Messages" />
+        <div class="card card-primary">
+			<div class="card-header border-0">
+				<h3 class="card-title">Products</h3>
+				@await Html.PartialAsync("_Tools", new { Report = "Products.trdp" })
+			</div>
+			<div class="card-body">
+				@if (Model.Count() == 0) {
+					<emptyresult icon="fa-solid fa-server"></emptyresult>
+				} else {
+                    <ejs-grid id="ProductGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" rowSelected="ProductGridRowSelected">
+                        <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
+                        <e-grid-columns>
+                            <e-grid-column field="Code" headerText="Code" textAlign="Left" width="120"></e-grid-column>
+                            <e-grid-column field="Name" headerText="Name" textAlign="Left" width="120"></e-grid-column>
+                            <e-grid-column field="Targetname" headerText="Target" textAlign="Left" width="120"></e-grid-column>
+                            <e-grid-column field="Price" headerText="Price" textAlign="Right" width="120"></e-grid-column>
+                            <e-grid-column field="Status.Name" headerText="Status"></e-grid-column>
+                        </e-grid-columns>
+                    </ejs-grid>
+				}
+			</div>
+		</div>
+	</section>
+</div>
+<!-- /.content-wrapper -->
+
+<!-- Report Options Dialog -->
+<partial name="_Options" />

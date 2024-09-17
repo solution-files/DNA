@@ -1,0 +1,91 @@
+﻿@model IList<DNA3.Models.Menu>
+@{
+    Layout = "_Dashboard";
+    string Title = "Menu";
+}
+@section CSS {
+
+}
+@section Scripts {
+
+    <script>
+
+        function MenuGridRowSelected(args) {
+            window.location.href = '@Url.Action("Edit", "Menu")/' + args.data.MenuId;
+        }
+
+        function ExportToExcel() {
+            var gridObj = document.getElementById("MenuGrid").ej2_instances[0];
+            gridObj.excelExport();
+        }
+
+        function ExportToPDF() {
+            var gridObj = document.getElementById("MenuGrid").ej2_instances[0];
+            gridObj.pdfExport();
+        }
+
+
+    </script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>@Title Manager</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Menu Manager</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <partial name="_Messages" />
+        <div class="card card-primary">
+            <div class="card-header border-0">
+                <h3 class="card-title">Menus</h3>
+                @await Html.PartialAsync("_Tools", new { Report = "Menus.trdp" })
+            </div>
+            <div class="card-body">
+                @if (Model.Count() == 0) {
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td style="border: none;"></td>
+                                <td style="border: none; text-align: center;"><i class="fa-solid fa-bars fa-10x"></i></td>
+                                <td style="border: none;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: none;"></td>
+                                <td style="border: none;" class="text-center font-size-18">No entries found. Click the button above to get started.</td>
+                                <td style="border: none;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                } else {
+                    <ejs-grid id="MenuGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" rowSelected="MenuGridRowSelected">
+                        <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
+                        <e-grid-columns>
+                            <e-grid-column field="MenuId" headerText="Menu" textAlign="Left" width="120"></e-grid-column>
+                            <e-grid-column field="Code" headerText="Code" textAlign="Left" width="120"></e-grid-column>
+                            <e-grid-column field="Name" headerText="Name"></e-grid-column>
+                        </e-grid-columns>
+                    </ejs-grid>
+                }
+            </div>
+        </div>
+    </section>
+</div>
+<!-- /.content-wrapper -->
+<!-- Report Options Dialog -->
+<partial name="_Options" />

@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "fontawesome-iconpicker@3.2.0",
+      "destination": "wwwroot/common/plugins/fontawesome-iconpicker/"
+    },
+    {
+      "library": "microsoft-signalr@7.0.2",
+      "destination": "wwwroot/common/plugins/microsoft-signalr/"
+    },
+    {
+      "library": "toastr.js@2.1.4",
+      "destination": "wwwroot/common/plugins/toastr.js/"
+    }
+  ]
+}

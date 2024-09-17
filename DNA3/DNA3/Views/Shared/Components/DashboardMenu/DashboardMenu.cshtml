@@ -1,0 +1,22 @@
+﻿@model DNA3.Models.Menu
+<li class="nav-item">
+	<a href="#" class="nav-link">
+		<i class="nav-icon @Html.Render(Model.Icon)"></i>
+		<p>
+			@Html.Render(Model.TargetName)
+			<i class="right fas fa-angle-left"></i>
+		</p>
+	</a>
+	<ul class="nav nav-treeview">
+		@foreach (DNA3.Models.Action action in Model.Actions.OrderBy(x => x.Weight)) {
+			if (User.HasSufficientAuthority(action.Role.Code)) {
+				<li class="nav-item">
+					<a href="@Html.Render(action.Target)" class="nav-link" @(action.NewWindow ? @Html.Render(" Target='_Blank'") : null)>
+						<i class="@Html.Render(action.Icon) nav-icon"></i>
+						<p>@Html.Render(action.TargetName)</p>
+					</a>
+				</li>
+			}
+		}
+	</ul>
+</li>

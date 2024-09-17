@@ -1,0 +1,142 @@
+﻿@model Request
+@{
+    Layout = "_Dashboard";
+    string Title = "Contact";
+}
+@section CSS {
+
+}
+@section Scripts {
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>@Title Detail</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item active">@Title Detail</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+		<div class="container-fluid">
+			<partial name="_Messages" />
+			<div class="row">
+				<!-- left column -->
+				<div class="col-md-6">
+					<!-- general form elements -->
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">@Title</h3>
+							<div class="card-tools">
+								<button asp-action="Save" form="Master" class="btn btn-tool btn-sm">
+									<i class="far fa-floppy-disk"></i>
+								</button>
+								<button asp-action="Delete" form="Master" class="btn btn-tool btn-sm">
+									<i class="far fa-trash-can"></i>
+								</button>
+								<a href="/report/viewer.html?Report=Contact.trdp" class="btn btn-tool btn-sm" target="_blank">
+									<i class="fas fa-print"></i>
+								</a>
+								<a asp-action="Index" class="btn btn-tool btn-sm">
+									<i class="fas fa-xmark"></i>
+								</a>
+							</div>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						<form asp-action="#" id="Master">
+							<div class="card-body">
+								<div class="row mb-0">
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label asp-for="Date">@Html.DisplayNameFor(x => x.Date)</label>
+											<input asp-for="Date" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Date)" spellcheck="false" autofocus>
+											<span asp-validation-for="Date" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label asp-for="Company">@Html.DisplayNameFor(x => x.Company)</label>
+											<input asp-for="Company" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Company)" spellcheck="false">
+											<span asp-validation-for="Company" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label asp-for="First">@Html.DisplayNameFor(x => x.First)</label>
+											<input asp-for="First" class="form-control" placeholder="@Html.DisplayNameFor(x => x.First)" spellcheck="false">
+											<span asp-validation-for="First" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label asp-for="Last">@Html.DisplayNameFor(x => x.Last)</label>
+											<input asp-for="Last" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Last)" spellcheck="false">
+											<span asp-validation-for="Last" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label asp-for="Email">@Html.DisplayNameFor(x => x.Email)</label>
+											<input asp-for="Email" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Email)" spellcheck="false">
+											<span asp-validation-for="Email" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label asp-for="Type">@Html.DisplayNameFor(x => x.Type)</label>
+											<input asp-for="Type" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Type)" spellcheck="false">
+											<span asp-validation-for="Type" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-12">
+										<div class="form-group">
+											<label asp-for="Subject">@Html.DisplayNameFor(x => x.Subject)</label>
+											<input asp-for="Subject" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Subject)" spellcheck="false">
+											<span asp-validation-for="Subject" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-12">
+										<div class="form-group">
+											<label asp-for="Content">@Html.DisplayNameFor(x => x.Content)</label>
+											<textarea asp-for="Content" rows="6" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Content)" spellcheck="false"></textarea>
+											<span asp-validation-for="Content" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /.card-body -->
+							<input asp-for="RequestId" type="hidden" />
+						</form>
+					</div>
+					<!-- /.card -->
+				</div>
+				<!-- / Left Column -->
+			</div>
+			<!-- / Row -->
+		</div>
+        <!-- Container Fluid -->
+    </section>
+</div>
+<!-- / Content Wrapper -->

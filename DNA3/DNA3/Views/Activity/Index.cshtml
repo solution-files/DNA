@@ -1,0 +1,104 @@
+﻿@model IList<Activity>
+@{
+	Layout = "_Dashboard";
+	string Title = "Activity";
+	string Plural = "Activities";
+}
+@section CSS {
+
+}
+@section Scripts {
+
+	<script>
+
+        function SetFilterOptions() {
+            try {
+                $.ajax({
+                    type: 'GET',
+                    url: '/activity',
+                    data: { Criteria: $('#FilterOptions').val() },
+                    success: function (htmlresponse) {
+                        location.reload();
+                    }
+                });
+            } catch (ex) {
+                alert(ex);
+            }
+        }
+
+        function ExportToExcel() {
+            var gridObj = document.getElementById("ActivityGrid").ej2_instances[0];
+            gridObj.excelExport();
+        }
+
+        function ExportToPDF() {
+            var gridObj = document.getElementById("ActivityGrid").ej2_instances[0];
+            gridObj.pdfExport();
+        }
+
+	</script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>@Title Manager</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">@Title Manager</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<partial name="_Messages" />
+		<div class="card card-primary">
+			<div class="card-header border-0">
+				<h3 class="card-title">@Plural</h3>
+				<div class="card-tools">
+					<a href="#" class="btn btn-tool btn-sm" onclick="ExportToExcel()">
+						<i class="fas fa-file-excel" title="Export to Excel"></i>
+					</a>
+					<a href="#" class="btn btn-tool btn-sm" onclick="ExportToPDF()">
+						<i class="fas fa-file-pdf" title="Export to PDF"></i>
+					</a>
+					<a href="#" class="btn btn-tool btn-sm">
+						<i class="fas fa-envelope" title="E-Mail Report"></i>
+					</a>
+					<a href="/report/viewer.html?Report=Activities.trdp" class="btn btn-tool btn-sm" target="_blank">
+						<i class="fas fa-print" title="Preview Report"></i>
+					</a>
+					<a asp-action="Close" class="btn btn-tool btn-sm">
+						<i class="fas fa-xmark" title="Close"></i>
+					</a>
+				</div>
+			</div>
+			<div class="card-body">
+				@if (Model.Count() == 0) {
+					<emptyresult icon="fa-solid fa-key"></emptyresult>
+				} else {
+                    <ejs-grid id="ActivityGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true">
+                        <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
+                        <e-grid-columns>
+                            <e-grid-column field="Timestamp" headerText="Timestamp" customFormat="@(new { type = "date", format = "MM/dd/yyyy" })" width="120"></e-grid-column>
+                            <e-grid-column field="Message" headerText="Message"></e-grid-column>
+                        </e-grid-columns>
+                    </ejs-grid>
+				}
+			</div>
+		</div>
+	</section>
+</div>
+<!-- /.content-wrapper -->
+<!-- Report Options Dialog -->
+<partial name="_Options" />

@@ -1,0 +1,46 @@
+﻿@{
+	Page FeaturesPage = (Page)ViewBag.FeaturesPage;
+	IList<Article> FeaturesList = (IList<Article>)ViewBag.FeaturesList;
+}
+<!-- ====== Features Start ====== -->
+<section id="features" class="ud-features">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="ud-section-title">
+					<span>@Html.Render(FeaturesPage.Name)</span>
+					<h2>
+						@Html.Render(FeaturesPage.Subject)
+						<vc:edit-icon controller="Page" action="Edit" id="@FeaturesPage.PageId" css="text-primary" title="Edit This Page"></vc:edit-icon>
+					</h2>
+					<p>
+						@Html.Render(FeaturesPage.Content)
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			@foreach (Article article in FeaturesList) {
+				<div class="col-xl-3 col-lg-3 col-sm-6">
+					<div class="ud-single-feature wow fadeInUp" data-wow-delay=".1s">
+						<div class="ud-feature-icon">
+							<i class="@article.Icon"></i>
+						</div>
+						<div class="ud-feature-content">
+							<h3 class="ud-feature-title">
+								@article.Subject
+								<vc:edit-icon controller="Article" action="Edit" id="@article.ArticleId" css="text-primary" title="Edit This Article"></vc:edit-icon>
+							</h3>
+							<p class="ud-feature-desc">
+								@article.Description
+							</p>
+							<a href="@article.Target" class="ud-feature-link">
+								@article.TargetName
+							</a>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</section>

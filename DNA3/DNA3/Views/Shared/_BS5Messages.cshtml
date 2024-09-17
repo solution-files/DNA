@@ -1,0 +1,11 @@
+﻿@using DNA3.Classes
+
+@if (Site.Messages.Count() > 0) {
+	@foreach (String message in Site.Messages) {
+		<div class="alert alert-warning alert-dismissible fade show mt-0" role="alert">
+			@Html.Render(message)
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	}
+	Site.Messages.Clear();
+}

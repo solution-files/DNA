@@ -1,0 +1,55 @@
+﻿@model DNA.Models.Error;
+@{
+	ViewData["Title"] = "Error";
+}
+
+@section CSS {
+
+}
+
+@section Scripts {
+
+}
+
+<!-- ====== Banner Start ====== -->
+<section class="ud-page-banner">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="ud-banner-content">
+					<h1>@Model.Name</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- ====== Banner End ====== -->
+
+<!-- ====== Error 404 Start ====== -->
+<div class="row">
+	<div class="col-xl-6 mx-auto">
+		<div class="shadow p-3 mb-5 bg-white rounded my-5 px-5">
+			<h2 class="ud-404-title text-center mt-5">
+				@Model.Code - @Model.Name
+			</h2>
+			<p class="card-text mb-5">
+				@Model.Description
+			</p>
+			<h5 class="ud-404-subtitle text-center">
+				Maybe you can find what you need here?
+			</h5>
+			<ul class="ud-404-links mb-5">
+				<li>
+					<a href="/">Home</a>
+				</li>
+				<li>
+					<a href="/home/contact">Support</a>
+				</li>
+				<li>
+					<a href="/home/contact">Latest News</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!-- ====== Error 404 End ====== -->

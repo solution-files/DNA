@@ -1,0 +1,7 @@
+﻿@model IList<DNA3.Models.Menu>;
+
+@foreach (DNA3.Models.Menu menu in Model) {
+	if (User.HasSufficientAuthority(menu.Role.Code)) {
+		<vc:dashboard-menu menu-code="@menu.Code" class="" show-icon=""></vc:dashboard-menu>
+	}
+}

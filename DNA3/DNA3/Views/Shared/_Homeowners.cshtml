@@ -1,0 +1,52 @@
+﻿<div id="homeownersModal" class="modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Selection Criteria</h5>
+				<div class="ml-auto">
+					<button type="button" class="btn btn-tool btn-sm" form="Parameters">
+						<i class="fas fa-magnifying-glass" title="Preview Report"></i>
+					</button>
+					<button type="button" class="btn btn-tool btn-sm" form="Parameters">
+						<i class="fas fa-print" title="Print Report"></i>
+					</button>
+					<a asp-action="Close" class="btn btn-tool btn-sm" data-dismiss="modal" aria-label="Close">
+						<i class="fas fa-xmark" title="Close Dialog"></i>
+					</a>
+				</div>
+			</div>
+			<div class="modal-body">
+				<form id="Parameters" asp-action="#" autocomplete="off">
+					<div class="row mb-0">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label for="City">City</label>
+								<input name="City" id="City" class="form-control" placeholder="City" autofocus>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label for="County">County</label>
+								<input name="County" id="City" class="form-control" placeholder="County">
+							</div>
+						</div>
+					</div>
+					<div class="row mb-0">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label for="State">State</label>
+								<input name="State" id="State" class="form-control" placeholder="State">
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label for="Zip">Zip</label>
+								<input name="Zip" id="Zip" class="form-control" placeholder="Zip">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

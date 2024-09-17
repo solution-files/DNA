@@ -1,0 +1,32 @@
+﻿<div class="card-tools">
+	@if (ViewData.ContainsKey("ID")) {
+		<a asp-action="New" asp-route-id="@ViewData["ID"]" class="btn btn-tool btn-sm">
+			<i class="fa-regular fa-file" title="New Document"></i>
+		</a>
+	} else {
+		<a asp-action="New" class="btn btn-tool btn-sm">
+			<i class="fa-regular fa-file" title="New Document"></i>
+		</a>
+	}
+	<a class="btn btn-tool btn-sm" onclick="DeleteSelected()">
+		<i class="fa-solid fa-trash" title="Delete Selected"></i>
+	</a>
+	<a class="btn btn-tool btn-sm" data-toggle="modal" data-target="#optionsModal">
+		<i class="fas fa-magnifying-glass" title="Find"></i>
+	</a>
+	@*<a href="#" class="btn btn-tool btn-sm" onclick="ExportToExcel()">
+			<i class="fas fa-file-excel" title="Export to Excel"></i>
+		</a>
+		<a href="#" class="btn btn-tool btn-sm" onclick="ExportToPDF()">
+			<i class="fas fa-file-pdf" title="Export to PDF"></i>
+		</a>
+		<a href="#" class="btn btn-tool btn-sm">
+			<i class="fas fa-envelope" title="E-Mail Report"></i>
+		</a>*@
+	<a href="/report/viewer.html?Report=@ViewData.Eval("Report")" class="btn btn-tool btn-sm" target="_blank">
+		<i class="fas fa-print" title="Preview Report"></i>
+	</a>
+	<a asp-controller="Dashboard" asp-action="Index" class="btn btn-tool btn-sm">
+		<i class="fas fa-xmark" title="Close"></i>
+	</a>
+</div>

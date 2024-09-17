@@ -1,0 +1,245 @@
+﻿@model FeaturesView
+@{
+	Layout = "_Dashboard";
+	string Title = "Features";
+}
+@section CSS {
+
+}
+@section Scripts {
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>@Title</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">@Title</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+
+		<div class="row">
+			<div class="col-lg-8">
+				<div class="card card-success">
+					<div class="card-header">
+						<h3 class="card-title">@Html.Render(Model.FeaturesPage.Subject)</h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+								<i class="fas fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col">
+								<p class="card-text">@Html.Render(Model.FeaturesPage.Content)</p>
+							</div>
+						</div>
+					</div>
+					<!-- /.card-body -->
+					<div class="card-footer text-right small">
+						@($"{Model.Assemblies.Count} Assemblies, {Model.Controllers.Count} Controller(s), {Model.ViewComponents.Count} View Component(s), and {Model.TagHelpers.Count} Tag Helper(s)")
+					</div>
+					<!-- /.card-footer-->
+				</div>
+				<!-- /.card -->
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-8">
+				<div class="card card-success">
+					<div class="card-header">
+						<h3 class="card-title">Assemblies</h3>
+
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+								<i class="fas fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col">
+
+								<p class="card-text">
+									An assembly is a collection of resources that work together to form a logical unit of functionality. They take the form of executable (.exe) or dynamic link library (.dll) and are the building blocks of .NET applications.
+								</p>
+
+								<ul>
+									@if (Model.Assemblies.Count() == 0) {
+										<li>None</li>
+									} else {
+										@foreach (Assembly assembly in Model.Assemblies) {
+											<li>@assembly.FullName</li>
+										}
+									}
+								</ul>
+
+							</div>
+						</div>
+					</div>
+					<!-- /.card-body -->
+					<div class="card-footer text-right small">
+						@($"{Model.Assemblies.Count()} Assemblies")
+					</div>
+					<!-- /.card-footer-->
+				</div>
+			</div>
+
+		</div>
+
+		<div class="row">
+			<div class="col-lg-4">
+				<div class="card card-success">
+					<div class="card-header">
+						<h3 class="card-title">Controllers</h3>
+
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+								<i class="fas fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col">
+
+								<p class="card-text">
+									Controllers define, group, and aggregate a common set of actions to be applied collectively.
+								</p>
+
+								<ul>
+									@if (Model.Controllers.Count() == 0) {
+										<li>None</li>
+									} else {
+										@foreach (TypeInfo item in Model.Controllers) {
+											<li>@item.Name</li>
+										}
+									}
+								</ul>
+
+							</div>
+						</div>
+					</div>
+					<!-- /.card-body -->
+					<div class="card-footer text-right small">
+						@($"{Model.Controllers.Count} Controller(s)")
+					</div>
+					<!-- /.card-footer-->
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<div class="card card-success">
+					<div class="card-header">
+						<h3 class="card-title">View Components</h3>
+
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+								<i class="fas fa-times"></i>
+							</button>
+						</div>
+
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col">
+
+								<p class="card-text">
+									View Components provide essential chunks of reusable business logic that are typically embedded into your website layout.
+								</p>
+
+								<ul>
+									@if (Model.ViewComponents.Count() == 0) {
+										<li>None</li>
+									} else {
+										@foreach (TypeInfo item in Model.ViewComponents) {
+											<li>@item.Name</li>
+										}
+									}
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- /.card-body -->
+					<div class="card-footer text-right small">
+						@($"{Model.ViewComponents.Count} View Component(s)")
+					</div>
+					<!-- /.card-footer-->
+				</div>
+				<!-- /.card -->
+
+				<div class="card card-success">
+					<div class="card-header">
+						<h3 class="card-title">Tag Helpers</h3>
+
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+								<i class="fas fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col">
+
+								<p class="card-text">
+									Tag Helpers enable server-side code to participate in the creation and rendering of HTML elements.
+								</p>
+
+								<ul>
+									@if (Model.TagHelpers.Count() == 0) {
+										<li>None</li>
+									} else {
+										@foreach (TypeInfo item in Model.TagHelpers) {
+											<li>@item.Name</li>
+										}
+									}
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- /.card-body -->
+					<div class="card-footer text-right small">
+						@($"{Model.TagHelpers.Count} Tag Helper(s)")
+					</div>
+					<!-- /.card-footer-->
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<!-- Report Options Dialog -->
+<partial name="_Options" />

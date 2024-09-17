@@ -1,0 +1,175 @@
+﻿@model Category
+@{
+	Layout = "_Dashboard";
+	string Title = "Category";
+}
+
+@section CSS {
+	<link href="~/common/plugins/fontawesome-iconpicker/css/fontawesome-iconpicker.css" rel="stylesheet" type="text/css" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css" rel="stylesheet" type="text/css" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/cobalt.min.css" rel="stylesheet" type="text/css" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/eclipse.min.css" rel="stylesheet" type="text/css" />
+}
+
+@section Scripts {
+
+	<!-- Automated Form Validation -->
+	<script src="~/common/plugins/jquery-validate/jquery.validate.min.js"></script>
+	<script src="~/common/plugins/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+	<!-- Font Awesome Icon Picker -->
+	<script src="~/common/plugins/fontawesome-iconpicker/js/fontawesome-iconpicker.min.js"></script>
+	<script>
+		$('#Icon').iconpicker({
+			container: false,
+			hideOnSelect: true,
+			placement: 'bottom'
+		});
+	</script>
+
+	<!-- Code Mirror -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/css/css.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/xml/xml.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/htmlmixed/htmlmixed.js"></script>
+
+	<script>
+
+		$('#Icon').iconpicker({
+			container: false,
+			hideOnSelect: true,
+			placement: 'bottom'
+		});
+
+		$(function () {
+			CodeMirror.fromTextArea(document.getElementById("Description"), {
+				mode: "htmlmixed",
+				theme: "cobalt",
+				indentUnit: 4,
+				smartIndent: true,
+				tabsize: 4,
+				lineNumbers: true,
+
+			});
+		});
+
+	</script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>@Title Detail</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">@Title Detail</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="container-fluid">
+			<partial name="_Messages" />
+			<div class="row">
+				<!-- left column -->
+				<div class="col-md-6">
+					<!-- general form elements -->
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">@Title</h3>
+							<div class="card-tools">
+								<button asp-action="Save" form="Master" class="btn btn-tool btn-sm">
+									<i class="far fa-floppy-disk"></i>
+								</button>
+								<button asp-action="Delete" form="Master" class="btn btn-tool btn-sm">
+									<i class="far fa-trash-can"></i>
+								</button>
+								<a href="/report/viewer.html?Report=Asset.trdp" class="btn btn-tool btn-sm" target="_blank">
+									<i class="fas fa-print"></i>
+								</a>
+								<a asp-action="Index" class="btn btn-tool btn-sm">
+									<i class="fas fa-xmark"></i>
+								</a>
+							</div>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						<form asp-action="#" id="Master">
+							<div class="card-body">
+								<div class="row mb-0">
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label asp-for="SectionId" class="mr-2">@Html.DisplayNameFor(x => x.SectionId)</label>
+											<a asp-controller="Section" asp-action="New" class="small mr-2">New</a><a asp-controller="Section" asp-action="Edit" asp-route-id="SectionId" class="small">Edit</a>
+											<select asp-for="SectionId" class="form-control" asp-items="@(new SelectList(ViewBag.SectionList, "SectionId", "Name"))" placeholder="@Html.DisplayNameFor(model => model.SectionId)" autocomplete="off" spellcheck="false"></select>
+											<span asp-validation-for="SectionId" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label asp-for="Icon">@Html.DisplayNameFor(x => x.Icon)</label>
+											<input asp-for="Icon" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Icon)" spellcheck="false">
+											<span asp-validation-for="Icon" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label asp-for="Slug">@Html.DisplayNameFor(x => x.Slug)</label>
+											<input asp-for="Slug" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Slug)" spellcheck="false">
+											<span asp-validation-for="Slug" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label asp-for="Name">@Html.DisplayNameFor(x => x.Name)</label>
+											<input asp-for="Name" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Name)" spellcheck="false">
+											<span asp-validation-for="Name" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-12">
+										<div class="form-group">
+											<label asp-for="Subject">@Html.DisplayNameFor(x => x.Subject)</label>
+											<input asp-for="Subject" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Subject)" spellcheck="false">
+											<span asp-validation-for="Subject" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-12">
+										<div class="form-group">
+											<label asp-for="Description">@Html.DisplayNameFor(x => x.Description)</label>
+											<textarea asp-for="Description" rows="6" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Description)"></textarea>
+											<span asp-validation-for="Description" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /.card-body -->
+							<input asp-for="CategoryId" type="hidden" />
+						</form>
+					</div>
+					<!-- /.card -->
+				</div>
+				<!-- / Left Column -->
+			</div>
+			<!-- / Row -->
+		</div>
+		<!-- Container Fluid -->
+	</section>
+</div>
+<!-- / Content Wrapper -->

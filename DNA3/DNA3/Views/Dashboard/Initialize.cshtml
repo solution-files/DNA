@@ -1,0 +1,315 @@
+﻿@model Initialize;
+@{
+	Layout = "_Dashboard";
+	string Title = "Initialize Database";
+}
+
+@section CSS {
+
+}
+
+@section Scripts {
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>@Title Manager</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">@Title</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<!-- left column -->
+				<div class="col-xl-9">
+					<partial name="_Messages" />
+					<!-- general form elements -->
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">@Title</h3>
+							<div class="card-tools">
+								<a asp-area="DOC" asp-controller="Backup" asp-action="Compress" class="btn btn-tool btn-sm" target="_blank">
+									<i class="fas fa-play" title="Compress Archive"></i>
+								</a>
+								<a href="/report/viewer.html?Document Manager Summary.trdp" class="btn btn-tool btn-sm" target="_blank">
+									<i class="fas fa-print" title="Preview Report"></i>
+								</a>
+								<a asp-action="Index" class="btn btn-tool btn-sm">
+									<i class="fas fa-xmark" title="Close"></i>
+								</a>
+							</div>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						<form asp-action="#" id="Master" method="post">
+							<div class="card-body">
+								<div class="row mb-0">
+									<div class="col-md-9">
+										<p>
+											This form allows you to reset each selected table to its original state and cannot be undone. 
+											Do not proceed unless you’re absolutely certain  this is what you want to do.
+										</p>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Account" class="mr-2"><label asp-for="Account">@Html.DisplayNameFor(x => x.Account)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Action" class="mr-2"><label asp-for="Action">@Html.DisplayNameFor(x => x.Action)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Activity" class="mr-2"><label asp-for="Activity">@Html.DisplayNameFor(x => x.Activity)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Article" class="mr-2"><label asp-for="Article">@Html.DisplayNameFor(x => x.Article)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Associate" class="mr-2"><label asp-for="Associate">@Html.DisplayNameFor(x => x.Associate)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Campaign" class="mr-2"><label asp-for="Campaign">@Html.DisplayNameFor(x => x.Campaign)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Cart" class="mr-2"><label asp-for="Cart">@Html.DisplayNameFor(x => x.Cart)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Category" class="mr-2"><label asp-for="Category">@Html.DisplayNameFor(x => x.Category)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Certificate" class="mr-2"><label asp-for="Certificate">@Html.DisplayNameFor(x => x.Certificate)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Client" class="mr-2"><label asp-for="Client">@Html.DisplayNameFor(x => x.Client)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Commission" class="mr-2"><label asp-for="Commission">@Html.DisplayNameFor(x => x.Commission)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Customer" class="mr-2"><label asp-for="Customer">@Html.DisplayNameFor(x => x.Customer)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="CustomerComment" class="mr-2"><label asp-for="CustomerComment">@Html.DisplayNameFor(x => x.CustomerComment)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Device" class="mr-2"><label asp-for="Device">@Html.DisplayNameFor(x => x.Device)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Disposition" class="mr-2"><label asp-for="Disposition">@Html.DisplayNameFor(x => x.Disposition)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Documents" class="mr-2"><label asp-for="Documents">@Html.DisplayNameFor(x => x.Documents)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Facility" class="mr-2"><label asp-for="Facility">@Html.DisplayNameFor(x => x.Facility)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="History" class="mr-2"><label asp-for="History">@Html.DisplayNameFor(x => x.History)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Homeowner" class="mr-2"><label asp-for="Homeowner">@Html.DisplayNameFor(x => x.Homeowner)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Invoice" class="mr-2"><label asp-for="Invoice">@Html.DisplayNameFor(x => x.Invoice)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="InvoiceItem" class="mr-2"><label asp-for="InvoiceItem">@Html.DisplayNameFor(x => x.InvoiceItem)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Item" class="mr-2"><label asp-for="Item">@Html.DisplayNameFor(x => x.Item)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Login" class="mr-2"><label asp-for="Login">@Html.DisplayNameFor(x => x.Login)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Material" class="mr-2"><label asp-for="Material">@Html.DisplayNameFor(x => x.Material)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Menu" class="mr-2"><label asp-for="Menu">@Html.DisplayNameFor(x => x.Menu)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Note" class="mr-2"><label asp-for="Note">@Html.DisplayNameFor(x => x.Note)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Page" class="mr-2"><label asp-for="Page">@Html.DisplayNameFor(x => x.Page)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Password" class="mr-2"><label asp-for="Password">@Html.DisplayNameFor(x => x.Password)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Product" class="mr-2"><label asp-for="Product">@Html.DisplayNameFor(x => x.Product)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Promotion" class="mr-2"><label asp-for="Promotion">@Html.DisplayNameFor(x => x.Promotion)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Reference" class="mr-2"><label asp-for="Reference">@Html.DisplayNameFor(x => x.Reference)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Registration" class="mr-2"><label asp-for="Registration">@Html.DisplayNameFor(x => x.Registration)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Request" class="mr-2"><label asp-for="Request">@Html.DisplayNameFor(x => x.Request)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Residence" class="mr-2"><label asp-for="Residence">@Html.DisplayNameFor(x => x.Residence)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Resource" class="mr-2"><label asp-for="Resource">@Html.DisplayNameFor(x => x.Resource)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Role" class="mr-2"><label asp-for="Role">@Html.DisplayNameFor(x => x.Role)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Section" class="mr-2"><label asp-for="Section">@Html.DisplayNameFor(x => x.Section)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Source" class="mr-2"><label asp-for="Source">@Html.DisplayNameFor(x => x.Source)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Status" class="mr-2"><label asp-for="Status">@Html.DisplayNameFor(x => x.Status)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Task" class="mr-2"><label asp-for="Task">@Html.DisplayNameFor(x => x.Task)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Ticket" class="mr-2"><label asp-for="Ticket">@Html.DisplayNameFor(x => x.Ticket)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="User" class="mr-2"><label asp-for="User">@Html.DisplayNameFor(x => x.User)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Vendor" class="mr-2"><label asp-for="Vendor">@Html.DisplayNameFor(x => x.Vendor)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Workorder" class="mr-2"><label asp-for="Vendor">@Html.DisplayNameFor(x => x.Vendor)</label>
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="icheck-primary">
+											<input asp-for="Vendor" class="mr-2"><label asp-for="Vendor">@Html.DisplayNameFor(x => x.Vendor)</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /.card-body -->
+							<div class="card-footer">
+								<button asp-controller="Dashboard" asp-action="Initialize" class="btn btn-danger">Initialize Database</button>
+								<button asp-controller="Dashboard" asp-action="Close" class="btn btn-secondary float-right">Cancel</button>
+							</div>
+							<!-- /.card-footer -->
+						</form>
+						<!-- /form -->
+					</div>
+					<!-- /.card -->
+				</div>
+				<!-- / Left Column -->
+			</div>
+			<!-- / Row -->
+		</div>
+		<!-- Container Fluid -->
+	</section>
+</div>
+<!-- / Content Wrapper -->

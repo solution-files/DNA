@@ -1,0 +1,61 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+	Layout = "_Dashboard";
+	string Title = "DOC";
+}
+@section CSS {
+
+}
+
+@section Scripts {
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>Document Mangement</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">@Title</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<partial name="_Messages" />
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="card card-primary">
+					<div class="card-header border-0">
+						<h3 class="card-title">About</h3>
+						<div class="card-tools">
+							<a asp-action="Index" class="btn btn-tool btn-sm">
+								<i class="fas fa-xmark" title="Close"></i>
+							</a>
+						</div>
+					</div>
+					<div class="card-body">
+						<p>
+							The Document Management module allows you to backup and restore mission critical files like 
+							Finance Paperwork and Purchase Agreements. Fully cross-platform, it works on Windows, Linux, 
+							or IOS-based operating systems and has a small enough footprint to run from many IOT Devices 
+							like Raspberry Pi.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+<!-- /.content-wrapper -->

@@ -1,0 +1,13 @@
+﻿@model DNA3.Models.Menu
+<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+	<div class="ud-widget">
+		<h5 class="ud-widget-title">@Model.TargetName</h5>
+		<ul class="ud-widget-links">
+			@foreach (DNA3.Models.Action action in Model.Actions.OrderBy(x => x.Weight)) {
+				<li>
+					<a href="@action.Target">@action.TargetName</a>
+				</li>
+			}
+		</ul>
+	</div>
+</div>

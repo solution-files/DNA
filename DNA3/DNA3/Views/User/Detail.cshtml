@@ -1,0 +1,163 @@
+﻿@model User
+@{
+	Layout = "_Dashboard";
+	string Title = "User";
+}
+@section CSS {
+
+}
+@section Scripts {
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>@Title Detail</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">@Title Detail</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="container-fluid">
+			<partial name="_Messages" />
+			<div class="row">
+				<!-- left column -->
+				<div class="col-md-6">
+					<!-- general form elements -->
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">@Title</h3>
+							<div class="card-tools">
+								<button asp-action="Save" form="Master" class="btn btn-tool btn-sm">
+									<i class="far fa-floppy-disk" title="Save"></i>
+								</button>
+								<button asp-action="Delete" form="Master" class="btn btn-tool btn-sm">
+									<i class="far fa-trash-can" title="Delete"></i>
+								</button>
+								<button asp-controller="Identity" asp-action="Index" asp-route-id="@Model.UserId" form="Master" class="btn btn-tool btn-sm">
+									<i class="fas fa-link" title="Identities"></i>
+								</button>
+								<button asp-action="Multifactor" form="Master" class="btn btn-tool btn-sm">
+									<i class="fas fa-qrcode" title="MFA"></i>
+								</button>
+								<a href="/report/viewer.html?Report=User.trdp" class="btn btn-tool btn-sm" target="_blank">
+									<i class="fas fa-print" title="Print"></i>
+								</a>
+								<a asp-action="Index" class="btn btn-tool btn-sm">
+									<i class="fas fa-xmark" title="Close"></i>
+								</a>
+							</div>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						<form asp-action="#" id="Master">
+							<div class="card-body">
+								<ul class="nav nav-tabs" id="General" role="tablist">
+									<li class="nav-item">
+										<a class="nav-link active" id="general-tab" data-toggle="pill" href="#general-content" role="tab" aria-controls="general-content" aria-selected="true">General</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" id="security-tab" data-toggle="pill" href="#security-content" role="tab" aria-controls="security-content" aria-selected="false">Security</a>
+									</li>
+								</ul>
+								<div class="tab-content" id="general-tab-content">
+									<div class="tab-pane fade show active" id="general-content" role="tabpanel" aria-labelledby="general-content">
+										<div class="row mb-0 mt-3">
+											<div class="col-lg-6">
+												<div class="form-group">
+													<label asp-for="First">@Html.DisplayNameFor(x => x.First)</label>
+													<input asp-for="First" class="form-control" placeholder="@Html.DisplayNameFor(x => x.First)" autocomplete="off" spellcheck="false">
+													<span asp-validation-for="First" class="text-danger small"></span>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="form-group">
+													<label asp-for="Last">@Html.DisplayNameFor(x => x.Last)</label>
+													<input asp-for="Last" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Last)" spellcheck="false">
+													<span asp-validation-for="Last" class="text-danger small"></span>
+												</div>
+											</div>
+										</div>
+										<div class="row mb-0">
+											<div class="col-lg-6">
+												<div class="form-group">
+													<label asp-for="RoleId" class="mr-2">@Html.DisplayNameFor(x => x.RoleId)</label>
+													<a asp-controller="Role" asp-action="New" class="small mr-2">New</a><a asp-controller="Role" asp-action="Edit" asp-route-id="@Model.RoleId" class="small">Edit</a>
+													<select asp-for="RoleId" class="form-control" asp-items="@(new SelectList(ViewBag.RoleList, "RoleId", "Name"))" placeholder="@Html.DisplayNameFor(model => model.RoleId)" autocomplete="off" spellcheck="false"></select>
+													<span asp-validation-for="RoleId" class="text-danger small"></span>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="form-group">
+													<label asp-for="StatusId" class="mr-2">@Html.DisplayNameFor(x => x.StatusId)</label>
+													<a asp-controller="Status" asp-action="New" class="small mr-2">New</a><a asp-controller="Status" asp-action="Edit" asp-route-id="@Model.StatusId" class="small">Edit</a>
+													<select asp-for="StatusId" class="form-control" asp-items="@(new SelectList(ViewBag.StatusList, "StatusId", "Name"))" placeholder="@Html.DisplayNameFor(model => model.StatusId)" autocomplete="off" spellcheck="false"></select>
+													<span asp-validation-for="StatusId" class="text-danger small"></span>
+												</div>
+											</div>
+										</div>
+										<div class="row mb-0">
+											<div class="col-12">
+												<div class="form-group">
+													<label asp-for="Thumbprint">@Html.DisplayNameFor(x => x.Thumbprint)</label>
+													<input asp-for="Thumbprint" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Thumbprint)" autocomplete="off" spellcheck="false">
+													<span asp-validation-for="Thumbprint" class="text-danger small"></span>
+												</div>
+											</div>
+										</div>
+										<div class="row mb-0">
+											<div class="col-12">
+												<div class="form-group">
+													<label asp-for="Certificate">@Html.DisplayNameFor(x => x.Certificate) <span class="small">(No carraige returns, line feeds, header, or footer)</span></label>
+													<textarea asp-for="Certificate" class="form-control" rows="6" placeholder="@Html.DisplayNameFor(x => x.Comment)" autocomplete="off" spellcheck="false"></textarea>
+													<span asp-validation-for="Certificate" class="text-danger small"></span>
+												</div>
+											</div>
+										</div>
+										<div class="row mb-0">
+											<div class="col-12">
+												<div class="form-group">
+													<label asp-for="Comment">@Html.DisplayNameFor(x => x.Comment)</label>
+													<input asp-for="Comment" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Comment)" autocomplete="off" spellcheck="false">
+													<span asp-validation-for="Comment" class="text-danger small"></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane fade" id="security-content" role="tabpanel" aria-labelledby="security-content">
+									</div>
+								</div>
+								<!-- /.card-body -->
+								<input asp-for="UserId" type="hidden" />
+								<input asp-for="ClientId" type="hidden" />
+								<input asp-for="TotpKey" type="hidden" />
+								<input asp-for="TotpManualSetup" type="hidden" />
+								<input asp-for="TotpDeviceName" type="hidden" />
+								<input asp-for="TotpCode" type="hidden" />
+								<input asp-for="Token" type="hidden" />
+								<input asp-for="TokenDate" type="hidden" />
+						</form>
+					</div>
+					<!-- /.card -->
+				</div>
+				<!-- / Left Column -->
+			</div>
+			<!-- / Row -->
+		</div>
+		<!-- Container Fluid -->
+	</section>
+</div>
+<!-- / Content Wrapper -->

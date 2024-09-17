@@ -1,0 +1,87 @@
+﻿@model Claimant
+
+@{
+	Layout = "_Authentication";
+}
+
+@section CSS {
+
+}
+
+@section Scripts {
+
+	<script>
+		RestoreLoginPreferences();
+	</script>
+
+}
+
+<div class="login-box">
+	<div class="card card-outline card-primary">
+		<div class="card-header text-center">
+			<a href="/dashboard" class="h1">@Configuration["App:Shortname"]</a>
+		</div>
+		<div class="card-body">
+			<p class="login-box-msg">Sign in to start your session</p>
+
+			<form asp-action="#">
+				<div class="input-group">
+					<input asp-for="Email" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Email)">
+					<div class="input-group-append">
+						<div class="input-group-text">
+							<span class="fas fa-envelope"></span>
+						</div>
+					</div>
+				</div>
+				<span asp-validation-for="Email" class="text-danger small"></span>
+				<div class="input-group mt-3">
+					<input asp-for="Password" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Password)">
+					<div class="input-group-append">
+						<div class="input-group-text">
+							<span class="fas fa-lock"></span>
+						</div>
+					</div>
+				</div>
+				<span asp-validation-for="Password" class="text-danger small"></span>
+				<div class="row mt-3">
+					<div class="col-8">
+						<div class="icheck-primary">
+							<input asp-for="Persist">
+							<label for="Persist">
+								@Html.DisplayNameFor(x => x.Persist)
+							</label>
+						</div>
+					</div>
+					<!-- /.col -->
+					<div class="col-4">
+						<button asp-action="Login" class="btn btn-primary btn-block" onclick="SaveLoginPreferences();">Sign In</button>
+					</div>
+					<!-- /.col -->
+				</div>
+				<input asp-for="Provider" type="hidden" />
+				<input asp-for="ReturnUrl" type="hidden" />
+			</form>
+
+			<div class="social-auth-links text-center mt-3 mb-3">
+				<a href="#" class="btn btn-block btn-primary" data-toggle="modal" data-target="#oauthModal">
+					<i class="fab fa-microsoft mr-2"></i> Sign in using Microsoft
+				</a>
+			</div>
+
+			<p class="mb-1">
+				<a href="/dashboard/recover">I forgot my password</a>
+			</p>
+			<p class="mb-1">
+				<a href="/dashboard/register" class="text-center">Register a new membership</a>
+			</p>
+			<p class="mb-0">
+				<a href="/contact/form" class="text-center">Contact us</a>
+			</p>
+		</div>
+		<!-- /.card-body -->
+	</div>
+	<!-- /.card -->
+</div>
+<!-- /.login-box -->
+
+<partial name="_OAuth" />

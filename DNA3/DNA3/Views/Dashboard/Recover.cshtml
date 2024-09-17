@@ -1,0 +1,52 @@
+﻿@model Recover
+
+@{
+	Layout = "_Authentication";
+}
+
+@section CSS {
+
+}
+
+@section Scripts {
+
+}
+
+<div class="login-box">
+	<div class="card card-outline card-primary">
+		<div class="card-header text-center">
+			<a href="/dashboard" class="h1">@Configuration["App:Shortname"]</a>
+		</div>
+		<div class="card-body">
+			<p class="login-box-msg">Enter your e-mail address to get started</p>
+
+			<form asp-action="#" class="mb-3">
+				<div class="input-group mb-0">
+					<input asp-for="Email" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Email)">
+					<div class="input-group-append">
+						<div class="input-group-text">
+							<span class="fas fa-envelope"></span>
+						</div>
+					</div>
+				</div>
+				<span asp-validation-for="Email" class="text-danger small"></span>
+				<div class="row mt-3">
+					<div class="col">
+						<button asp-action="Recover" class="btn btn-primary btn-block">Recover</button>
+					</div>
+					<!-- /.col -->
+				</div>
+				<input asp-for="Provider" type="hidden" />
+			</form>
+			<p class="mb-1">
+				<a href="/dashboard/register" class="text-center">Register a new membership</a>
+			</p>
+			<p class="mb-0">
+				<a href="/dashboard/login" class="text-center">Sign In</a>
+			</p>
+		</div>
+		<!-- /.card-body -->
+	</div>
+	<!-- /.card -->
+</div>
+<!-- /.login-box -->

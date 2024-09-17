@@ -1,0 +1,27 @@
+﻿@{
+	Page AboutPage = (Page)ViewBag.AboutPage;
+}
+<!-- ====== About Start ====== -->
+<section id="about" class="ud-about">
+	<div class="container">
+		<div class="ud-about-wrapper wow fadeInUp" data-wow-delay=".2s">
+			<div class="ud-about-content-wrapper">
+				<div class="ud-about-content">
+					<span class="tag">@AboutPage.Name</span>
+					<h2>
+						@Html.Render(AboutPage.Subject)
+						<vc:edit-icon controller="Page" action="Edit" id="@AboutPage.PageId" css="text-primary" title="Edit This Page"></vc:edit-icon>
+					</h2>
+					<p>
+						@Html.Render(AboutPage.Content)
+					</p>
+					<a href="javascript:void(0)" class="ud-main-btn">Learn More</a>
+				</div>
+			</div>
+			<div class="ud-about-image">
+				<img src="/assets/images/about/about-image.svg" alt="about-image" />
+			</div>
+		</div>
+	</div>
+</section>
+<!-- ====== About End ====== -->

@@ -1,0 +1,42 @@
+﻿@{
+	Page HomePage = (Page)ViewBag.HomePage;
+}
+<!-- ====== Hero Start ====== -->
+<section class="ud-hero" id="home">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="ud-hero-content wow fadeInUp" data-wow-delay=".2s">
+					<h1 class="ud-hero-title">
+						@Html.Render(HomePage.Subject)
+						<vc:edit-icon controller="Page" action="Edit" id="@HomePage.PageId" css="text-light" title="Edit This Page"></vc:edit-icon>
+					</h1>
+					<p class="ud-hero-desc">
+						@Html.Render(HomePage.Content)
+					</p>
+					<ul class="ud-hero-buttons">
+						<li>
+							<a href="/report/viewer.html?Report=Barcodes Report.trdp" rel="nofollow noopener" target="_blank" class="ud-main-btn ud-white-btn">
+								View Demo
+							</a>
+						</li>
+						<li>
+							<a href="/#about" rel="nofollow noopener" class="ud-main-btn ud-link-btn">
+								Learn More <i class="lni lni-arrow-right"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="ud-hero-brands-wrapper wow fadeInUp" data-wow-delay=".3s">
+					<img src="/assets/images/hero/brand.svg" alt="brand" />
+				</div>
+				<div class="ud-hero-image wow fadeInUp" data-wow-delay=".25s">
+					<img src="/assets/images/hero/hero-image.svg" alt="hero-image" />
+					<img src="/assets/images/hero/dotted-shape.svg" alt="shape" class="shape shape-1" />
+					<img src="/assets/images/hero/dotted-shape.svg" alt="shape" class="shape shape-2" />
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- ====== Hero End ====== -->

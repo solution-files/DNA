@@ -1,0 +1,70 @@
+﻿@{
+	Page FAQPage = (Page)ViewBag.FAQPage;
+	IList<Article> FAQList = (IList<Article>)ViewBag.FAQList;
+	int Counter = 0;
+}
+<!-- ====== FAQ Start ====== -->
+<section id="faq" class="ud-faq">
+	<div class="shape">
+		<img src="@Configuration["Theme:Path"]/assets/images/faq/shape.svg" alt="shape" />
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="ud-section-title text-center mx-auto">
+					<span>@Html.Render(FAQPage.Name)</span>
+					<h2>
+						@Html.Render(FAQPage.Subject)
+						<vc:edit-icon controller="Page" action="Edit" id="@FAQPage.PageId" css="text-primary" title="Edit This Page"></vc:edit-icon>
+					</h2>
+					<p>
+						@Html.Render(FAQPage.Content)
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-6">
+				@foreach (Article article in FAQList.Take(3)) {
+					Counter = Counter + 1;
+					<div class="ud-single-faq wow fadeInUp" data-wow-delay=".1s">
+						<div class="accordion">
+							<button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="@("#collapse" + Counter.ToString())">
+								<span class="icon flex-shrink-0">
+									<i class="lni lni-chevron-down"></i>
+								</span>
+								<span>@Html.Render(article.Subject)</span>
+							</button>
+							<div id="@("collapse" + Counter.ToString())" class="accordion-collapse collapse">
+								<div class="ud-faq-body">
+									@Html.Render(article.Description)
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+			<div class="col-lg-6">
+				@foreach (Article article in FAQList.Skip(3).Take(3)) {
+					Counter = Counter + 1;
+					<div class="ud-single-faq wow fadeInUp" data-wow-delay=".1s">
+						<div class="accordion">
+							<button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="@("#collapse" + Counter.ToString())">
+								<span class="icon flex-shrink-0">
+									<i class="lni lni-chevron-down"></i>
+								</span>
+								<span>@Html.Render(article.Subject)</span>
+							</button>
+							<div id="@("collapse" + Counter.ToString())" class="accordion-collapse collapse">
+								<div class="ud-faq-body">
+									@Html.Render(article.Description)
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</section>

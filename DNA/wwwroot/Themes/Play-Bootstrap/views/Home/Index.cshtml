@@ -1,0 +1,37 @@
+﻿@model Request
+@{
+	ViewData["Title"] = "Home";
+	Page HomePage = (Page)ViewBag.HomePage;
+	Page FeaturesPage = (Page)ViewBag.FeaturesPage;
+	Page AboutPage = (Page)ViewBag.AboutPage;
+	Page ProductsPage = (Page)ViewBag.ProductsPage;
+	Page FAQPage = (Page)ViewBag.FAQPage;
+	Page TestimonialsPage = (Page)ViewBag.TestimonialsPage;
+	Page TeamPage = (Page)ViewBag.TeamPage;
+	Page ContactPage = (Page)ViewBag.ContactPage;
+}
+
+@section CSS {
+
+}
+
+@section Scripts {
+	<script src="~/common/plugins/jquery-validate/jquery.validate.min.js"></script>
+	<script src="~/common/plugins/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<partial name="_Intro" />
+
+<partial name="_Features" />
+
+<partial name="_About" />
+
+<partial name="_Pricing" />
+
+<partial name="_FAQ" />
+
+<partial name="_Testimonials" />
+
+<partial name="_Team" />
+
+<partial name="_Contact" />

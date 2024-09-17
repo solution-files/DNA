@@ -1,0 +1,315 @@
+﻿@model Vendor
+@{
+	Layout = "_Dashboard";
+	string Title = "Vendor";
+	IList<FileModel> Attachments = (IList<FileModel>)ViewBag.Attachments;
+}
+
+@section CSS {
+
+}
+
+@section Scripts {
+
+	<!-- Automated Form Validation -->
+	<script src="~/common/plugins/jquery-validate/jquery.validate.min.js"></script>
+	<script src="~/common/plugins/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+	<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=YourBingMapsKey&callback=loadMapScenario' async defer></script>
+
+	<script>
+
+		// Load Map Scenario
+		function loadMapScenario() {
+
+			// Get Current Position
+			var loc = new Microsoft.Maps.Location(38.213741, -85.541077);
+			navigator.geolocation.getCurrentPosition(function (position) {
+				loc = new Microsoft.Maps.Location(
+					position.coords.latitude,
+					position.coords.longitude);
+			});
+
+			// Create Map
+			var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+				credentials: 'AmSSsZPqH9eAznme_JJfNzMGy8JTCgsUCd0KmNPy1eCuCC1Qb6Y0sgpvN-dT6BbK',
+				center: loc,
+				zoom: 5
+			});
+
+			// Load Directions
+			Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function () {
+				var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+				directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.driving });
+				var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: 'PRESENT LOCATION', location: loc});
+				var waypoint2 = new Microsoft.Maps.Directions.Waypoint({ address: '@Model.Address', location: new Microsoft.Maps.Location(@ViewData["Longitude"], @ViewData["Latitude"]) });
+				directionsManager.addWaypoint(waypoint1);
+				directionsManager.addWaypoint(waypoint2);
+				directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('printoutPanel') });
+				directionsManager.calculateDirections();
+			});
+
+		}
+
+		// Copy Phone to Clipboard with Formatting
+		function CopyPhone() {
+			navigator.clipboard.writeText($('#Phone').val());
+		}
+
+		// Copy Phone to Clipboard without Formatting
+		function CopyPhoneUnformatted() {
+			navigator.clipboard.writeText($('#Phone').val().replace(/\D/g, ''));
+		}
+
+		// Copy Address to Clipboard
+		//function CopyAddressToClipboard() {
+		//	navigator.clipboard.writeText(
+		//		$('#Name').val().toUpperCase() + '\r' +
+		//		$('#Address').val() + '\r' +
+		//		$('#City').val() + ', ' + $('#State').val() + '  ' + $('#Zip').val()
+		//	);
+		//}
+
+		// CopyToClipboard
+		function CopyToClipboard(element) {
+			navigator.clipboard.writeText($(element).val());
+		}
+
+	</script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>@Title Detail</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">@Title Detail</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="container-fluid">
+			<partial name="_Messages" />
+			<div class="row">
+				<!-- left column -->
+				<div class="col-md-6">
+					<!-- general form elements -->
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">@Title</h3>
+							<div class="card-tools">
+								<button asp-controller="Vendor" asp-action="Save" form="Master" class="btn btn-tool btn-sm">
+									<i class="far fa-floppy-disk" title="Save Record"></i>
+								</button>
+								<button asp-controller="Vendor" asp-action="Delete" form="Master" class="btn btn-tool btn-sm">
+									<i class="far fa-trash-can" title="Delete Record"></i>
+								</button>
+								<a href="/report/viewer.html?Report=Vendor Envelope.trdp&RecordID=@Model.VendorId" class="btn btn-tool btn-sm" target="_blank">
+									<i class="fas fa-envelopes-bulk" title="Preview Envelope"></i>
+								</a>
+								<a href="/report/viewer.html?Report=Vendor.trdp&RecordID=@Model.VendorId" class="btn btn-tool btn-sm" target="_blank">
+									<i class="fas fa-print" title="Preview Installation Order"></i>
+								</a>
+								<button asp-controller="Vendor" asp-action="Verify" form="Master" class="btn btn-tool btn-sm">
+									<i class="fas fa-envelope" title="Verify Address"></i>
+								</button>
+								<a asp-action="Index" class="btn btn-tool btn-sm">
+									<i class="fas fa-xmark" title="Close"></i>
+								</a>
+							</div>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						<form asp-action="#" id="Master" autocomplete="off">
+							<div class="card-body">
+								<div class="row mb-0">
+									<div class="col-lg-4">
+										<div class="form-group">
+											<label asp-for="Code">@Html.DisplayNameFor(x => x.Code)</label>
+											<input asp-for="Code" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Code)" data-lpignore="true" autocomplete="off" spellcheck="false" autofocus>
+											<span asp-validation-for="Code" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="form-group">
+											<label asp-for="Name">@Html.DisplayNameFor(x => x.Name)</label>
+											<input asp-for="Name" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Name)" data-lpignore="true" autocomplete="off" spellcheck="false">
+											<span asp-validation-for="Name" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="form-group">
+											<label asp-for="Phone">@Html.DisplayNameFor(x => x.Phone)&emsp;</label>
+											<div class="input-group">
+												<input asp-for="Phone" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Phone)" data-lpignore="true" autocomplete="off" spellcheck="false">
+												<div class="input-group-append">
+													<div id="copyphonef" class="input-group-text bg-primary" onclick="CopyPhone();"><span class="fas fa-copy" title="Copy with formatting"></span></div>
+													<div id="copyphoneuf" class="input-group-text bg-primary" onclick="CopyPhoneUnformatted();"><span class="far fa-copy" title="Copy without formatting"></span></div>
+												</div>
+											</div>
+											<span asp-validation-for="Phone" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-12">
+										<div class="form-group">
+											<label asp-for="Address">@Html.DisplayNameFor(x => x.Address)</label>
+											<div class="input-group mb-3">
+												<input asp-for="Address" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Address)" data-lpignore="true" autocomplete="off" spellcheck="false">
+												<div class="input-group-append">
+													<div id="copyaddress" class="input-group-text bg-primary" onclick="CopyPhone();"><span class="far fa-copy" title="Copy to Clipboard"></span></div>
+												</div>
+											</div>
+											<span asp-validation-for="Address" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label asp-for="City">@Html.DisplayNameFor(x => x.City)</label>
+											<input asp-for="City" class="form-control" placeholder="@Html.DisplayNameFor(x => x.City)" data-lpignore="true" autocomplete="off" spellcheck="false">
+											<span asp-validation-for="City" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="form-group">
+											<label asp-for="State">@Html.DisplayNameFor(x => x.State)</label>
+											<input asp-for="State" class="form-control" placeholder="@Html.DisplayNameFor(x => x.State)" data-lpignore="true" autocomplete="off" spellcheck="false">
+											<span asp-validation-for="State" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="form-group">
+											<label asp-for="Zip">@Html.DisplayNameFor(x => x.Zip)</label>
+											<input asp-for="Zip" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Zip)" data-lpignore="true" autocomplete="off" spellcheck="false">
+											<span asp-validation-for="Zip" class="text-danger small"></span>
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="form-group">
+											<label asp-for="Zip4">@Html.DisplayNameFor(x => x.Zip4)</label>
+											<input asp-for="Zip4" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Zip4)" data-lpignore="true" autocomplete="off" spellcheck="false">
+											<span asp-validation-for="Zip4" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-lg-8">
+										<div class="form-group">
+											<label asp-for="Email">@Html.DisplayNameFor(x => x.Email)</label>
+											<div class="input-group mb-3">
+												<input asp-for="Email" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Email)" data-lpignore="true" autocomplete="off" spellcheck="false">
+												<div class="input-group-append">
+													<div id="copyemail" class="input-group-text bg-primary" onclick="CopyToClipboard('#Email');"><span class="far fa-copy" title="Copy to Clipboard"></span></div>
+												</div>
+											</div>
+											<span asp-validation-for="Email" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-12">
+										<div class="form-group">
+											<label asp-for="Comment" class="mr-2">@Html.DisplayNameFor(x => x.Comment)</label>
+											<textarea asp-for="Comment" class="form-control" rows="4" placeholder="@Html.DisplayNameFor(x => x.Comment)" data-lpignore="true" autocomplete="off" spellcheck="false"></textarea>
+											<span asp-validation-for="Comment" class="text-danger small"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /.card-body -->
+							<input asp-for="VendorId" type="hidden" />
+						</form>
+					</div>
+					<!-- /.card -->
+				</div>
+				<!-- / Left Column -->
+				<!-- Right column -->
+				<div class="col-md-6">
+					<partial name="_Messages" />
+					<!-- general form elements -->
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">Driving Directions</h3>
+							<div class="card-tools">
+								<a asp-area="Service" asp-controller="Customer" asp-action="DrivingDirections" class="btn btn-tool btn-sm" form="Master">
+									<i class="fas fa-diamond-turn-right" title="Get Route Details"></i>
+								</a>
+							</div>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						<form asp-action="#" id="Secondary">
+							<div class="card-body mb-3" style="max-height: 600px; overflow-y: auto;">
+								<div class="row mb-0">
+									<div class="col-lg-6">
+										<div id='myMap' style="max-height: 600px;"></div>
+									</div>
+									<div class="col-lg-6">
+										<div id='printoutPanel'></div>
+									</div>
+								</div>
+							</div>
+							<!-- /.card-body -->
+						</form>
+						<!-- /.card -->
+					</div>
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">File Attachments</h3>
+							<div class="card-tools">
+								<a asp-area="Service" asp-controller="Customer" asp-action="UploadFiles" class="btn btn-tool btn-sm" form="Master">
+									<i class="fas fa-file-import" title="Upload Files and Photos"></i>
+								</a>
+							</div>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						<form asp-action="#" id="Tertiary">
+							<div class="card-body mb-3">
+								<table class="table table-striped">
+									@if (Attachments.Count() == 0) {
+										<emptyresult icon="fa-regular fa-file"></emptyresult>
+									} else {
+										<thead>
+											<tr><th>File Name</th></tr>
+										</thead>
+										<tbody>
+											@foreach (FileModel Attachment in Attachments) {
+												<tr>
+													<td><a asp-area="" asp-controller="Pdf" asp-action="Index" asp-route-filename="@Attachment.FileName" target="_blank">@Attachment.FileName</a></td>
+													<td><a asp-area="Service" asp-controller="Customer" asp-action="DeleteFile" asp-route-filename="@Attachment.FileName"><i class="far fa-trash-can"></i></a></td>
+												</tr>
+											}
+										</tbody>
+									}
+								</table>
+							</div>
+							<!-- /.card-body -->
+						</form>
+						<!-- /.card -->
+					</div>
+					<!-- / Right Column -->
+				</div>
+				<!-- / Row -->
+			</div>
+			<!-- / Container Fluid -->
+		</div>
+	</section>
+</div>
+<!-- / Content Wrapper -->
+<!-- Options Modal -->
+<partial name="_Options" />
