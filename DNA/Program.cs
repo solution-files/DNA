@@ -112,6 +112,9 @@ services.AddSession(options => {
     options.Cookie.IsEssential = true;
 });
 
+// Data Protection
+services.AddDataProtection();
+
 // Other Services
 services.AddScoped<DNA3.Classes.IAuth, DNA3.Classes.Auth>();
 services.AddScoped<DNA3.Classes.ITools, DNA3.Classes.Tools>();
