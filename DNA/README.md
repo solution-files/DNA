@@ -1,4 +1,4 @@
-# DNA
+﻿# DNA
 ## Web Application Template for ASP.NET Core
 
 ## Introduction
