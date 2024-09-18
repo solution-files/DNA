@@ -326,7 +326,7 @@ namespace DNA.Controllers {
         private string BuildMessageBody(Request request) {
             StringBuilder result = new();
             try {
-                result = result.AppendLine($"<p>The following message was sent from {Configuration["Application:Domain"]} by {request.First} {request.Last}");
+                result = result.AppendLine($"<p>The following message was sent from {Configuration["App:Domain"]} by {request.First} {request.Last}");
                 result = result.AppendLine($"on {String.Format(DateTime.Now.ToString(), "D")}</p>");
                 result = result.AppendLine(@$"<table>");
                 result = result.AppendLine($"<tr><td>Host Name:</td><td>{Dns.GetHostName()}</td></tr>");
@@ -344,13 +344,13 @@ namespace DNA.Controllers {
             bool result = true;
             try {
                 MailMessage message = new() {
-                    From = new MailAddress(Configuration["Smtp:From"], Configuration["Application:SalesName"]),
-                    Subject = $"{Configuration["Application:Shortname"]} - {request.Subject}",
+                    From = new MailAddress(Configuration["Smtp:From"], Configuration["App:SalesName"]),
+                    Subject = $"{Configuration["App:Shortname"]} - {request.Subject}",
                     Body = BuildMessageBody(request),
                     BodyEncoding = System.Text.Encoding.UTF8,
                     IsBodyHtml = true
                 };
-                message.To.Add(new MailAddress(Configuration["Smtp:From"], Configuration["Application:SalesName"]));
+                message.To.Add(new MailAddress(Configuration["Smtp:From"], Configuration["App:SalesName"]));
                 message.CC.Add(new MailAddress(request.Email, $"{request.First} {request.Last}"));
                 message.ReplyToList.Add(new MailAddress(request.Email, $"{request.First} {request.Last}"));
 
