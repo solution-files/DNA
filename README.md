@@ -3,6 +3,7 @@
 
 ## Introduction
 Dot Net Admin (DNA) strives to standardize the application development process. It consists of a parent website, dashboard, and collection of optional class libraries to provide the functionality needed by your application.
+
 Provided as Assembly Parts contained in their own Areas, each class library provides the Models, Views, and Controllers needed to provide a specific unit of functionality. For example: the AR library provides Accounts Receivable, and the SMO library provides SQL Server Management Objects. In this fashion, complete solutions can be constructed by starting with a parent website and including as many Assembly Parts as needed to complete the application. Since assemblies are constructed to work with any parent website, the same assemblies can be used in multiple solutions, greatly reducing the amount of code maintenance required.
 
 ### DNA (Parent Website)
