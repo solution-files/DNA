@@ -10,10 +10,10 @@ Provided as Assembly Parts contained in their own Areas, each class library prov
 The parent website serves as the target for Content Management features and provides the configuration and settings for the entire solution. If your application doesn’t need a parent website, simply redirect to /Dashboard.
 
 ### DNA3 (Dashboard Assembly Part)
-The Dashboard Assembly Part provides Client, User, and User Identity Management, Authorization and Authentication Services for four different Schemes, Content Management Services, and a single Migration file to create all the tables for the various modules. Due to limitations in Migration Scripting capability, tables are created for every known module but are configured only when the system detects that its associated Assembly Part is installed. Based upon its presence or absence, each Assembly Part will be added or removed from the dashboard menu automatically.
+The Dashboard Assembly Part provides Client, User, and User Identity Management, Authorization and Authentication Services, Content Management, and a single Migration file to create the database tables. Due to limitations in Migration Scripting capability, tables are created for every known module but are configured only when the system detects that a module actually exists. Based upon its presence or absence, each module will be added or removed from the dashboard menu automatically.
 
 ### SMO (SQL Server Management Objects)
-The SQL Server Management Objects module provides Upload, Download, Backup, Restore, and Database Scripting capabilities to facilitate migration of data from one version of SQL Server to another. Automated backups can be scheduled and completed backups can be downloaded to authorized user desktop systems on demand.
+The SQL Server Management Objects module provides Upload, Download, Backup, Restore, and Database Scripting capabilities to facilitate migration of data from one version of SQL Server to another. Automated backups can be scheduled and completed backups can be downloaded to your desktop on demand.
 
 ### Utilities Class Library
 As its name suggests, the Utilities Class Library provides functionality common to all modules ranging from simple string manipulation to functionality specific to ADO.NET and Entity Framework. Classes intended for system wide use should be included in this project.
