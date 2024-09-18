@@ -25,13 +25,13 @@ The system will run on Windows, Linux, and Docker based servers equipped with th
 
 - Create C:\DNASettings.json and replace its content with the following:
 
-`
+```
 {
   "ConnectionStrings": {
-    "MainContext": "Server=your_domainn_ame.com;Database=DNA;User=dna;Password=random_string;TrustServerCertificate=True;"
+    "MainContext": "Server=your_domainn_ame.com;Database=DNA;User=dna;Password=random_string;TrustServerCertificate=True;"`
   },
 }
-`
+```
 
 - If you change the location of your secrets file, update the path in Program.cs
 - Edit appsettings.json as needed, the settings are all self-explanatory and commented.
@@ -39,6 +39,10 @@ The system will run on Windows, Linux, and Docker based servers equipped with th
 - Run the CreateTables Migration Script located at DNA/DNA3/DNA3/Migrations
 - Create a suitable SSL configured website to host your application.
 - Publish the source code and navigate to https://your_domain_name.com
+
+The database tables will be seeded and the dashboard menus adjusted automatically the first time you run the application and on each subsequest restart. If you add or remove modules, the dashboard menus will be adjusted accordingly, but all existing data will remain intact.
+
+At this point you can sign in to the default administrator account using admin@companyone.com for the user name and P@ssw0rd (note the zero) as the password.
 
 ## Customization
 The parent website and dashboard modules can be themed separately. Themes consist of a Layout file, associated views, and the CSS and Javascript required for your template. Just about any standard template can be used with the only caveat being that your must break down pages into MVC compatible format. To function with the Content Management Features, each view will require a trivial amount of code to be inserted.
