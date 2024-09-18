@@ -24,7 +24,7 @@ Configuration settings are broken down into two parts: Common settings contained
 The system will run on Windows, Linux, and Docker based servers equipped with the .NET 8 Runtime. The following procedure will take only a few minutes to complete:
 
 - Create C:\DNASettings.json and replace its content with the following:
-- 
+
 ```
 {
   "ConnectionStrings": {
