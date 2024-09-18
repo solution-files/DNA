@@ -23,3 +23,4 @@ Configuration settings are broken down into two parts: Common settings contained
 The parent website and dashboard modules can be themed separately. Themes consist of a Layout file, associated views, and the CSS and Javascript required for your template. Just about any standard template can be used with the only caveat being that your must break down pages into MVC compatible format. To function with the Content Management Features, each view will require a trivial amount of code to be inserted.
 
 ## Known Issues
+- Documentation is not yet complete
