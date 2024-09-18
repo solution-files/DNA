@@ -21,8 +21,29 @@ As its name suggests, the Utilities Class Library provides functionality common 
 ## Installation
 Configuration settings are broken down into two parts: Common settings contained within the source code tree and application secrets defined in a separate file in a location of your choosing. There are only two secrets required for basic operation: A Database Connection String, and a random string for JWT encryption.
 
+The system will run on Windows, Linux, and Docker based servers equipped with the .NET 8 Runtime. The following procedure will take only a few minutes to complete:
+
+- Create C:\DNASettings.json and replace its content with the following:
+
+`
+{
+  "ConnectionStrings": {
+    "MainContext": "Server=your_domainn_ame.com;Database=DNA;User=dna;Password=random_string;TrustServerCertificate=True;"
+  },
+}
+`
+
+- If you change the location of your secrets file, update the path in Program.cs
+- Edit appsettings.json as needed, the settings are all self-explanatory and commented.
+- Create a SQL Server database, user, and password for the application and update DNASettings.json accordingly.
+- Run the CreateTables Migration Script located at DNA/DNA3/DNA3/Migrations
+- Create a suitable SSL configured website to host your application.
+- Publish the source code and navigate to https://your_domain_name.com
+
 ## Customization
 The parent website and dashboard modules can be themed separately. Themes consist of a Layout file, associated views, and the CSS and Javascript required for your template. Just about any standard template can be used with the only caveat being that your must break down pages into MVC compatible format. To function with the Content Management Features, each view will require a trivial amount of code to be inserted.
 
 ## Known Issues
 - Documentation is not yet complete
+- An interface is being constructed to automate program setup and configuration
+- Multifactor Authentication (MFA) is not yet complete
