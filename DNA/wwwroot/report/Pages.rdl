@@ -10,7 +10,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2024-09-11T18:08:03.4452249Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2024-09-19T12:57:21.1488716Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <Author>DNA</Author>
@@ -581,7 +581,7 @@
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>4in</Height>
+        <Height>2in</Height>
         <Style>
           <Border>
             <Style>None</Style>
@@ -634,7 +634,7 @@
                     <TextRun>
                       <Value>=Globals!ExecutionTime</Value>
                       <Style>
-                        <Format>mm/dd/yyyy hh:mm tt</Format>
+                        <Format>MM/dd/yyyy hh:mm tt</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
