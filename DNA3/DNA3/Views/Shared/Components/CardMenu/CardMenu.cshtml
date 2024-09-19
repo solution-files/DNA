@@ -23,7 +23,7 @@
 <a href="#" class="btn btn-tool btn-sm">
 	<i class="fas fa-envelope" title="E-Mail Report"></i>
 </a>
-<a href="/report/viewer.html?Report=Customers.trdp" class="btn btn-tool btn-sm" target="_blank">
+<a href="/report/viewer.html?Report=Customers.rdl" class="btn btn-tool btn-sm" target="_blank">
 	<i class="fas fa-print" title="Preview Report"></i>
 </a>
 <a asp-action="Close" class="btn btn-tool btn-sm">
@@ -46,10 +46,10 @@
 <button asp-area="Service" asp-controller="History" asp-action="Index" asp-route-id="@Model.CustomerId" form="Master" class="btn btn-tool btn-sm">
 	<i class="fas fa-link" title="Call History"></i>
 </button>
-<a href="/report/viewer.html?Report=Envelope.trdp&RecordID=@Model.CustomerId" class="btn btn-tool btn-sm" target="_blank">
+<a href="/report/viewer.html?Report=Envelope.rdl&RecordID=@Model.CustomerId" class="btn btn-tool btn-sm" target="_blank">
 	<i class="fas fa-envelopes-bulk" title="Preview Envelope"></i>
 </a>
-<a href="/report/viewer.html?Report=Installation Order.trdp&RecordID=@Model.CustomerId" class="btn btn-tool btn-sm" target="_blank">
+<a href="/report/viewer.html?Report=Installation Order.rdl&RecordID=@Model.CustomerId" class="btn btn-tool btn-sm" target="_blank">
 	<i class="fas fa-print" title="Preview Installation Order"></i>
 </a>
 <button asp-area="Service" asp-controller="Customer" asp-action="Verify" form="Master" class="btn btn-tool btn-sm">

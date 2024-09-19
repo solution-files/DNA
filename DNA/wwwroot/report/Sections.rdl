@@ -10,7 +10,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2024-09-19T13:02:20.1113809Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2024-09-19T13:39:56.3524896Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <Author>DNA</Author>
@@ -29,35 +29,128 @@
     <DataSet Name="dsMain">
       <Query>
         <DataSourceName>dsReport</DataSourceName>
-        <CommandText>SELECT * FROM Page ORDER BY Name</CommandText>
+        <CommandText>SELECT
+  [Section].SectionId
+  ,[Section].PageId AS [Section PageId]
+  ,[Section].[Date] AS [Section Date]
+  ,[Section].Slug AS [Section Slug]
+  ,[Section].Name AS [Section Name]
+  ,[Section].Subject AS [Section Subject]
+  ,[Section].Description
+  ,[Section].Icon AS [Section Icon]
+  ,[Section].Columns
+  ,[Section].[Limit]
+  ,Page.PageId AS [Page PageId]
+  ,Page.[Date] AS [Page Date]
+  ,Page.Slug AS [Page Slug]
+  ,Page.Name AS [Page Name]
+  ,Page.Subject AS [Page Subject]
+  ,Page.Content
+  ,Page.Icon AS [Page Icon]
+FROM
+  Page
+  INNER JOIN [Section]
+    ON Page.PageId = [Section].PageId</CommandText>
+        <rd:DesignerState>
+          <QueryDefinition xmlns="http://schemas.microsoft.com/ReportingServices/QueryDefinition/Relational">
+            <SelectedColumns>
+              <ColumnExpression ColumnOwner="Section" ColumnName="SectionId" />
+              <ColumnExpression ColumnOwner="Section" ColumnName="PageId" />
+              <ColumnExpression ColumnOwner="Section" ColumnName="Date" />
+              <ColumnExpression ColumnOwner="Section" ColumnName="Slug" />
+              <ColumnExpression ColumnOwner="Section" ColumnName="Name" />
+              <ColumnExpression ColumnOwner="Section" ColumnName="Subject" />
+              <ColumnExpression ColumnOwner="Section" ColumnName="Description" />
+              <ColumnExpression ColumnOwner="Section" ColumnName="Icon" />
+              <ColumnExpression ColumnOwner="Section" ColumnName="Columns" />
+              <ColumnExpression ColumnOwner="Section" ColumnName="Limit" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="PageId" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="Date" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="Slug" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="Name" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="Subject" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="Content" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="Icon" />
+            </SelectedColumns>
+            <Joins>
+              <Join Type="CROSS JOIN" ColumnOwner="Page" />
+              <Join Type="INNER JOIN" ColumnOwner="Section">
+                <On>
+                  <From ColumnOwner="Page" ColumnName="PageId" />
+                  <To ColumnOwner="Section" ColumnName="PageId" />
+                </On>
+              </Join>
+            </Joins>
+          </QueryDefinition>
+        </rd:DesignerState>
       </Query>
       <Fields>
-        <Field Name="PageId">
-          <DataField>PageId</DataField>
+        <Field Name="SectionId">
+          <DataField>SectionId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="Date">
-          <DataField>Date</DataField>
+        <Field Name="Section_PageId">
+          <DataField>Section PageId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Section_Date">
+          <DataField>Section Date</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
-        <Field Name="Slug">
-          <DataField>Slug</DataField>
+        <Field Name="Section_Slug">
+          <DataField>Section Slug</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Name">
-          <DataField>Name</DataField>
+        <Field Name="Section_Name">
+          <DataField>Section Name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Subject">
-          <DataField>Subject</DataField>
+        <Field Name="Section_Subject">
+          <DataField>Section Subject</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Content">
           <DataField>Content</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Icon">
-          <DataField>Icon</DataField>
+        <Field Name="Description">
+          <DataField>Description</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Section_Icon">
+          <DataField>Section Icon</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Columns">
+          <DataField>Columns</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Limit">
+          <DataField>Limit</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Page_PageId">
+          <DataField>Page PageId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Page_Date">
+          <DataField>Page Date</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="Page_Slug">
+          <DataField>Page Slug</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Page_Name">
+          <DataField>Page Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Page_Subject">
+          <DataField>Page Subject</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Page_Icon">
+          <DataField>Page Icon</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -71,7 +164,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.70833in</Width>
+                  <Width>0.7in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1in</Width>
@@ -80,10 +173,16 @@
                   <Width>1in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.5in</Width>
+                  <Width>1.25in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.76042in</Width>
+                  <Width>0.7in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>0.7in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.61875in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -141,7 +240,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Name</Value>
+                                  <Value>Page</Value>
                                   <Style>
                                     <FontSize>11pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -175,14 +274,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox34">
+                        <Textbox Name="Textbox5">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Slug</Value>
+                                  <Value>Section</Value>
                                   <Style>
                                     <FontSize>11pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -195,7 +294,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox34</rd:DefaultName>
+                          <rd:DefaultName>Textbox5</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -237,6 +336,88 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox36</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BottomBorder>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <BackgroundColor>White</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox9">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Columns</Value>
+                                  <Style>
+                                    <FontSize>11pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>#666666</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox9</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BottomBorder>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <BackgroundColor>White</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox7">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Limit</Value>
+                                  <Style>
+                                    <FontSize>11pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>#666666</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox7</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -303,14 +484,14 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Date">
+                        <Textbox Name="Section_Date">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Date.Value</Value>
+                                  <Value>=Fields!Section_Date.Value</Value>
                                   <Style>
                                     <FontWeight>Normal</FontWeight>
                                     <Format>MM/dd/yy</Format>
@@ -323,7 +504,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Date</rd:DefaultName>
+                          <rd:DefaultName>Section_Date</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -339,14 +520,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Name">
+                        <Textbox Name="Page_Name">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Name.Value</Value>
+                                  <Value>=Fields!Page_Name.Value</Value>
                                   <Style>
                                     <FontWeight>Normal</FontWeight>
                                     <Color>#333333</Color>
@@ -358,7 +539,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Name</rd:DefaultName>
+                          <rd:DefaultName>Page_Name</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -374,14 +555,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Slug">
+                        <Textbox Name="Section_Name">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Slug.Value</Value>
+                                  <Value>=Fields!Section_Name.Value</Value>
                                   <Style>
                                     <FontWeight>Normal</FontWeight>
                                     <Color>#333333</Color>
@@ -393,7 +574,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Slug</rd:DefaultName>
+                          <rd:DefaultName>Section_Name</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -409,14 +590,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Icon">
+                        <Textbox Name="Section_Icon">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Icon.Value</Value>
+                                  <Value>=Fields!Section_Icon.Value</Value>
                                   <Style>
                                     <FontWeight>Normal</FontWeight>
                                     <Color>#333333</Color>
@@ -428,7 +609,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Icon</rd:DefaultName>
+                          <rd:DefaultName>Section_Icon</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -444,14 +625,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Subject">
+                        <Textbox Name="Columns">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Subject.Value</Value>
+                                  <Value>=Fields!Columns.Value</Value>
                                   <Style>
                                     <FontWeight>Normal</FontWeight>
                                     <Color>#333333</Color>
@@ -463,7 +644,77 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Subject</rd:DefaultName>
+                          <rd:DefaultName>Columns</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BackgroundColor>White</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Limit">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Limit.Value</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <Color>#333333</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Limit</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BackgroundColor>White</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Section_Subject">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Section_Subject.Value</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <Color>#333333</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Section_Subject</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -483,6 +734,8 @@
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
+                <TablixMember />
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -551,7 +804,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Pages</Value>
+                    <Value>Sections</Value>
                     <Style>
                       <FontFamily>Arial</FontFamily>
                       <FontSize>12pt</FontSize>
@@ -588,7 +841,7 @@
           </Border>
         </Style>
       </Body>
-      <Width>8.5in</Width>
+      <Width>9.09375in</Width>
       <Page>
         <PageFooter>
           <Height>0.45in</Height>
