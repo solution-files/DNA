@@ -28,14 +28,14 @@
 						</div>
 						<div class="ud-feature-content">
 							<h3 class="ud-feature-title">
-								@article.Subject
+								@Html.Render(article.Subject)
 								<vc:edit-icon controller="Article" action="Edit" id="@article.ArticleId" css="text-primary" title="Edit This Article"></vc:edit-icon>
 							</h3>
 							<p class="ud-feature-desc">
-								@article.Description
+								@Html.Render(article.Description)
 							</p>
 							<a href="@article.Target" class="ud-feature-link">
-								@article.TargetName
+								@Html.Render(article.TargetName)
 							</a>
 						</div>
 					</div>
