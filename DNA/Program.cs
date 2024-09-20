@@ -3,12 +3,15 @@
 using Azure.Identity;
 using DNA3.Classes;
 using DNA3.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
@@ -29,6 +32,16 @@ builder.Configuration.AddJsonFile("C:\\DNASettings.json");
 string? jwtkey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(jwtkey)) {
     throw new ArgumentException("JWT Encryption Key must be configured and accessible to the Configuration Manager");
+}
+
+string? msauthclientid = builder.Configuration["MicrosoftSettings:ClientId"];
+if (string.IsNullOrEmpty(msauthclientid)) {
+    throw new ArgumentException("Microsoft Authentication Client ID must be configured and accessible to the Configuration Manager");
+}
+
+string? msauthclientsecret = builder.Configuration["MicrosoftSettings:ClientSecret"];
+if (string.IsNullOrEmpty(msauthclientsecret)) {
+    throw new ArgumentException("Microsoft Authentication Client Secret must be configured and accessible to the Configuration Manager");
 }
 
 string? connectionstring = builder.Configuration["ConnectionStrings:MainContext"];
@@ -56,6 +69,22 @@ services.AddAuthentication(options => {
     options.LogoutPath = "/Dashboard/Logout";
     options.AccessDeniedPath = "/Dashboard";
     options.SlidingExpiration = true;
+}).AddCertificate(options => {
+    options.AllowedCertificateTypes = CertificateTypes.All;
+    options.Events = new CertificateAuthenticationEvents {
+        OnCertificateValidated = async context => {
+            IAuth validationService = context.HttpContext.RequestServices.GetRequiredService<IAuth>();
+            await validationService.AuthenticateCertificate(context);
+        }
+    };
+}).AddJwtBearer(options => {
+    options.TokenValidationParameters = new TokenValidationParameters {
+        RequireExpirationTime = true,
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtkey))
+    };
 });
 
 // Authorization Policies
@@ -71,29 +100,6 @@ services.Configure<CookiePolicyOptions>(options => {
     options.CheckConsentNeeded = context => true;
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
-
-// Certificate Authentication
-services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate(options => {
-    options.AllowedCertificateTypes = CertificateTypes.All;
-    options.Events = new CertificateAuthenticationEvents {
-        OnCertificateValidated = async context => {
-            IAuth validationService = context.HttpContext.RequestServices.GetRequiredService<IAuth>();
-            await validationService.AuthenticateCertificate(context);
-        }
-    };
-});
-
-// JWT Authentication
-services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => {
-        options.TokenValidationParameters = new TokenValidationParameters {
-            RequireExpirationTime = true,
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtkey))
-        };
-    });
 
 // Database Context
 services.AddDbContext<MainContext>(options => options.UseSqlServer(connectionstring));
