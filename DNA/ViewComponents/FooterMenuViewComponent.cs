@@ -17,7 +17,7 @@ namespace DNA.ViewComponents {
 
 		private readonly DNA3.Models.MainContext Context;
 		private readonly ILogger<FooterMenuViewComponent> Logger;
-		private DNA3.Models.Menu model;
+		private DNA3.Models.Menu? model;
 
 		#endregion
 
@@ -29,11 +29,9 @@ namespace DNA.ViewComponents {
 		}
 
 		public async Task<IViewComponentResult> InvokeAsync(string MenuCode, string Class, string ShowIcon) {
-			Task<IViewComponentResult> ComponentTask = null;
+			Task<IViewComponentResult>? ComponentTask = null;
 			try {
-				if (ShowIcon == null) {
-					ShowIcon = "False";
-				}
+				ShowIcon ??= "False";
 				ViewData["Class"] = Class;
 				ViewData["ShowIcon"] = ShowIcon;
 				model = await Context.Menu.Include(x => x.Actions).Where(x => x.Code == MenuCode).SingleOrDefaultAsync();

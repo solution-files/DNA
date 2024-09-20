@@ -140,7 +140,7 @@ namespace DNA3.Controllers {
         // Empty (Get)
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet, HttpPost]
-        public async Task<IActionResult> Empty() {
+        public async Task<IActionResult> EmptyContents() {
             string message;
             try {
                 var instance = await Context.Cart.Include(x => x.Items).SingleAsync(x => x.CartId == User.ClientId());

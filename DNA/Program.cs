@@ -34,16 +34,6 @@ if (string.IsNullOrEmpty(jwtkey)) {
     throw new ArgumentException("JWT Encryption Key must be configured and accessible to the Configuration Manager");
 }
 
-string? msauthclientid = builder.Configuration["MicrosoftSettings:ClientId"];
-if (string.IsNullOrEmpty(msauthclientid)) {
-    throw new ArgumentException("Microsoft Authentication Client ID must be configured and accessible to the Configuration Manager");
-}
-
-string? msauthclientsecret = builder.Configuration["MicrosoftSettings:ClientSecret"];
-if (string.IsNullOrEmpty(msauthclientsecret)) {
-    throw new ArgumentException("Microsoft Authentication Client Secret must be configured and accessible to the Configuration Manager");
-}
-
 string? connectionstring = builder.Configuration["ConnectionStrings:MainContext"];
 if (string.IsNullOrEmpty(connectionstring)) {
     throw new ArgumentException("Database Connection String must be configured and accessible to the Configuration Manager");
@@ -88,12 +78,11 @@ services.AddAuthentication(options => {
 });
 
 // Authorization Policies
-services.AddAuthorization(options => {
-    options.AddPolicy("ApiUserPolicy", policy => policy.RequireClaim("Role", "Admin"));
-    options.AddPolicy("Administrators", policy => policy.RequireClaim("Role", "Admin"));
-    options.AddPolicy("Managers", policy => policy.RequireClaim("Role", "Admin", "Manager"));
-    options.AddPolicy("Users", policy => policy.RequireClaim("Role", "Admin", "Manager", "User"));
-});
+services.AddAuthorizationBuilder()
+    .AddPolicy("ApiUserPolicy", policy => policy.RequireClaim("Role", "Admin"))
+    .AddPolicy("Administrators", policy => policy.RequireClaim("Role", "Admin"))
+    .AddPolicy("Managers", policy => policy.RequireClaim("Role", "Admin", "Manager"))
+    .AddPolicy("Users", policy => policy.RequireClaim("Role", "Admin", "Manager", "User"));
 
 // Cookie Policy
 services.Configure<CookiePolicyOptions>(options => {
@@ -103,9 +92,6 @@ services.Configure<CookiePolicyOptions>(options => {
 
 // Database Context
 services.AddDbContext<MainContext>(options => options.UseSqlServer(connectionstring));
-
-// SignalR
-services.AddSignalR().AddJsonProtocol(x => x.PayloadSerializerOptions.PropertyNamingPolicy = null);
 
 // Cross-Origin Requests
 services.AddCors();

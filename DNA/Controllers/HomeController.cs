@@ -27,6 +27,10 @@ namespace DNA.Controllers {
 		private readonly ILogger<HomeController> Logger;
         private readonly DNA3.Classes.IDNATools DNATools;
 
+        private string SmtpHost;
+        private string SmtpPort;
+        private string SmtpFrom;
+        private string SalesName;
 		#endregion
 
 		#region Methods
@@ -36,14 +40,36 @@ namespace DNA.Controllers {
 			Context = context;
 			Logger = logger;
             DNATools = dnatools;
-		}
 
-		#endregion
+            // Make sure configuration settings are accessible to the Configuration Manager
+            SmtpHost = Configuration["Smtp:Host"] ?? "";
+            if (string.IsNullOrEmpty(SmtpHost)) {
+                throw new ArgumentException("SMTP Host address must be configured and accessible to the Configuration Manager");
+            }
 
-		#region Controller Actions
+            SmtpPort = Configuration["Smtp:Port"] ?? "";
+            if (string.IsNullOrEmpty(SmtpPort)) {
+                throw new ArgumentException("SMTP Port Number must be configured and accessible to the Configuration Manager");
+            }
 
-		// Index (Get)
-		public async Task<IActionResult> IndexAsync(){
+            SmtpFrom = Configuration["Smtp:From"] ?? "";
+            if (string.IsNullOrEmpty(SmtpFrom)) {
+                throw new ArgumentException("SMTP From address must be configured and accessible to the Configuration Manager");
+            }
+
+            SalesName = Configuration["App:SalesName"] ?? "";
+            if (string.IsNullOrEmpty(SalesName)) {
+                throw new ArgumentException("Sales Name must be configured and accessible to the Configuration Manager");
+            }
+
+        }
+
+        #endregion
+
+        #region Controller Actions
+
+        // Index (Get)
+        public async Task<IActionResult> IndexAsync(){
 			string message;
 			try {
                 await DNATools.Initialize();
@@ -344,21 +370,21 @@ namespace DNA.Controllers {
             bool result = true;
             try {
                 MailMessage message = new() {
-                    From = new MailAddress(Configuration["Smtp:From"], Configuration["App:SalesName"]),
+                    From = new MailAddress(SmtpFrom, SalesName),
                     Subject = $"{Configuration["App:Shortname"]} - {request.Subject}",
                     Body = BuildMessageBody(request),
                     BodyEncoding = System.Text.Encoding.UTF8,
                     IsBodyHtml = true
                 };
-                message.To.Add(new MailAddress(Configuration["Smtp:From"], Configuration["App:SalesName"]));
+                message.To.Add(new MailAddress(SmtpFrom, SalesName));
                 message.CC.Add(new MailAddress(request.Email, $"{request.First} {request.Last}"));
                 message.ReplyToList.Add(new MailAddress(request.Email, $"{request.First} {request.Last}"));
 
                 NetworkCredential credentials = new(Configuration["Smtp:User"], Configuration["Smtp:Password"]);
 
                 SmtpClient smtpclient = new() {
-                    Host = Configuration["Smtp:Host"],
-                    Port = Convert.ToInt16(Configuration["Smtp:Port"]),
+                    Host = SmtpHost,
+                    Port = Convert.ToInt16(SmtpPort),
                     Credentials = credentials,
                     EnableSsl = true
                 };
