@@ -17,7 +17,7 @@ namespace DNA.ViewComponents {
 
 		private readonly DNA3.Models.MainContext Context;
 		private readonly ILogger<AboutUsViewComponent> Logger;
-		private DNA3.Models.Page model;
+		private DNA3.Models.Page? model;
 
 		#endregion
 

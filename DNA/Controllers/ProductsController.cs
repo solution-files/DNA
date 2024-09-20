@@ -40,7 +40,7 @@ namespace DNA.Controllers {
         // Detail (Get)
         public async Task<IActionResult> Detail(int? id) {
             string message;
-            Product instance = new Product();
+            Product? instance = new Product();
             try {
                 instance = await Context.Product.Include(x => x.Status).Where(x => x.ProductId == id).SingleOrDefaultAsync();
             } catch (Exception ex) {

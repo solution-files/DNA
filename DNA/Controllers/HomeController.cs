@@ -27,10 +27,11 @@ namespace DNA.Controllers {
 		private readonly ILogger<HomeController> Logger;
         private readonly DNA3.Classes.IDNATools DNATools;
 
-        private string SmtpHost;
-        private string SmtpPort;
-        private string SmtpFrom;
-        private string SalesName;
+        private readonly string SmtpHost;
+        private readonly string SmtpPort;
+        private readonly string SmtpFrom;
+        private readonly string SalesName;
+
 		#endregion
 
 		#region Methods

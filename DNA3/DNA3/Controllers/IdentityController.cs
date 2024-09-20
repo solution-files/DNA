@@ -182,7 +182,7 @@ namespace DNA3.Controllers {
             try {
                 if (ModelState.IsValid) {
                     var hash = Utilities.Security.CreateHash(instance.Proposed);
-                    var rows = await Context.Database.ExecuteSqlRawAsync($"UPDATE [Login] SET [Password] = '{hash}' WHERE LoginId = {instance.LoginId}");
+                    var rows = await Context.Database.ExecuteSqlAsync($"UPDATE [Login] SET [Password] = '{hash}' WHERE LoginId = {instance.LoginId}");
                     if (rows != 1) {
                         throw new ArgumentException($"Password was not updated as expected, {rows} rows were changed.");
                     }
