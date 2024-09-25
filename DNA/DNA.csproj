@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Content\" />
     <Folder Include="wwwroot\report\Resources\Data\" />
     <Folder Include="wwwroot\report\Resources\Images\" />
     <Folder Include="wwwroot\report\Resources\Styles\" />
