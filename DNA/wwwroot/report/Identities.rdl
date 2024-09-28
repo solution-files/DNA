@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
-  <Description>Categories</Description>
+  <Description>Login Identities</Description>
   <am:AuthoringMetadata>
     <am:CreatedBy>
       <am:Name>MSRB</am:Name>
@@ -10,7 +10,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2024-09-28T22:53:40.8244400Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2024-09-28T22:54:15.8044448Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <Author>DNA</Author>
@@ -30,134 +30,249 @@
       <Query>
         <DataSourceName>dsReport</DataSourceName>
         <CommandText>SELECT
-  Category.CategoryId
-  ,Category.SectionId AS [Category SectionId]
-  ,Category.[Date] AS [Category Date]
-  ,Category.Slug AS [Category Slug]
-  ,Category.Name AS [Category Name]
-  ,Category.Subject AS [Category Subject]
-  ,Category.Description AS [Category Description]
-  ,Category.Icon AS [Category Icon]
-  ,[Section].SectionId AS [Section SectionId]
-  ,[Section].PageId
-  ,[Section].[Date] AS [Section Date]
-  ,[Section].Slug AS [Section Slug]
-  ,[Section].Name AS [Section Name]
-  ,[Section].Subject AS [Section Subject]
-  ,[Section].Description AS [Section Description]
-  ,[Section].Icon AS [Section Icon]
-  ,[Section].Columns
-  ,[Section].[Limit]
+  Login.LoginId
+  ,Login.Provider
+  ,Login.UserId AS [Login UserId]
+  ,Login.Email AS [Login Email]
+  ,Login.Password
+  ,[User].UserId AS [User UserId]
+  ,[User].ClientId AS [User ClientId]
+  ,[User].[First] AS [User First]
+  ,[User].[Last] AS [User Last]
+  ,[User].RoleId
+  ,[User].StatusId AS [User StatusId]
+  ,[User].Persist
+  ,[User].TotpKey
+  ,[User].TotpManualSetup
+  ,[User].TotpDeviceName
+  ,[User].TotpCode
+  ,[User].Token
+  ,[User].TokenDate
+  ,[User].Thumbprint
+  ,[User].Certificate
+  ,[User].Comment AS [User Comment]
+  ,Client.ClientId AS [Client ClientId]
+  ,Client.Company
+  ,Client.Address1
+  ,Client.Address2
+  ,Client.City
+  ,Client.[State]
+  ,Client.Zip
+  ,Client.Zip1
+  ,Client.[First] AS [Client First]
+  ,Client.[Last] AS [Client Last]
+  ,Client.Phone
+  ,Client.Email AS [Client Email]
+  ,Client.Comment AS [Client Comment]
+  ,Client.Avitar
+  ,Client.StatusId AS [Client StatusId]
 FROM
-  [Section]
-  INNER JOIN Category
-    ON [Section].SectionId = Category.SectionId</CommandText>
+  [User]
+  INNER JOIN Login
+    ON [User].UserId = Login.UserId
+  INNER JOIN Client
+    ON [User].ClientId = Client.ClientId</CommandText>
         <rd:DesignerState>
           <QueryDefinition xmlns="http://schemas.microsoft.com/ReportingServices/QueryDefinition/Relational">
             <SelectedColumns>
-              <ColumnExpression ColumnOwner="Category" ColumnName="CategoryId" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="SectionId" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="Date" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="Slug" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="Name" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="Subject" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="Description" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="Icon" />
-              <ColumnExpression ColumnOwner="Section" ColumnName="SectionId" />
-              <ColumnExpression ColumnOwner="Section" ColumnName="PageId" />
-              <ColumnExpression ColumnOwner="Section" ColumnName="Date" />
-              <ColumnExpression ColumnOwner="Section" ColumnName="Slug" />
-              <ColumnExpression ColumnOwner="Section" ColumnName="Name" />
-              <ColumnExpression ColumnOwner="Section" ColumnName="Subject" />
-              <ColumnExpression ColumnOwner="Section" ColumnName="Description" />
-              <ColumnExpression ColumnOwner="Section" ColumnName="Icon" />
-              <ColumnExpression ColumnOwner="Section" ColumnName="Columns" />
-              <ColumnExpression ColumnOwner="Section" ColumnName="Limit" />
+              <ColumnExpression ColumnOwner="Login" ColumnName="LoginId" />
+              <ColumnExpression ColumnOwner="Login" ColumnName="Provider" />
+              <ColumnExpression ColumnOwner="Login" ColumnName="UserId" />
+              <ColumnExpression ColumnOwner="Login" ColumnName="Email" />
+              <ColumnExpression ColumnOwner="Login" ColumnName="Password" />
+              <ColumnExpression ColumnOwner="User" ColumnName="UserId" />
+              <ColumnExpression ColumnOwner="User" ColumnName="ClientId" />
+              <ColumnExpression ColumnOwner="User" ColumnName="First" />
+              <ColumnExpression ColumnOwner="User" ColumnName="Last" />
+              <ColumnExpression ColumnOwner="User" ColumnName="RoleId" />
+              <ColumnExpression ColumnOwner="User" ColumnName="StatusId" />
+              <ColumnExpression ColumnOwner="User" ColumnName="Persist" />
+              <ColumnExpression ColumnOwner="User" ColumnName="TotpKey" />
+              <ColumnExpression ColumnOwner="User" ColumnName="TotpManualSetup" />
+              <ColumnExpression ColumnOwner="User" ColumnName="TotpDeviceName" />
+              <ColumnExpression ColumnOwner="User" ColumnName="TotpCode" />
+              <ColumnExpression ColumnOwner="User" ColumnName="Token" />
+              <ColumnExpression ColumnOwner="User" ColumnName="TokenDate" />
+              <ColumnExpression ColumnOwner="User" ColumnName="Thumbprint" />
+              <ColumnExpression ColumnOwner="User" ColumnName="Certificate" />
+              <ColumnExpression ColumnOwner="User" ColumnName="Comment" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="ClientId" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="Company" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="Address1" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="Address2" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="City" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="State" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="Zip" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="Zip1" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="First" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="Last" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="Phone" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="Email" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="Comment" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="Avitar" />
+              <ColumnExpression ColumnOwner="Client" ColumnName="StatusId" />
             </SelectedColumns>
             <Joins>
-              <Join Type="CROSS JOIN" ColumnOwner="Section" />
-              <Join Type="INNER JOIN" ColumnOwner="Category">
+              <Join Type="CROSS JOIN" ColumnOwner="User" />
+              <Join Type="INNER JOIN" ColumnOwner="Login">
                 <On>
-                  <From ColumnOwner="Section" ColumnName="SectionId" />
-                  <To ColumnOwner="Category" ColumnName="SectionId" />
+                  <From ColumnOwner="User" ColumnName="UserId" />
+                  <To ColumnOwner="Login" ColumnName="UserId" />
+                </On>
+              </Join>
+              <Join Type="INNER JOIN" ColumnOwner="Client">
+                <On>
+                  <From ColumnOwner="User" ColumnName="ClientId" />
+                  <To ColumnOwner="Client" ColumnName="ClientId" />
                 </On>
               </Join>
             </Joins>
           </QueryDefinition>
         </rd:DesignerState>
-        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
-        <Field Name="CategoryId">
-          <DataField>CategoryId</DataField>
+        <Field Name="LoginId">
+          <DataField>LoginId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="PageId">
-          <DataField>PageId</DataField>
+        <Field Name="Provider">
+          <DataField>Provider</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Login_UserId">
+          <DataField>Login UserId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="Category_SectionId">
-          <DataField>Category SectionId</DataField>
+        <Field Name="Login_Email">
+          <DataField>Login Email</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Password">
+          <DataField>Password</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="User_UserId">
+          <DataField>User UserId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="Category_Date">
-          <DataField>Category Date</DataField>
+        <Field Name="User_ClientId">
+          <DataField>User ClientId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="User_First">
+          <DataField>User First</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="User_Last">
+          <DataField>User Last</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="RoleId">
+          <DataField>RoleId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="User_StatusId">
+          <DataField>User StatusId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Persist">
+          <DataField>Persist</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="TotpKey">
+          <DataField>TotpKey</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TotpManualSetup">
+          <DataField>TotpManualSetup</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TotpDeviceName">
+          <DataField>TotpDeviceName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TotpCode">
+          <DataField>TotpCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Token">
+          <DataField>Token</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TokenDate">
+          <DataField>TokenDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
-        <Field Name="Category_Slug">
-          <DataField>Category Slug</DataField>
+        <Field Name="Thumbprint">
+          <DataField>Thumbprint</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Category_Name">
-          <DataField>Category Name</DataField>
+        <Field Name="Certificate">
+          <DataField>Certificate</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Category_Subject">
-          <DataField>Category Subject</DataField>
+        <Field Name="User_Comment">
+          <DataField>User Comment</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Category_Description">
-          <DataField>Category Description</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Category_Icon">
-          <DataField>Category Icon</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Section_SectionId">
-          <DataField>Section SectionId</DataField>
+        <Field Name="Client_ClientId">
+          <DataField>Client ClientId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="Section_Date">
-          <DataField>Section Date</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="Section_Slug">
-          <DataField>Section Slug</DataField>
+        <Field Name="Company">
+          <DataField>Company</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Section_Name">
-          <DataField>Section Name</DataField>
+        <Field Name="Address1">
+          <DataField>Address1</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Section_Subject">
-          <DataField>Section Subject</DataField>
+        <Field Name="Address2">
+          <DataField>Address2</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Section_Description">
-          <DataField>Section Description</DataField>
+        <Field Name="City">
+          <DataField>City</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Section_Icon">
-          <DataField>Section Icon</DataField>
+        <Field Name="State">
+          <DataField>State</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Columns">
-          <DataField>Columns</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="Zip">
+          <DataField>Zip</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Limit">
-          <DataField>Limit</DataField>
+        <Field Name="Zip1">
+          <DataField>Zip1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Client_First">
+          <DataField>Client First</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Client_Last">
+          <DataField>Client Last</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Phone">
+          <DataField>Phone</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Client_Email">
+          <DataField>Client Email</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Client_Comment">
+          <DataField>Client Comment</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Avitar">
+          <DataField>Avitar</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Client_StatusId">
+          <DataField>Client StatusId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
@@ -171,70 +286,19 @@ FROM
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.70833in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>1in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>1in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>1in</Width>
-                </TablixColumn>
-                <TablixColumn>
                   <Width>1.5in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.76042in</Width>
+                  <Width>5.46875in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
                   <Height>0.25in</Height>
                   <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox10">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Date</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Format>MM/dd/yy</Format>
-                                    <Color>#666666</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox10</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <BackgroundColor>White</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="Textbox3">
@@ -244,7 +308,7 @@ FROM
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Section</Value>
+                                  <Value>Client</Value>
                                   <Style>
                                     <FontSize>11pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -278,47 +342,6 @@ FROM
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox32">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Name</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#666666</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox32</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <BackgroundColor>White</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
                         <Textbox Name="Textbox34">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -326,7 +349,7 @@ FROM
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Slug</Value>
+                                  <Value>Email</Value>
                                   <Style>
                                     <FontSize>11pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -367,7 +390,7 @@ FROM
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Icon</Value>
+                                  <Value>Provider</Value>
                                   <Style>
                                     <FontSize>11pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -399,47 +422,6 @@ FROM
                         </Textbox>
                       </CellContents>
                     </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox16">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Subject</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#666666</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox16</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <BackgroundColor>White</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
@@ -447,17 +429,16 @@ FROM
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Category_Date">
+                        <Textbox Name="Company">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Category_Date.Value</Value>
+                                  <Value>=Fields!Company.Value</Value>
                                   <Style>
                                     <FontWeight>Normal</FontWeight>
-                                    <Format>MM/dd/yy</Format>
                                     <Color>#333333</Color>
                                   </Style>
                                 </TextRun>
@@ -467,7 +448,7 @@ FROM
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Category_Date</rd:DefaultName>
+                          <rd:DefaultName>Company</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -483,14 +464,14 @@ FROM
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Section_Name">
+                        <Textbox Name="Login_Email">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Section_Name.Value</Value>
+                                  <Value>=Fields!Login_Email.Value</Value>
                                   <Style>
                                     <FontWeight>Normal</FontWeight>
                                     <Color>#333333</Color>
@@ -502,7 +483,7 @@ FROM
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Section_Name</rd:DefaultName>
+                          <rd:DefaultName>Login_Email</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -518,14 +499,14 @@ FROM
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Category_Name">
+                        <Textbox Name="Provider">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Category_Name.Value</Value>
+                                  <Value>=Fields!Provider.Value</Value>
                                   <Style>
                                     <FontWeight>Normal</FontWeight>
                                     <Color>#333333</Color>
@@ -537,112 +518,7 @@ FROM
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Category_Name</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BackgroundColor>White</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Category_Slug">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Category_Slug.Value</Value>
-                                  <Style>
-                                    <FontWeight>Normal</FontWeight>
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Category_Slug</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BackgroundColor>White</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Category_Icon">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Category_Icon.Value</Value>
-                                  <Style>
-                                    <FontWeight>Normal</FontWeight>
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Category_Icon</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BackgroundColor>White</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Category_Subject">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Category_Subject.Value</Value>
-                                  <Style>
-                                    <FontWeight>Normal</FontWeight>
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Category_Subject</rd:DefaultName>
+                          <rd:DefaultName>Provider</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -665,9 +541,6 @@ FROM
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
-                <TablixMember />
-                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -681,7 +554,7 @@ FROM
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dsMain</DataSetName>
-            <Top>0.98958in</Top>
+            <Top>1.11458in</Top>
             <Left>0.125in</Left>
             <Height>0.5in</Height>
             <Width>7.96875in</Width>
@@ -731,7 +604,7 @@ FROM
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Categories</Value>
+                    <Value>Login Identities</Value>
                     <Style>
                       <FontFamily>Arial</FontFamily>
                       <FontSize>12pt</FontSize>

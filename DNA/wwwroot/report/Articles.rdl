@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
-  <Description>Categories</Description>
+  <Description>Articles</Description>
   <am:AuthoringMetadata>
     <am:CreatedBy>
       <am:Name>MSRB</am:Name>
@@ -10,7 +10,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2024-09-28T22:53:40.8244400Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2024-09-28T22:53:21.4224447Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <Author>DNA</Author>
@@ -30,16 +30,23 @@
       <Query>
         <DataSourceName>dsReport</DataSourceName>
         <CommandText>SELECT
-  Category.CategoryId
-  ,Category.SectionId AS [Category SectionId]
-  ,Category.[Date] AS [Category Date]
-  ,Category.Slug AS [Category Slug]
-  ,Category.Name AS [Category Name]
-  ,Category.Subject AS [Category Subject]
-  ,Category.Description AS [Category Description]
-  ,Category.Icon AS [Category Icon]
+  Article.ArticleId
+  ,Article.[Date] AS [Article Date]
+  ,Article.PageId AS [Article PageId]
+  ,Article.SectionId AS [Article SectionId]
+  ,Article.CategoryId
+  ,Article.Icon AS [Article Icon]
+  ,Article.Name AS [Article Name]
+  ,Article.Subject AS [Article Subject]
+  ,Article.Description AS [Article Description]
+  ,Article.Image
+  ,Article.Target
+  ,Article.TargetName
+  ,Article.Tags
+  ,Article.Weight
+  ,Article.StatusId AS [Article StatusId]
   ,[Section].SectionId AS [Section SectionId]
-  ,[Section].PageId
+  ,[Section].PageId AS [Section PageId]
   ,[Section].[Date] AS [Section Date]
   ,[Section].Slug AS [Section Slug]
   ,[Section].Name AS [Section Name]
@@ -48,21 +55,44 @@
   ,[Section].Icon AS [Section Icon]
   ,[Section].Columns
   ,[Section].[Limit]
+  ,Status.StatusId AS [Status StatusId]
+  ,Status.TableId
+  ,Status.Code
+  ,Status.Name AS [Status Name]
+  ,Status.Description AS [Status Description]
+  ,Page.PageId AS [Page PageId]
+  ,Page.[Date] AS [Page Date]
+  ,Page.Slug AS [Page Slug]
+  ,Page.Name AS [Page Name]
+  ,Page.Subject AS [Page Subject]
+  ,Page.Content
+  ,Page.Icon AS [Page Icon]
 FROM
-  [Section]
-  INNER JOIN Category
-    ON [Section].SectionId = Category.SectionId</CommandText>
+  Article
+  INNER JOIN Status
+    ON Article.StatusId = Status.StatusId
+  INNER JOIN Page
+    ON Article.PageId = Page.PageId
+  INNER JOIN [Section]
+    ON Article.SectionId = [Section].SectionId AND Page.PageId = [Section].PageId</CommandText>
         <rd:DesignerState>
           <QueryDefinition xmlns="http://schemas.microsoft.com/ReportingServices/QueryDefinition/Relational">
             <SelectedColumns>
-              <ColumnExpression ColumnOwner="Category" ColumnName="CategoryId" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="SectionId" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="Date" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="Slug" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="Name" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="Subject" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="Description" />
-              <ColumnExpression ColumnOwner="Category" ColumnName="Icon" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="ArticleId" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="Date" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="PageId" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="SectionId" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="CategoryId" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="Icon" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="Name" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="Subject" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="Description" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="Image" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="Target" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="TargetName" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="Tags" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="Weight" />
+              <ColumnExpression ColumnOwner="Article" ColumnName="StatusId" />
               <ColumnExpression ColumnOwner="Section" ColumnName="SectionId" />
               <ColumnExpression ColumnOwner="Section" ColumnName="PageId" />
               <ColumnExpression ColumnOwner="Section" ColumnName="Date" />
@@ -73,72 +103,115 @@ FROM
               <ColumnExpression ColumnOwner="Section" ColumnName="Icon" />
               <ColumnExpression ColumnOwner="Section" ColumnName="Columns" />
               <ColumnExpression ColumnOwner="Section" ColumnName="Limit" />
+              <ColumnExpression ColumnOwner="Status" ColumnName="StatusId" />
+              <ColumnExpression ColumnOwner="Status" ColumnName="TableId" />
+              <ColumnExpression ColumnOwner="Status" ColumnName="Code" />
+              <ColumnExpression ColumnOwner="Status" ColumnName="Name" />
+              <ColumnExpression ColumnOwner="Status" ColumnName="Description" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="PageId" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="Date" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="Slug" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="Name" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="Subject" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="Content" />
+              <ColumnExpression ColumnOwner="Page" ColumnName="Icon" />
             </SelectedColumns>
             <Joins>
-              <Join Type="CROSS JOIN" ColumnOwner="Section" />
-              <Join Type="INNER JOIN" ColumnOwner="Category">
+              <Join Type="CROSS JOIN" ColumnOwner="Article" />
+              <Join Type="INNER JOIN" ColumnOwner="Status">
                 <On>
-                  <From ColumnOwner="Section" ColumnName="SectionId" />
-                  <To ColumnOwner="Category" ColumnName="SectionId" />
+                  <From ColumnOwner="Article" ColumnName="StatusId" />
+                  <To ColumnOwner="Status" ColumnName="StatusId" />
+                </On>
+              </Join>
+              <Join Type="INNER JOIN" ColumnOwner="Page">
+                <On>
+                  <From ColumnOwner="Article" ColumnName="PageId" />
+                  <To ColumnOwner="Page" ColumnName="PageId" />
+                </On>
+              </Join>
+              <Join Type="INNER JOIN" ColumnOwner="Section">
+                <On>
+                  <From ColumnOwner="Article" ColumnName="SectionId" />
+                  <To ColumnOwner="Section" ColumnName="SectionId" />
+                </On>
+                <On>
+                  <From ColumnOwner="Page" ColumnName="PageId" />
+                  <To ColumnOwner="Section" ColumnName="PageId" />
                 </On>
               </Join>
             </Joins>
           </QueryDefinition>
         </rd:DesignerState>
-        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
+        <Field Name="ArticleId">
+          <DataField>ArticleId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="CategoryId">
           <DataField>CategoryId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="PageId">
-          <DataField>PageId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Category_SectionId">
-          <DataField>Category SectionId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Category_Date">
-          <DataField>Category Date</DataField>
+        <Field Name="Article_Date">
+          <DataField>Article Date</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
-        <Field Name="Category_Slug">
-          <DataField>Category Slug</DataField>
+        <Field Name="Article_PageId">
+          <DataField>Article PageId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Article_SectionId">
+          <DataField>Article SectionId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Article_Icon">
+          <DataField>Article Icon</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Category_Name">
-          <DataField>Category Name</DataField>
+        <Field Name="Article_Name">
+          <DataField>Article Name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Category_Subject">
-          <DataField>Category Subject</DataField>
+        <Field Name="Article_Subject">
+          <DataField>Article Subject</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Category_Description">
-          <DataField>Category Description</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Category_Icon">
-          <DataField>Category Icon</DataField>
+        <Field Name="Article_Description">
+          <DataField>Article Description</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Section_SectionId">
           <DataField>Section SectionId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="Image">
+          <DataField>Image</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="Section_Date">
           <DataField>Section Date</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
-        <Field Name="Section_Slug">
-          <DataField>Section Slug</DataField>
+        <Field Name="Target">
+          <DataField>Target</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TargetName">
+          <DataField>TargetName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Tags">
+          <DataField>Tags</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Section_Name">
           <DataField>Section Name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Weight">
+          <DataField>Weight</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="Section_Subject">
           <DataField>Section Subject</DataField>
@@ -148,9 +221,21 @@ FROM
           <DataField>Section Description</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Section_Slug">
+          <DataField>Section Slug</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Article_StatusId">
+          <DataField>Article StatusId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="Section_Icon">
           <DataField>Section Icon</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Section_PageId">
+          <DataField>Section PageId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="Columns">
           <DataField>Columns</DataField>
@@ -159,6 +244,54 @@ FROM
         <Field Name="Limit">
           <DataField>Limit</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Status_StatusId">
+          <DataField>Status StatusId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TableId">
+          <DataField>TableId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Code">
+          <DataField>Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Status_Name">
+          <DataField>Status Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Status_Description">
+          <DataField>Status Description</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Page_PageId">
+          <DataField>Page PageId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Page_Date">
+          <DataField>Page Date</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="Page_Slug">
+          <DataField>Page Slug</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Page_Name">
+          <DataField>Page Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Page_Subject">
+          <DataField>Page Subject</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Content">
+          <DataField>Content</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Page_Icon">
+          <DataField>Page Icon</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -171,70 +304,22 @@ FROM
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.70833in</Width>
-                </TablixColumn>
-                <TablixColumn>
                   <Width>1in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1in</Width>
+                  <Width>1.75in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.5in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>2.76042in</Width>
+                  <Width>4.21875in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
                   <Height>0.25in</Height>
                   <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox10">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Date</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Format>MM/dd/yy</Format>
-                                    <Color>#666666</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox10</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <BackgroundColor>White</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="Textbox3">
@@ -244,7 +329,7 @@ FROM
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Section</Value>
+                                  <Value>Page</Value>
                                   <Style>
                                     <FontSize>11pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -285,7 +370,7 @@ FROM
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Name</Value>
+                                  <Value>Section</Value>
                                   <Style>
                                     <FontSize>11pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -326,7 +411,7 @@ FROM
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Slug</Value>
+                                  <Value>Name</Value>
                                   <Style>
                                     <FontSize>11pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -340,47 +425,6 @@ FROM
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox34</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <BackgroundColor>White</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox36">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Icon</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#666666</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox36</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -447,17 +491,16 @@ FROM
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Category_Date">
+                        <Textbox Name="Page_Name">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Category_Date.Value</Value>
+                                  <Value>=Fields!Page_Name.Value</Value>
                                   <Style>
                                     <FontWeight>Normal</FontWeight>
-                                    <Format>MM/dd/yy</Format>
                                     <Color>#333333</Color>
                                   </Style>
                                 </TextRun>
@@ -467,7 +510,7 @@ FROM
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Category_Date</rd:DefaultName>
+                          <rd:DefaultName>Page_Name</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -518,14 +561,14 @@ FROM
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Category_Name">
+                        <Textbox Name="Article_Name">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Category_Name.Value</Value>
+                                  <Value>=Fields!Article_Name.Value</Value>
                                   <Style>
                                     <FontWeight>Normal</FontWeight>
                                     <Color>#333333</Color>
@@ -537,7 +580,7 @@ FROM
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Category_Name</rd:DefaultName>
+                          <rd:DefaultName>Article_Name</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -553,14 +596,14 @@ FROM
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Category_Slug">
+                        <Textbox Name="Article_Subject">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Category_Slug.Value</Value>
+                                  <Value>=Fields!Article_Subject.Value</Value>
                                   <Style>
                                     <FontWeight>Normal</FontWeight>
                                     <Color>#333333</Color>
@@ -572,77 +615,7 @@ FROM
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Category_Slug</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BackgroundColor>White</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Category_Icon">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Category_Icon.Value</Value>
-                                  <Style>
-                                    <FontWeight>Normal</FontWeight>
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Category_Icon</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BackgroundColor>White</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Category_Subject">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Category_Subject.Value</Value>
-                                  <Style>
-                                    <FontWeight>Normal</FontWeight>
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Category_Subject</rd:DefaultName>
+                          <rd:DefaultName>Article_Subject</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -662,8 +635,6 @@ FROM
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
-                <TablixMember />
-                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -731,7 +702,7 @@ FROM
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Categories</Value>
+                    <Value>Articles</Value>
                     <Style>
                       <FontFamily>Arial</FontFamily>
                       <FontSize>12pt</FontSize>
@@ -761,7 +732,7 @@ FROM
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>2in</Height>
+        <Height>1.5625in</Height>
         <Style>
           <Border>
             <Style>None</Style>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
-  <Description>Page List</Description>
+  <Description>Products</Description>
   <am:AuthoringMetadata>
     <am:CreatedBy>
       <am:Name>MSRB</am:Name>
@@ -10,7 +10,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2024-09-28T12:05:53.3589992Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2024-09-28T22:54:53.2754425Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <Author>DNA</Author>
@@ -676,7 +676,7 @@ FROM
           </Border>
         </Style>
       </Body>
-      <Width>8.5in</Width>
+      <Width>8.09375in</Width>
       <Page>
         <PageFooter>
           <Height>0.45in</Height>

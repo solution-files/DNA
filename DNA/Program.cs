@@ -23,6 +23,7 @@ using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using System.Configuration;
 using Microsoft.AspNetCore.Authentication.Google;
+using System.Security.Claims;
 
 #endregion
 
@@ -33,12 +34,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add external configuration file
 builder.Configuration.AddJsonFile("C:\\DNASettings.json");
 
-// Make sure application secrets are accessible to the Configuration Manager
+// Make sure the JWT Key is accessible to the Configuration Manager
 string? jwtkey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(jwtkey)) {
     throw new ArgumentException("JWT Encryption Key must be configured and accessible to the Configuration Manager");
 }
 
+// Make sure the Connection String is accessible to the Configuration Manager
 string? connectionstring = builder.Configuration["ConnectionStrings:MainContext"];
 if (string.IsNullOrEmpty(connectionstring)) {
     throw new ArgumentException("Database Connection String must be configured and accessible to the Configuration Manager");
