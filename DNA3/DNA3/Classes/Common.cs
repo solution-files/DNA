@@ -1,25 +1,22 @@
 ﻿#region Usings
 
-using Microsoft.AspNetCore.Html;
+using DNA3.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 #endregion
 
 namespace DNA3.Classes {
 
-    #region Common Interfaces
+    #region Interface
 
     #endregion
 
@@ -27,26 +24,40 @@ namespace DNA3.Classes {
 
     public class Common {
 
-        #region System Variables
+        #region Authentication
 
-        public static readonly Queue<string> Messages = new();
-        public static readonly String CurrentFilter = "";
-        public static readonly string Controller = "";
-        public static readonly string Action = "";
-        public static readonly string Mode = "";
-        public static readonly ILogger Log = null;
+        // Get Claims List
+        public static List<Claim> GetClaimsList(Login claimant) {
+            List<Claim> claims = new();
+            try {
+                claims = new List<Claim> {
+                    new Claim("lgnid", claimant.LoginId.ToString()),
+                    new Claim("usrid", claimant.UserId.ToString()),
+                    new Claim("cliid", claimant.User.ClientId.ToString()),
+                    new Claim("first", claimant.User.First),
+                    new Claim("last", claimant.User.Last),
+                    new Claim("full", claimant.User.First + ' ' + claimant.User.Last),
+                    new Claim("email", claimant.Email),
+                    new Claim("role", claimant.User.Role.Code),
+                    new Claim(ClaimTypes.Email, claimant.Email)
+                };
+            } catch (Exception ex) {
+                Log.Error(ex, ex.Message);
+            }
+            return claims;
+        }
 
         #endregion
 
         #region Cookies
 
         public static string GetCookie(HttpContext context, string name) {
-			string value;
-			try {
+            string value;
+            try {
                 value = context.Request.Cookies[name];
             } catch (Exception ex) {
                 Common.Messages.Enqueue(ex.Message);
-                Log.LogError(ex, ex.Message);
+                Log.Error(ex, ex.Message);
                 value = null;
             }
             return value;
@@ -61,7 +72,7 @@ namespace DNA3.Classes {
                 context.Response.Cookies.Append(name, value);
             } catch (Exception ex) {
                 Common.Messages.Enqueue(ex.Message);
-                Log.LogError(ex, ex.Message);
+                Log.Error(ex, ex.Message);
                 result = false;
             }
             return result;
@@ -73,7 +84,7 @@ namespace DNA3.Classes {
                 context.Response.Cookies.Delete(name);
             } catch (Exception ex) {
                 Common.Messages.Enqueue(ex.Message);
-                Log.LogError(ex, ex.Message);
+                Log.Error(ex, ex.Message);
                 result = false;
             }
             return result;
@@ -136,7 +147,7 @@ namespace DNA3.Classes {
         /// <param name="value">The plain-text string to be hashed</param>
         /// <returns>The one-way hashed value to be stored in a database</returns>
         public static String CreateHash(string value) {
-            string result ;
+            string result;
             try {
                 result = (BitConverter.ToString(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(value))).Replace("-", "")).ToUpper();
             } catch {
@@ -315,6 +326,16 @@ namespace DNA3.Classes {
             }
             return ReturnValue;
         }
+
+        #endregion
+
+        #region System Variables
+
+        public static readonly Queue<string> Messages = new();
+        public static readonly String CurrentFilter = "";
+        public static readonly string Controller = "";
+        public static readonly string Action = "";
+        public static readonly string Mode = "";
 
         #endregion
 

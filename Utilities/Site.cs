@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace Utilities {
         public static string Action = "";
         public static string Mode = "";
         public static Serilog.ILogger Log = null;
+        public static string ConnectionString = "";
 
         #endregion
 

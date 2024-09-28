@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DNA3", "DNA3\DNA3\DNA3.cspr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Utilities\Utilities.csproj", "{0A9A9BDB-243A-4588-A872-846CCAAE04FD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMO", "SMO\SMO.csproj", "{398F9C94-D66B-445C-A183-A8A19CB66805}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{0A9A9BDB-243A-4588-A872-846CCAAE04FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A9A9BDB-243A-4588-A872-846CCAAE04FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A9A9BDB-243A-4588-A872-846CCAAE04FD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{398F9C94-D66B-445C-A183-A8A19CB66805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{398F9C94-D66B-445C-A183-A8A19CB66805}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{398F9C94-D66B-445C-A183-A8A19CB66805}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{398F9C94-D66B-445C-A183-A8A19CB66805}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

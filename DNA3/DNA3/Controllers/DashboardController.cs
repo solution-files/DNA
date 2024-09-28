@@ -14,7 +14,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using MimeKit.Text;
-using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Data.SqlClient;
@@ -24,7 +23,6 @@ using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities;
-using System.IO;
 
 #endregion
 
@@ -665,7 +663,7 @@ namespace DNA3.Controllers {
                                 throw new Exception("Local athentication attempts should not have a null password");
                             } else {
                                 if (Utilities.Security.ValidatePassword(model.Password, claimant.Password)) {
-                                    var claims = Auth.GetClaimsList(claimant);
+                                    var claims = Common.GetClaimsList(claimant);
                                     var userIdentity = new ClaimsIdentity(claims, "login");
                                     ClaimsPrincipal principal = new(userIdentity);
                                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);

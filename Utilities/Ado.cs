@@ -2,6 +2,8 @@
 
 using Serilog;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -13,6 +15,29 @@ namespace Utilities {
     public class Ado {
 
         #region Methods
+        
+        // Google On Ticket Received
+        public static IList<T> ListFromSql<T>(string cs, string[] pms, string sql) {
+            IList<T> result = default;
+            try {
+                DataTable dt = new("Generic");
+                using (SqlConnection conn = new(cs)) {
+                    using (SqlCommand cmd = new(sql, conn)) {
+                        foreach(string pm in pms) {
+                            var p = pm.Split("=");
+                            cmd.Parameters.AddWithValue(p[0], p[1]);
+                        }
+                        using (SqlDataAdapter da = new(cmd)) {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+                result = (IList<T>)dt.AsEnumerable().ToList();
+            } catch (Exception ex) {
+                Log.Error(ex, ex.Message);
+            }
+            return result;
+        }
 
         // Database Name From Connection String
         public static string DatabaseNameFromConnectionString(string cs) {
@@ -31,9 +56,9 @@ namespace Utilities {
         public static bool DatabaseExists(string cs) {
             bool result;
             try {
-                using (SqlConnection con = new SqlConnection(cs)) {
+                using (SqlConnection con = new(cs)) {
                     string database = DatabaseNameFromConnectionString(cs);
-                    using (SqlCommand cmd = new SqlCommand($"SELECT 1 AS Result FROM master.sys.databases WHERE ([name] = '{database}' OR [name] = '{database}')", con)) {
+                    using (SqlCommand cmd = new($"SELECT 1 AS Result FROM master.sys.databases WHERE ([name] = '{database}' OR [name] = '{database}')", con)) {
                         con.Open();
                         object response = cmd.ExecuteScalar();
                         if (con.State == ConnectionState.Open) {
@@ -58,8 +83,8 @@ namespace Utilities {
             bool result;
             try {
                 string database = DatabaseNameFromConnectionString(cs);
-                using (SqlConnection con = new SqlConnection(cs)) {
-                    using (SqlCommand cmd = new SqlCommand($"SELECT 1 AS Result FROM sys.tables AS T INNER JOIN sys.schemas AS S ON T.schema_id = S.schema_id WHERE S.Name = '{database}' AND T.Name = '{table}';", con)) {
+                using (SqlConnection con = new(cs)) {
+                    using (SqlCommand cmd = new($"SELECT 1 AS Result FROM sys.tables AS T INNER JOIN sys.schemas AS S ON T.schema_id = S.schema_id WHERE S.Name = '{database}' AND T.Name = '{table}';", con)) {
                         con.Open();
                         object response = cmd.ExecuteScalar();
                         if (con.State == ConnectionState.Open) {
@@ -83,8 +108,8 @@ namespace Utilities {
         public static T GetScalarValue<T>(string connectionstring, string attribute, string entity, string field, string value) {
             T ReturnValue = default;
             try {
-                using (SqlConnection con = new SqlConnection(connectionstring)) {
-                    using (SqlCommand cmd = new SqlCommand($"SELECT [{attribute}] FROM [{entity}] WHERE [{field}] = '{value}'", con)) {
+                using (SqlConnection con = new(connectionstring)) {
+                    using (SqlCommand cmd = new($"SELECT [{attribute}] FROM [{entity}] WHERE [{field}] = '{value}'", con)) {
                         con.Open();
                         object result = cmd.ExecuteScalar();
                         if (con.State == ConnectionState.Open) {

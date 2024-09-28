@@ -8,7 +8,7 @@
 }
 @section Scripts {
 
-	<script>
+    <script>
 
         function SetFilterOptions() {
             try {
@@ -39,8 +39,7 @@
             gridObj.pdfExport();
         }
 
-
-	</script>
+    </script>
 
 }
 
@@ -78,10 +77,10 @@
                     <ejs-grid id="ProductGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" rowSelected="ProductGridRowSelected">
                         <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
                         <e-grid-columns>
-                            <e-grid-column field="Code" headerText="Code" textAlign="Left" width="120"></e-grid-column>
-                            <e-grid-column field="Name" headerText="Name" textAlign="Left" width="120"></e-grid-column>
-                            <e-grid-column field="Targetname" headerText="Target" textAlign="Left" width="120"></e-grid-column>
-                            <e-grid-column field="Price" headerText="Price" textAlign="Right" width="120"></e-grid-column>
+                            <e-grid-column field="Code" headerText="Code" textAlign="Left" width="100"></e-grid-column>
+                            <e-grid-column field="Name" headerText="Name" textAlign="Left" width="190"></e-grid-column>
+                            <e-grid-column field="Target" headerText="Target" textAlign="Left" width="200"></e-grid-column>
+                            <e-grid-column field="Price" headerText="Price" textAlign="Right" width="120" format="C2"></e-grid-column>
                             <e-grid-column field="Status.Name" headerText="Status"></e-grid-column>
                         </e-grid-columns>
                     </ejs-grid>

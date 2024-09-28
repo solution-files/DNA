@@ -28,7 +28,6 @@ namespace DNA3.Classes {
         Task<string> AuthenticateCertificate(CertificateValidatedContext certcontext);
         Task<bool> RecoverPasswordAsync(Recover model);
         Task<bool> RegisterAccountAsync(Registration model);
-        List<Claim> GetClaimsList(Login claimant);
         bool SmtpMessage(string from, string to, string subject, string content);
     }
 
@@ -69,7 +68,7 @@ namespace DNA3.Classes {
                         throw new ArgumentException("Please respond to the identity validation e-mail to activate your account");
                     } else {
                         if (claimant.User.Status.Code == "Active") {
-                            var claims = GetClaimsList(claimant);
+                            var claims = Common.GetClaimsList(claimant);
                             var userIdentity = new ClaimsIdentity(claims, "login");
                             ClaimsPrincipal principal = new(userIdentity);
                             certcontext.Principal = new ClaimsPrincipal(new ClaimsIdentity(claims, certcontext.Scheme.Name));
@@ -243,27 +242,6 @@ If you have questions or need further assistance, please contact {Configuration[
         #endregion
 
         #region Common Methods
-
-        // Get Claims List
-        public List<Claim> GetClaimsList(Login claimant) {
-            List<Claim> claims = new();
-            try {
-                claims = new List<Claim> {
-                    new Claim("lgnid", claimant.LoginId.ToString()),
-                    new Claim("usrid", claimant.UserId.ToString()),
-                    new Claim("cliid", claimant.User.ClientId.ToString()),
-                    new Claim("first", claimant.User.First),
-                    new Claim("last", claimant.User.Last),
-                    new Claim("full", claimant.User.First + ' ' + claimant.User.Last),
-                    new Claim("email", claimant.Email),
-                    new Claim("role", claimant.User.Role.Code),
-                    new Claim(ClaimTypes.Email, claimant.Email)
-                };
-            } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
-            }
-            return claims;
-        }
 
         // Smtp Message
         public bool SmtpMessage(string from, string to, string subject, string content) {

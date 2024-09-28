@@ -18,6 +18,11 @@ using Newtonsoft.Json.Serialization;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using System.Configuration;
+using Microsoft.AspNetCore.Authentication.Google;
 
 #endregion
 
@@ -37,6 +42,8 @@ if (string.IsNullOrEmpty(jwtkey)) {
 string? connectionstring = builder.Configuration["ConnectionStrings:MainContext"];
 if (string.IsNullOrEmpty(connectionstring)) {
     throw new ArgumentException("Database Connection String must be configured and accessible to the Configuration Manager");
+} else {
+    Utilities.Site.ConnectionString = connectionstring;
 }
 
 // Services 
@@ -75,6 +82,10 @@ services.AddAuthentication(options => {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtkey))
     };
+}).AddGoogle(googleOptions => {
+    googleOptions.ClientId = builder.Configuration["GoogleSettings:ClientId"];
+    googleOptions.ClientSecret = builder.Configuration["GoogleSettings:ClientSecret"];
+    googleOptions.Events.OnTicketReceived += DNA3.Classes.Handlers.GoogleOnTicketReceived;
 });
 
 // Authorization Policies
