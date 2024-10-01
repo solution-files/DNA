@@ -2,8 +2,10 @@
 
 using DNA3.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Utilities;
@@ -24,24 +26,34 @@ namespace DNA3.Classes {
 
         public static async System.Threading.Tasks.Task GoogleOnTicketReceived(TicketReceivedContext context) {
             try {
-                Login claimant = Utilities.Ado.ListFromSql<Login>(Utilities.Site.ConnectionString, new string[] { $"@Email={context.Principal.EmailAddress}" }, "SELECT * FROM [Login] AS l WHERE l.Email = @Email" ).FirstOrDefault();
+                Claimant claimant = Utilities.Ado.ListFromSql<DNA3.Models.Claimant>(Utilities.Site.ConnectionString, new string[] { $"@Email={context.Principal.EmailAddress()}" }, "SELECT l.LoginId, l.Provider, l.UserId, u.ClientId, l.Email, u.First, u.Last, s.Code AS StatusCode, r.Code as RoleCode FROM [Login] AS l INNER JOIN [User] AS u ON l.UserId = u.UserId INNER JOIN [Status] AS s ON u.StatusId = s.StatusId INNER JOIN [Role] AS r ON u.RoleId = r.RoleId WHERE l.Provider = 'Google' AND l.Email = @Email").FirstOrDefault();
                 if (claimant != null) {
-                    if (claimant.User.Status.Code == "Pending") {
+                    if (claimant.StatusCode == "Pending") {
                         throw new ArgumentException("Please respond to the identity validation e-mail to activate your account");
                     } else {
-                        if (claimant.User.Status.Code == "Active") {
-                            var claims = Common.GetClaimsList(claimant);
+                        if (claimant.StatusCode == "Active") {
+                            var claims = new List<Claim> {
+                                new Claim("lgnid", claimant.LoginId.ToString()),
+                                new Claim("usrid", claimant.UserId.ToString()),
+                                new Claim("cliid", claimant.ClientId.ToString()),
+                                new Claim("first", claimant.First),
+                                new Claim("last", claimant.Last),
+                                new Claim("full", claimant.First + ' ' + claimant.Last),
+                                new Claim("email", claimant.Email),
+                                new Claim("role", claimant.RoleCode),
+                                new Claim(ClaimTypes.Email, claimant.Email)
+                            };
                             var userIdentity = new ClaimsIdentity(claims, "login");
                             ClaimsPrincipal principal = new(userIdentity);
                             context.Principal = new ClaimsPrincipal(new ClaimsIdentity(claims, context.Scheme.Name));
                             context.Success();
-                            Log.Logger.Information($"Azure Account Authenticated ({claimant.User.FullName})");
+                            Log.Logger.Information($"Google Account Authenticated (claimant.First + ' ' + claimant.Last)");
                         } else {
-                            throw new ArgumentException($"Azure Account is {claimant.User.Status.Code}");
+                            throw new ArgumentException($"Google Account is {claimant.User.Status.Code}");
                         }
                     }
                 } else {
-                    throw new ArgumentException("Azure Account not found");
+                    throw new ArgumentException("Google Account not found");
                 }
             } catch(Exception ex) {
                 Log.Error(ex, ex.Message);

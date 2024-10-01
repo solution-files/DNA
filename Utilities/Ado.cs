@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 
 #endregion
 
@@ -16,7 +17,7 @@ namespace Utilities {
 
         #region Methods
         
-        // Google On Ticket Received
+        // List from SQL Query - Returns a list of the specified type for the desired SQL statement.
         public static IList<T> ListFromSql<T>(string cs, string[] pms, string sql) {
             IList<T> result = default;
             try {
@@ -32,11 +33,38 @@ namespace Utilities {
                         }
                     }
                 }
-                result = (IList<T>)dt.AsEnumerable().ToList();
+                result = ConvertDataTable<T>(dt);
             } catch (Exception ex) {
                 Log.Error(ex, ex.Message);
             }
             return result;
+        }
+
+        // Convert Datatable
+        private static List<T> ConvertDataTable<T>(DataTable dt) {
+            List<T> data = new List<T>();
+            foreach (DataRow row in dt.Rows) {
+                T item = GetItem<T>(row);
+                data.Add(item);
+            }
+            return data;
+        }
+
+        // Get Item (From Datarow)
+        private static T GetItem<T>(DataRow dr) {
+            Type temp = typeof(T);
+            T obj = Activator.CreateInstance<T>();
+
+            foreach (DataColumn column in dr.Table.Columns) {
+                foreach (PropertyInfo pro in temp.GetProperties()) {
+                    if (pro.Name == column.ColumnName) {
+                        pro.SetValue(obj, dr[column.ColumnName], null);
+                    } else {
+                        continue;
+                    }
+                }
+            }
+            return obj;
         }
 
         // Database Name From Connection String

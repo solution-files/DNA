@@ -24,6 +24,9 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using System.Configuration;
 using Microsoft.AspNetCore.Authentication.Google;
 using System.Security.Claims;
+using System.Diagnostics;
+using System.DirectoryServices.AccountManagement;
+using DocumentFormat.OpenXml.InkML;
 
 #endregion
 
@@ -48,6 +51,16 @@ if (string.IsNullOrEmpty(connectionstring)) {
     Utilities.Site.ConnectionString = connectionstring;
 }
 
+// Make sure the Google Client ID and Secret are accessible to the Configuration Manager
+string? googleClientId = builder.Configuration["GoogleSettings:ClientId"];
+if (string.IsNullOrEmpty(googleClientId)) {
+    throw new ArgumentException("Google Client ID must be configured and accessible to the Configuration Manager");
+}
+string? googleClientSecret = builder.Configuration["GoogleSettings:ClientSecret"];
+if (string.IsNullOrEmpty(googleClientSecret)) {
+    throw new ArgumentException("Google Client Secret must be configured and accessible to the Configuration Manager");
+}
+
 // Services 
 var services = builder.Services;
 services.AddControllersWithViews();
@@ -60,9 +73,9 @@ services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.Ap
 
 // Authentication Options (Change CookieAuthenticatonDefaults to CertificateAuthenticationDefaults for User Mapped Client Certificate Authentication)
 services.AddAuthentication(options => {
-    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 }).AddCookie(options => {
     options.LoginPath = "/Dashboard/Login";
     options.LogoutPath = "/Dashboard/Logout";
@@ -85,9 +98,12 @@ services.AddAuthentication(options => {
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtkey))
     };
 }).AddGoogle(googleOptions => {
-    googleOptions.ClientId = builder.Configuration["GoogleSettings:ClientId"];
-    googleOptions.ClientSecret = builder.Configuration["GoogleSettings:ClientSecret"];
-    googleOptions.Events.OnTicketReceived += DNA3.Classes.Handlers.GoogleOnTicketReceived;
+    googleOptions.ClientId = googleClientId;
+    googleOptions.ClientSecret = googleClientSecret;
+    googleOptions.Scope.Add("email");
+    googleOptions.Scope.Add("profile");
+    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "EmailAddress");
+    googleOptions.Events.OnTicketReceived += Handlers.GoogleOnTicketReceived;
 });
 
 // Authorization Policies

@@ -61,7 +61,6 @@ namespace DNA3.Classes {
         public async Task<string> AuthenticateCertificate(CertificateValidatedContext certcontext) {
             string result = "";
             try {
-                Debug.Print(Utilities.Strings.Base64Encode(certcontext.ClientCertificate.Thumbprint));
                 Login claimant = await Context.Login.Include(x => x.User).ThenInclude(x => x.Role).Include(x => x.User).ThenInclude(x => x.Status).Where(x => x.User.Thumbprint == certcontext.ClientCertificate.Thumbprint).FirstOrDefaultAsync();
                 if (claimant != null) {
                     if (claimant.User.Status.Code == "Pending") {
