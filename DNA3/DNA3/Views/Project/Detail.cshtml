@@ -1,11 +1,11 @@
-﻿@model DNA3.Models.Menu
+﻿@model DNA3.Models.Project
 @{
 	Layout = "_Dashboard";
-	string Title = "Menu";
+	string Title = "Project";
 }
 
 @section CSS {
-	<link href="~/common/plugins/fontawesome-iconpicker/css/fontawesome-iconpicker.css" rel="stylesheet" type="text/css" />
+
 }
 
 @section Scripts {
@@ -13,18 +13,8 @@
 	<!-- Automated Form Validation -->
 	<script src="~/common/plugins/jquery-validate/jquery.validate.min.js"></script>
 	<script src="~/common/plugins/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-
-	<!-- Font Awesome Icon Picker -->
-	<script src="~/common/plugins/fontawesome-iconpicker/js/fontawesome-iconpicker.min.js"></script>
-	<script>
-		$('#Icon').iconpicker({
-			container: false,
-			hideOnSelect: true,
-			placement: 'bottom'
-		});
-	</script>
-
 }
+
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -63,10 +53,10 @@
 								<button asp-action="Delete" form="Master" class="btn btn-tool btn-sm">
 									<i class="far fa-trash-can"></i>
 								</button>
-								<button asp-controller="Action" asp-action="Index" asp-route-id="@Model.MenuId" form="Master" class="btn btn-tool btn-sm">
+								<button asp-controller="Action" asp-action="Index" asp-route-id="@Model.ProjectId" form="Master" class="btn btn-tool btn-sm">
 									<i class="fas fa-link"></i>
 								</button>
-								<a href="/report/viewer.html?Report=Menu.rdl" formaction="Master" class="btn btn-tool btn-sm" target="_blank">
+								<a href="/report/viewer.html?Report=Project.rdl" formaction="Master" class="btn btn-tool btn-sm" target="_blank">
 									<i class="fas fa-print"></i>
 								</a>
 								<a asp-action="Index" class="btn btn-tool btn-sm">
@@ -81,63 +71,33 @@
 								<div class="row mb-0">
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label asp-for="Icon">@Html.DisplayNameFor(x => x.Icon)</label>
-											<input asp-for="Icon" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Icon)" autocomplete="off" spellcheck="false">
-											<span asp-validation-for="Icon" class="text-danger small"></span>
-										</div>
-									</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label asp-for="Code">@Html.DisplayNameFor(x => x.Code)</label>
-											<input asp-for="Code" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Code)" autocomplete="off" spellcheck="false">
-											<span asp-validation-for="Code" class="text-danger small"></span>
+                                            <label asp-for="Date">@Html.DisplayNameFor(x => x.Date)</label>
+                                            <input asp-for="Date" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Date)" autocomplete="off" spellcheck="false">
+                                            <span asp-validation-for="Date" class="text-danger small"></span>
 										</div>
 									</div>
 								</div>
 								<div class="row mb-0">
-									<div class="col-lg-6">
+									<div class="col-12">
 										<div class="form-group">
-											<label asp-for="Name">@Html.DisplayNameFor(x => x.Name)</label>
-											<input asp-for="Name" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Name)">
-											<span asp-validation-for="Name" class="text-danger small"></span>
-										</div>
-									</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label asp-for="Description">@Html.DisplayNameFor(x => x.Description)</label>
-											<input asp-for="Description" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Description)">
-											<span asp-validation-for="Description" class="text-danger small"></span>
+                                            <label asp-for="Subject">@Html.DisplayNameFor(x => x.Subject)</label>
+                                            <input asp-for="Subject" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Subject)">
+                                            <span asp-validation-for="Subject" class="text-danger small"></span>
 										</div>
 									</div>
 								</div>
 								<div class="row mb-0">
-									<div class="col-lg-6">
+									<div class="col-12">
 										<div class="form-group">
-											<label asp-for="Target">@Html.DisplayNameFor(x => x.Target)</label>
-											<input asp-for="Target" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Target)">
-											<span asp-validation-for="Target" class="text-danger small"></span>
-										</div>
-									</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label asp-for="TargetName">@Html.DisplayNameFor(x => x.TargetName)</label>
-											<input asp-for="TargetName" class="form-control" placeholder="@Html.DisplayNameFor(x => x.TargetName)">
-											<span asp-validation-for="TargetName" class="text-danger small"></span>
-										</div>
-									</div>
-								</div>
-								<div class="row mb-0">
-									<div class="col-lg-4">
-										<div class="form-group">
-											<label asp-for="Weight">@Html.DisplayNameFor(x => x.Weight)</label>
-											<input asp-for="Weight" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Weight)">
-											<span asp-validation-for="Weight" class="text-danger small"></span>
+                                            <label asp-for="Content">@Html.DisplayNameFor(x => x.Content)</label>
+                                            <input asp-for="Content" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Content)">
+                                            <span asp-validation-for="Content" class="text-danger small"></span>
 										</div>
 									</div>
 								</div>
 							</div>
 							<!-- /.card-body -->
-							<input asp-for="MenuId" type="hidden" />
+							<input asp-for="ProjectId" type="hidden" />
 						</form>
 					</div>
 					<!-- /.card -->
