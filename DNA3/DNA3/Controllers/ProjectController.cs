@@ -64,15 +64,17 @@ namespace DNA3.Controllers {
         // New (Get)
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
-        public IActionResult New() {
+        public async Task<IActionResult> NewAsync() {
             Project instance = new();
             try {
+                instance.Date = DateTime.Now;
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
                 Logger.LogError(ex, message);
             }
+            ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
         }
 
@@ -88,6 +90,7 @@ namespace DNA3.Controllers {
                 Site.Messages.Enqueue(ex.Message);
                 Logger.LogError(ex, ex.Message);
             }
+            ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
         }
 
@@ -115,6 +118,7 @@ namespace DNA3.Controllers {
                 message = ex.Message;
                 Logger.LogError(ex, message);
             }
+            ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
         }
 
@@ -138,6 +142,7 @@ namespace DNA3.Controllers {
                 Site.Messages.Enqueue(ex.Message);
                 Logger.LogError(ex, ex.Message);
             }
+            ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
         }
 

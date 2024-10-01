@@ -76,7 +76,15 @@
                                             <span asp-validation-for="Date" class="text-danger small"></span>
 										</div>
 									</div>
-								</div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label asp-for="StatusId" class="mr-2">@Html.DisplayNameFor(x => x.StatusId)</label>
+                                            <a asp-controller="Status" asp-action="New" class="small mr-2">New</a><a asp-controller="Status" asp-action="Edit" asp-route-id="@Model.StatusId" class="small">Edit</a>
+                                            <select asp-for="StatusId" class="form-control" asp-items="@(new SelectList(ViewBag.StatusList, "StatusId", "Name"))" placeholder="@Html.DisplayNameFor(model => model.StatusId)" autocomplete="off" spellcheck="false"></select>
+                                            <span asp-validation-for="StatusId" class="text-danger small"></span>
+                                        </div>
+                                    </div>
+                                </div>
 								<div class="row mb-0">
 									<div class="col-12">
 										<div class="form-group">

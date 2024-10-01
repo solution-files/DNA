@@ -20,12 +20,17 @@ namespace DNA3.Models {
         public DateTime Date { get; set; }
 
         [Display(Name = "Subject")]
+        [Required(ErrorMessage = "{0} cannot be blank")]
+        [MinLength(10, ErrorMessage = "{0} must be at least {1} characters long")]
         public string Subject { get; set; }
 
         [Display(Name = "Content")]
+        [Required(ErrorMessage = "{0} cannot be blank")]
+        [MinLength(10, ErrorMessage = "{0} must be at least {1} characters long")]
         public string Content { get; set; }
 
         [Display(Name = "Status")]
+        [Required(ErrorMessage = "Please select a valid {0} code from the list")]
         public int StatusId { get; set; }
 
         #endregion
