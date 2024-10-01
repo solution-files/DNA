@@ -30,6 +30,7 @@ namespace DNA3.Models {
 
         #region Mapped
 
+        public virtual DbSet<Project> Project { get; set; }
         public virtual DbSet<Deviceservice> Deviceservice { get; set; }
         public virtual DbSet<Service> Service { get; set; }
         public virtual DbSet<Note> Note { get; set; }
@@ -117,6 +118,14 @@ namespace DNA3.Models {
             modelBuilder.Entity<Databases>().HasKey(e => e.database_id);
             modelBuilder.Entity<DailyServiceSummary>().HasNoKey();
             modelBuilder.Entity<MonthlyServiceSummary>().HasNoKey();
+
+            modelBuilder.Entity<Project>(entity => {
+                entity.Property(e => e.ProjectId).UseIdentityColumn(10000, 1);
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.Subject).HasMaxLength(300);
+            });
 
             modelBuilder.Entity<Note>(entity => {
                 entity.Property(e => e.NoteId).UseIdentityColumn(10000, 1);
