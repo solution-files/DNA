@@ -175,9 +175,9 @@ services.AddMvc(options => {
 services.AddControllers(x => x.AllowEmptyInputInBodyModelBinding = true);
 
 // Kestrel Server Options (Uncomment for User Mapped Client Certificate Authentication)
-services.Configure<KestrelServerOptions>(options => {
-    options.ConfigureHttpsDefaults(options => options.ClientCertificateMode = ClientCertificateMode.RequireCertificate);
-});
+//services.Configure<KestrelServerOptions>(options => {
+//    options.ConfigureHttpsDefaults(options => options.ClientCertificateMode = ClientCertificateMode.RequireCertificate);
+//});
 
 var app = builder.Build();
 
