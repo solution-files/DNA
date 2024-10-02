@@ -53,7 +53,14 @@ namespace DNA3.Classes {
                         }
                     }
                 } else {
-                    throw new ArgumentException("Google Account not found");
+                    string email = context.Principal.FindFirst(ClaimTypes.Email).Value;
+                    string first = context.Principal.FindFirst(ClaimTypes.GivenName).Value;
+                    string last = context.Principal.FindFirst(ClaimTypes.Surname).Value;
+                    if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(first) || string.IsNullOrEmpty(last)) {
+                        throw new ArgumentException("Google Account not found");
+                    } else {
+                        Utilities.Ado.CreateNewAccount(Utilities.Site.ConnectionString, email, first, last);
+                    }
                 }
             } catch(Exception ex) {
                 Log.Error(ex, ex.Message);

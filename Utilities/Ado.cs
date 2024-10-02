@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 
 #endregion
 
@@ -16,6 +17,94 @@ namespace Utilities {
     public class Ado {
 
         #region Methods
+
+        // Cteate New Account
+        public static string CreateNewAccount(string cs, string email, string first, string last) {
+            string result;
+            int clientid;
+            int userid;
+            try {
+
+                // Company
+                using (SqlConnection conn = new(cs)) {
+                    using (SqlCommand cmd = new("INSERT INTO [Client](Company, Address1, First, Last, Email, StatusId) OUTPUT INSERTED.ClientId VALUES(@Company, '', @First, @Last, @Email, @StatusId)", conn)) {
+                        cmd.Parameters.AddWithValue("@Company", first + " " + last);
+                        cmd.Parameters.AddWithValue("@First", first);
+                        cmd.Parameters.AddWithValue("@Last", last);
+                        cmd.Parameters.AddWithValue("@Email", email);
+                        cmd.Parameters.AddWithValue("@StatusId", GetScalarValue<int>(cs, "StatusId", "Status", "Code", "Active"));
+                        conn.Open();
+                        clientid = (int)cmd.ExecuteScalar();
+                        if (conn.State == ConnectionState.Open) {
+                            conn.Close();
+                        }
+                    }
+                }
+
+                // User
+                using (SqlConnection conn = new(cs)) {
+                    using (SqlCommand cmd = new("INSERT INTO [User](ClientId, First, Last, RoleId, StatusId, Persist, Comment) OUTPUT INSERTED.UserId VALUES(@ClientId, @First, @Last, @RoleId, @StatusId, @Persist, @Comment)", conn)) {
+                        cmd.Parameters.AddWithValue("@ClientId", clientid);
+                        cmd.Parameters.AddWithValue("@First", first);
+                        cmd.Parameters.AddWithValue("@Last", last);
+                        cmd.Parameters.AddWithValue("@RoleId", GetScalarValue<int>(cs, "RoleId", "Role", "Code", "User"));
+                        cmd.Parameters.AddWithValue("@StatusId", GetScalarValue<int>(cs, "StatusId", "Status", "Code", "Active"));
+                        cmd.Parameters.AddWithValue("@Persist", "true");
+                        cmd.Parameters.AddWithValue("@Comment", "Added automatically from Google Authentication Profile");
+                        conn.Open();
+                        userid = (int)cmd.ExecuteScalar();
+                        if (conn.State == ConnectionState.Open) {
+                            conn.Close();
+                        }
+                    }
+                }
+
+                // Login Identity
+                using (SqlConnection conn = new(cs)) {
+                    using (SqlCommand cmd = new("INSERT INTO [Login](Provider, UserId, Email, Password) VALUES (@Provider, @UserId, @Email, '')", conn)) {
+                        cmd.Parameters.AddWithValue("@Provider", "Google");
+                        cmd.Parameters.AddWithValue("@UserId", userid);
+                        cmd.Parameters.AddWithValue("@Email", email);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        if (conn.State == ConnectionState.Open) {
+                            conn.Close();
+                        }
+                    }
+                }
+
+                result = "Success";
+            } catch(Exception ex) {
+                result = ex.Message;
+                Log.Error(ex, ex.Message);
+            }
+            return result;
+        }
+
+        // Insert From SQL
+        public static string InsertFromSql(string cs, string[] pms, string sql) {
+            string result;
+            try {
+                using (SqlConnection conn = new(cs)) {
+                    using (SqlCommand cmd = new(sql, conn)) {
+                        foreach(string pm in pms) {
+                            var p = pm.Split("=");
+                            cmd.Parameters.AddWithValue(p[0], p[1]);
+                        }
+                        conn.Open();
+                        if (cmd.ExecuteNonQuery() > 0) {
+                            result = "Success";
+                        } else {
+                            result = "Record was not inserted. See error log for details";
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Log.Error(ex, ex.Message);
+                result = ex.Message;
+            }
+            return result;
+        }
         
         // List from SQL Query - Returns a list of the specified type for the desired SQL statement.
         public static IList<T> ListFromSql<T>(string cs, string[] pms, string sql) {
