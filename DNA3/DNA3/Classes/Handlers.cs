@@ -27,6 +27,17 @@ namespace DNA3.Classes {
         public static async System.Threading.Tasks.Task GoogleOnTicketReceived(TicketReceivedContext context) {
             try {
                 Claimant claimant = Utilities.Ado.ListFromSql<DNA3.Models.Claimant>(Utilities.Site.ConnectionString, new string[] { $"@Email={context.Principal.EmailAddress()}" }, "SELECT l.LoginId, l.Provider, l.UserId, u.ClientId, l.Email, u.First, u.Last, s.Code AS StatusCode, r.Code as RoleCode FROM [Login] AS l INNER JOIN [User] AS u ON l.UserId = u.UserId INNER JOIN [Status] AS s ON u.StatusId = s.StatusId INNER JOIN [Role] AS r ON u.RoleId = r.RoleId WHERE l.Provider = 'Google' AND l.Email = @Email").FirstOrDefault();
+                if (claimant == null) {
+                    string email = context.Principal.FindFirst(ClaimTypes.Email).Value;
+                    string first = context.Principal.FindFirst(ClaimTypes.GivenName).Value;
+                    string last = context.Principal.FindFirst(ClaimTypes.Surname).Value;
+                    if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(first) || string.IsNullOrEmpty(last)) {
+                        throw new ArgumentException("Google Account not found");
+                    } else {
+                        Utilities.Ado.CreateNewAccount(Utilities.Site.ConnectionString, email, first, last);
+                    }
+                    claimant = Utilities.Ado.ListFromSql<DNA3.Models.Claimant>(Utilities.Site.ConnectionString, new string[] { $"@Email={context.Principal.EmailAddress()}" }, "SELECT l.LoginId, l.Provider, l.UserId, u.ClientId, l.Email, u.First, u.Last, s.Code AS StatusCode, r.Code as RoleCode FROM [Login] AS l INNER JOIN [User] AS u ON l.UserId = u.UserId INNER JOIN [Status] AS s ON u.StatusId = s.StatusId INNER JOIN [Role] AS r ON u.RoleId = r.RoleId WHERE l.Provider = 'Google' AND l.Email = @Email").FirstOrDefault();
+                }
                 if (claimant != null) {
                     if (claimant.StatusCode == "Pending") {
                         throw new ArgumentException("Please respond to the identity validation e-mail to activate your account");
@@ -51,15 +62,6 @@ namespace DNA3.Classes {
                         } else {
                             throw new ArgumentException($"Google Account is {claimant.User.Status.Code}");
                         }
-                    }
-                } else {
-                    string email = context.Principal.FindFirst(ClaimTypes.Email).Value;
-                    string first = context.Principal.FindFirst(ClaimTypes.GivenName).Value;
-                    string last = context.Principal.FindFirst(ClaimTypes.Surname).Value;
-                    if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(first) || string.IsNullOrEmpty(last)) {
-                        throw new ArgumentException("Google Account not found");
-                    } else {
-                        Utilities.Ado.CreateNewAccount(Utilities.Site.ConnectionString, email, first, last);
                     }
                 }
             } catch(Exception ex) {
