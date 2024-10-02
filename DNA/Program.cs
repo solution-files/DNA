@@ -71,11 +71,31 @@ Assembly DashboardAssembly = typeof(DNA3.Controllers.DashboardController).GetTyp
 AssemblyPart DashboardPart = new(DashboardAssembly);
 services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(DashboardPart));
 
-// Authentication Options (Change CookieAuthenticatonDefaults to CertificateAuthenticationDefaults for User Mapped Client Certificate Authentication)
+// Cookie Authentication
+//
+//services.AddAuthentication(options => {
+//    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//
+// Certificate Authentication (Also uncomment Kestrel options below)
+//
+//services.AddAuthentication(options => {
+//    options.DefaultAuthenticateScheme = CertificateAuthenticationDefaults.AuthenticationScheme;
+//    options.DefaultSignInScheme = CertificateAuthenticationDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = CertificateAuthenticationDefaults.AuthenticationScheme;
+//
+// Google Authentication
+//
+//services.AddAuthentication(options => {
+//    options.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+//    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+//
 services.AddAuthentication(options => {
-    options.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
-    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = CertificateAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CertificateAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CertificateAuthenticationDefaults.AuthenticationScheme;
 }).AddCookie(options => {
     options.LoginPath = "/Dashboard/Login";
     options.LogoutPath = "/Dashboard/Logout";
@@ -155,9 +175,9 @@ services.AddMvc(options => {
 services.AddControllers(x => x.AllowEmptyInputInBodyModelBinding = true);
 
 // Kestrel Server Options (Uncomment for User Mapped Client Certificate Authentication)
-//services.Configure<KestrelServerOptions>(options => {
-//    options.ConfigureHttpsDefaults(options => options.ClientCertificateMode = ClientCertificateMode.RequireCertificate);
-//});
+services.Configure<KestrelServerOptions>(options => {
+    options.ConfigureHttpsDefaults(options => options.ClientCertificateMode = ClientCertificateMode.RequireCertificate);
+});
 
 var app = builder.Build();
 
