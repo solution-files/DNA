@@ -26,7 +26,7 @@
             }
         }
 
-        function PageGridRowSelected(args) {
+        function RoleGridRowSelected(args) {
             window.location.href = '@Url.Action("Edit", "Role")/' + args.data.PageId;
         }
 
@@ -69,7 +69,7 @@
         <div class="card card-primary">
 			<div class="card-header border-0">
 				<h3 class="card-title">@Plural</h3>
-				@await Html.PartialAsync("_IndexTools", new { Report = "Roles.rdl" })
+				@await Html.PartialAsync("_Tools", new { Report = "Role Definitions.rdl" })
 			</div>
 			<div class="card-body">
 				@if (Model.Count() == 0) {
