@@ -27,7 +27,7 @@ namespace DNA3.Controllers {
 		private readonly IConfiguration Configuration;
 		private readonly MainContext Context;
 		private readonly ILogger<ReportController> Logger;
-		private readonly string Title = "Action";
+		private readonly string Title = "Report";
 
 		#endregion
 

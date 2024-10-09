@@ -22,7 +22,7 @@ namespace DNA3.Controllers {
 
 	public class FeaturesController : Controller {
 
-        #region Properties and Services
+        #region Variables
 
         private readonly ApplicationPartManager PartManager;
         private readonly ILogger<FeaturesController> Logger;

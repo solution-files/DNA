@@ -27,7 +27,7 @@ namespace DNA3.Controllers {
         private readonly IConfiguration Configuration;
         private readonly MainContext Context;
         private readonly ILogger<ProjectController> Logger;
-        private readonly string Title = "Menu";
+        private readonly string Title = "Project";
 
         #endregion
 
@@ -112,7 +112,7 @@ namespace DNA3.Controllers {
                     await Context.SaveChangesAsync();
                     Site.Messages.Enqueue(message);
                     Log.Logger.ForContext("UserId", User.UserId()).Warning(message);
-                    return RedirectToAction("Edit", "Menu", new { id = instance.ProjectId });
+                    return RedirectToAction("Edit", "Project", new { id = instance.ProjectId });
                 }
             } catch (Exception ex) {
                 message = ex.Message;

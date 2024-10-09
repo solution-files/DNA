@@ -18,8 +18,6 @@ using Utilities;
 
 namespace DNA3.Controllers {
 
-    #region Class
-
     [Authorize(Policy = "Administrators")]
     public class PageController : Controller {
 
@@ -179,7 +177,5 @@ namespace DNA3.Controllers {
         #endregion
 
     }
-
-    #endregion
 
 }

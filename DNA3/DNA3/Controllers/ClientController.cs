@@ -20,7 +20,7 @@ namespace DNA3.Controllers {
     [Authorize(Policy = "Administrators")]
     public class ClientController : Controller {
 
-        #region Variables and Constants
+        #region Variables
 
         // Variables
         private readonly IConfiguration Configuration;

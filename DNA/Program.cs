@@ -1,49 +1,39 @@
 #region Usings
 
-using Azure.Identity;
 using DNA3.Classes;
 using DNA3.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Serialization;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using System.Configuration;
-using Microsoft.AspNetCore.Authentication.Google;
 using System.Security.Claims;
-using System.Diagnostics;
-using System.DirectoryServices.AccountManagement;
-using DocumentFormat.OpenXml.InkML;
+using System.Text;
 
 #endregion
 
-#region Configuration
+#region Configuration Manager Sources
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add external configuration file
+// The Configuration Manager can load settings from a wide variety of sources including JSON Files, XML Files, INI Files, Command-Line Arguments,
+// Environment Variables, In-Memory .NET Objects, Secret Manager Storage, and the Azure Key Vault. In this case, we load application secrets from
+// an encrypted JSON file stored outside of the source-code tree to prevent propagation to Version Control archives.
 builder.Configuration.AddJsonFile("C:\\DNASettings.json");
 
-// Make sure the JWT Key is accessible to the Configuration Manager
+// JWT Key must be accessible to the Configuration Manager
 string? jwtkey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(jwtkey)) {
     throw new ArgumentException("JWT Encryption Key must be configured and accessible to the Configuration Manager");
 }
 
-// Make sure the Connection String is accessible to the Configuration Manager
+// Connection String must be accessible to the Configuration Manager
 string? connectionstring = builder.Configuration["ConnectionStrings:MainContext"];
 if (string.IsNullOrEmpty(connectionstring)) {
     throw new ArgumentException("Database Connection String must be configured and accessible to the Configuration Manager");
@@ -51,7 +41,7 @@ if (string.IsNullOrEmpty(connectionstring)) {
     Utilities.Site.ConnectionString = connectionstring;
 }
 
-// Make sure the Google Client ID and Secret are accessible to the Configuration Manager
+// Google Client ID and Secret must be accessible to the Configuration Manager
 string? googleClientId = builder.Configuration["GoogleSettings:ClientId"];
 if (string.IsNullOrEmpty(googleClientId)) {
     throw new ArgumentException("Google Client ID must be configured and accessible to the Configuration Manager");
@@ -60,6 +50,26 @@ string? googleClientSecret = builder.Configuration["GoogleSettings:ClientSecret"
 if (string.IsNullOrEmpty(googleClientSecret)) {
     throw new ArgumentException("Google Client Secret must be configured and accessible to the Configuration Manager");
 }
+
+// Common application settings must be accessible to the Configuration Manager
+string? appname = builder.Configuration["App:Name"];
+if (string.IsNullOrEmpty(appname)) {
+    throw new ArgumentException("Application Name must be configured and accessible to the Configuration Manager");
+}
+string? appdescription = builder.Configuration["App:Description"];
+if (string.IsNullOrEmpty(appdescription)) {
+    throw new ArgumentException("Application Description must be configured and accessible to the Configuration Manager");
+}
+string? appversion = builder.Configuration["App:Version"];
+if (string.IsNullOrEmpty(appversion)) {
+    throw new ArgumentException("Application Version must be configured and accessible to the Configuration Manager");
+}
+string? appurl = builder.Configuration["App:URL"];
+if (string.IsNullOrEmpty(appurl)) {
+    throw new ArgumentException("Application URL must be configured and accessible to the Configuration Manager");
+}
+
+#endregion
 
 // Services 
 var services = builder.Services;
@@ -153,7 +163,7 @@ services.AddSession(options => {
     options.Cookie.IsEssential = true;
 });
 
-// Data Protection
+// Encrypted Data Protection
 services.AddDataProtection();
 
 // Other Services
@@ -174,7 +184,23 @@ services.AddMvc(options => {
 // Controller Options
 services.AddControllers(x => x.AllowEmptyInputInBodyModelBinding = true);
 
-// Kestrel Server Options (Uncomment for User Mapped Client Certificate Authentication)
+// Swagger Generator and Documents
+services.AddSwaggerGen(c => {
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First()); // Required for Telerik Reporting
+    c.IgnoreObsoleteActions();
+    c.IgnoreObsoleteProperties();
+    c.CustomSchemaIds(type => type.FullName);
+    c.SwaggerDoc(appversion, new OpenApiInfo {
+        Version = appversion,
+        Title = appname,
+        Description = appdescription,
+        TermsOfService = new Uri($"{appurl}/Terms"),
+        Contact = new OpenApiContact() { Name = builder.Configuration["App:SupportName"], Email = builder.Configuration["App:SupportAddress"], Url = new Uri(appurl) }
+    });
+});
+
+
+// Kestrel Server Options (Uncomment for User Mapped Client Certificate Authentication during development)
 //services.Configure<KestrelServerOptions>(options => {
 //    options.ConfigureHttpsDefaults(options => options.ClientCertificateMode = ClientCertificateMode.RequireCertificate);
 //});
@@ -216,6 +242,12 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Swagger
+app.UseSwagger();
+app.UseSwaggerUI(c => {
+    c.SwaggerEndpoint($"/swagger/{appversion}/swagger.json", appname);
+});
+
 // Routing
 app.MapControllerRoute(
     name: "area",
@@ -229,5 +261,3 @@ Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(builder.Configura
 Bold.Licensing.BoldLicenseProvider.RegisterLicense(builder.Configuration["Boldreports:License"]);
 
 app.Run();
-
-#endregion
