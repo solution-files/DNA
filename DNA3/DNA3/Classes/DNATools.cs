@@ -293,6 +293,7 @@ namespace DNA3.Classes {
                 }
 
                 int roleid = await GetRoleKeyValue("Admin");
+                int userroleid = await GetRoleKeyValue("User");
 
                 // Clients, Users, and User Identities (Logins)
                 IList<Client> Clients = await Context.Client.Where(x => x.ClientId > 0).ToListAsync();
@@ -664,20 +665,20 @@ namespace DNA3.Classes {
                 code = "PW";
                 name = "Parent Website";
                 if (!Context.Menu.Any(x => x.Code == code)) {
-                    m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = name, Description = $"{name} System", Icon = "fas fa-chart-line", Target = "javascript:void()", TargetName = name, Weight = 800 };
+                    m = new Menu { RoleId = userroleid, TopLevel = true, Code = code, Name = name, Description = $"{name} System", Icon = "fas fa-chart-line", Target = "javascript:void()", TargetName = name, Weight = 800 };
                     m.Actions = new List<Action>() {
-                        new() { RoleId = roleid, Code = "Home", Name = "Home", Description = $"{name} Introduction", Icon = "far fa-circle", Target = "/#home", TargetName = "Home", Weight = 100 },
-                        new() { RoleId = roleid, Code = "Features", Name = "Features", Description = $"{name} Features Section", Icon = "far fa-circle", Target = "/#features", TargetName = "Features", Weight = 200 },
-                        new() { RoleId = roleid, Code = "About", Name = "About", Description = $"{name} About Us Section", Icon = "far fa-circle", Target = "/#about", TargetName = "About us", Weight = 300 },
-                        new() { RoleId = roleid, Code = "Pricing", Name = "Pricing", Description = $"{name} Pricing Section", Icon = "far fa-circle", Target = "/#pricing", TargetName = "Pricing", Weight = 400 },
-                        new() { RoleId = roleid, Code = "FAQ", Name = "FAQ", Description = $"{name} Frequently Asked Questions", Icon = "far fa-circle", Target = "/#faq", TargetName = "FAQ", Weight = 500 },
-                        new() { RoleId = roleid, Code = "Testimonials", Name = "Testimonials", Description = $"{name} Customer Testimonials", Icon = "far fa-circle", Target = "/#testimonials", TargetName = "Testimonials", Weight = 600 },
-                        new() { RoleId = roleid, Code = "Team", Name = "Team", Description = $"{name} Meet the Team", Icon = "far fa-circle", Target = "/#team", TargetName = "Meet the team", Weight = 700 },
-                        new() { RoleId = roleid, Code = "Contact", Name = "Contact", Description = $"{name} Contact Section", Icon = "far fa-circle", Target = "/#contact", TargetName = "Contact us", Weight = 800 },
-                        new() { RoleId = roleid, Code = "How It Works", Name = "How it works", Description = $"{name} How It Works", Icon = "far fa-circle", Target = "/HowItWorks", TargetName = "How it works", Weight = 900 },
-                        new() { RoleId = roleid, Code = "Terms", Name = "Terms", Description = $"{name} Terms Of Service", Icon = "far fa-circle", Target = "/Terms", TargetName = "Terms of service", Weight = 1000 },
-                        new() { RoleId = roleid, Code = "Privacy", Name = "Privacy", Description = $"{name} Privacy Policy", Icon = "far fa-circle", Target = "/Privacy", TargetName = "Privacy policy", Weight = 1100 },
-                        new() { RoleId = roleid, Code = "Refunds", Name = "Refunds", Description = $"{name} Refund Policy", Icon = "far fa-circle", Target = "/Refunds", TargetName = "Refund policy", Weight = 1200 },
+                        new() { RoleId = userroleid, Code = "Home", Name = "Home", Description = $"{name} Introduction", Icon = "far fa-circle", Target = "/#home", TargetName = "Home", Weight = 100 },
+                        new() { RoleId = userroleid, Code = "Features", Name = "Features", Description = $"{name} Features Section", Icon = "far fa-circle", Target = "/#features", TargetName = "Features", Weight = 200 },
+                        new() { RoleId = userroleid, Code = "About", Name = "About", Description = $"{name} About Us Section", Icon = "far fa-circle", Target = "/#about", TargetName = "About us", Weight = 300 },
+                        new() { RoleId = userroleid, Code = "Pricing", Name = "Pricing", Description = $"{name} Pricing Section", Icon = "far fa-circle", Target = "/#pricing", TargetName = "Pricing", Weight = 400 },
+                        new() { RoleId = userroleid, Code = "FAQ", Name = "FAQ", Description = $"{name} Frequently Asked Questions", Icon = "far fa-circle", Target = "/#faq", TargetName = "FAQ", Weight = 500 },
+                        new() { RoleId = userroleid, Code = "Testimonials", Name = "Testimonials", Description = $"{name} Customer Testimonials", Icon = "far fa-circle", Target = "/#testimonials", TargetName = "Testimonials", Weight = 600 },
+                        new() { RoleId = userroleid, Code = "Team", Name = "Team", Description = $"{name} Meet the Team", Icon = "far fa-circle", Target = "/#team", TargetName = "Meet the team", Weight = 700 },
+                        new() { RoleId = userroleid, Code = "Contact", Name = "Contact", Description = $"{name} Contact Section", Icon = "far fa-circle", Target = "/#contact", TargetName = "Contact us", Weight = 800 },
+                        new() { RoleId = userroleid, Code = "How It Works", Name = "How it works", Description = $"{name} How It Works", Icon = "far fa-circle", Target = "/HowItWorks", TargetName = "How it works", Weight = 900 },
+                        new() { RoleId = userroleid, Code = "Terms", Name = "Terms", Description = $"{name} Terms Of Service", Icon = "far fa-circle", Target = "/Terms", TargetName = "Terms of service", Weight = 1000 },
+                        new() { RoleId = userroleid, Code = "Privacy", Name = "Privacy", Description = $"{name} Privacy Policy", Icon = "far fa-circle", Target = "/Privacy", TargetName = "Privacy policy", Weight = 1100 },
+                        new() { RoleId = userroleid, Code = "Refunds", Name = "Refunds", Description = $"{name} Refund Policy", Icon = "far fa-circle", Target = "/Refunds", TargetName = "Refund policy", Weight = 1200 },
                     };
                     Context.Menu.Add(m);
                     await Context.SaveChangesAsync();
@@ -686,9 +687,9 @@ namespace DNA3.Classes {
                 code = "PM";
                 name = "Project Manager";
                 if (!Context.Menu.Any(x => x.Code == code)) {
-                    m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = name, Description = $"{name}", Icon = "fas fa-list-check", Target = "javascript:void()", TargetName = name, Weight = 900 };
+                    m = new Menu { RoleId = userroleid, TopLevel = true, Code = code, Name = name, Description = $"{name}", Icon = "fas fa-list-check", Target = "javascript:void()", TargetName = name, Weight = 900 };
                     m.Actions = new List<Action>() {
-                        new() { RoleId = roleid, Code = "Project List", Name = "Project List", Description = $"{name} Project List", Icon = "far fa-circle", Target = "/project", TargetName = "Project List", Weight = 100 },
+                        new() { RoleId = userroleid, Code = "Project List", Name = "Project List", Description = $"{name} Project List", Icon = "far fa-circle", Target = "/project", TargetName = "Project List", Weight = 100 },
                     };
                     Context.Menu.Add(m);
                     await Context.SaveChangesAsync();
@@ -697,12 +698,12 @@ namespace DNA3.Classes {
                 code = "PP";
                 name = "Partner Portals";
                 if (!Context.Menu.Any(x => x.Code == code)) {
-                    m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = name, Description = $"{name}", Icon = "fas fa-user-tie", Target = "javascript:void()", TargetName = name, Weight = 1000 };
+                    m = new Menu { RoleId = userroleid, TopLevel = true, Code = code, Name = name, Description = $"{name}", Icon = "fas fa-user-tie", Target = "javascript:void()", TargetName = name, Weight = 1000 };
                     m.Actions = new List<Action>() {
-                        new() { RoleId = roleid, Code = "BS", Name = "Bootstrap", Description = $"{name} Bootstrap", Icon = "far fa-circle", Target = "https://getbootstrap.com/", TargetName = "Bootstrap", NewWindow = true, Weight = 100 },
-                        new() { RoleId = roleid, Code = "BI", Name = "Bootstrap Icons", Description = $"{name} Bootstrap Icons", Icon = "far fa-circle", Target = "https://icons.getbootstrap.com/", TargetName = "Bootstrap Icons", NewWindow = true, Weight = 200 },
-                        new() { RoleId = roleid, Code = "FA", Name = "Fontawesome", Description = $"{name} Fontawesome", Icon = "far fa-circle", Target = "https://fontawesome.com/icons", TargetName = "Fontawesome", NewWindow = true, Weight = 300 },
-                        new() { RoleId = roleid, Code = "USPSBCG", Name = "USPS Business Gateway", Description = $"{name} USPS Business Customer Gateway", Icon = "far fa-circle", Target = "https://gateway.usps.com/eAdmin/view/signin", TargetName = "USPS Business Gateway", NewWindow = true, Weight = 400 },
+                        new() { RoleId = userroleid, Code = "BS", Name = "Bootstrap", Description = $"{name} Bootstrap", Icon = "far fa-circle", Target = "https://getbootstrap.com/", TargetName = "Bootstrap", NewWindow = true, Weight = 100 },
+                        new() { RoleId = userroleid, Code = "BI", Name = "Bootstrap Icons", Description = $"{name} Bootstrap Icons", Icon = "far fa-circle", Target = "https://icons.getbootstrap.com/", TargetName = "Bootstrap Icons", NewWindow = true, Weight = 200 },
+                        new() { RoleId = userroleid, Code = "FA", Name = "Fontawesome", Description = $"{name} Fontawesome", Icon = "far fa-circle", Target = "https://fontawesome.com/icons", TargetName = "Fontawesome", NewWindow = true, Weight = 300 },
+                        new() { RoleId = userroleid, Code = "USPSBCG", Name = "USPS Business Gateway", Description = $"{name} USPS Business Customer Gateway", Icon = "far fa-circle", Target = "https://gateway.usps.com/eAdmin/view/signin", TargetName = "USPS Business Gateway", NewWindow = true, Weight = 400 },
                     };
                     Context.Menu.Add(m);
                     await Context.SaveChangesAsync();
