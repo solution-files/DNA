@@ -18,7 +18,6 @@ using Utilities;
 
 namespace DNA3.Controllers {
 
-    [Authorize(Policy = "Administrators")]
     public class UserController : Controller {
 
 		#region Variables
@@ -40,13 +39,14 @@ namespace DNA3.Controllers {
 			Logger = logger;
 		}
 
-		#endregion
+        #endregion
 
-		#region Controller Actions
+        #region Controller Actions
 
-		// Index
-		[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpGet, HttpPost]
+        // Index
+        [HttpGet, HttpPost]
+        [Authorize(Policy = "Administrators")]
+        [ApiExplorerSettings(IgnoreApi = true)]
 		public async Task<IActionResult> Index(int? id) {
 			string message;
             IList<User> result = default;
@@ -67,9 +67,10 @@ namespace DNA3.Controllers {
 			return RedirectToAction("Index", "Dashboard");
 		}
 
-		// New (Get)
-		[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpGet]
+        // New (Get)
+        [HttpGet]
+        [Authorize(Policy = "Administrators")]
+        [ApiExplorerSettings(IgnoreApi = true)]
 		public async Task<IActionResult> New() {
 			User instance = new User();
 			try {
@@ -86,9 +87,10 @@ namespace DNA3.Controllers {
 			return View("Detail", instance);
 		}
 
-		// Edit (Get)
-		[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpGet]
+        // Edit (Get)
+        [HttpGet]
+        [Authorize(Policy = "Administrators")]
+        [ApiExplorerSettings(IgnoreApi = true)]
 		public IActionResult Edit(int? id) {
 			User instance = new User();
 			try {
@@ -104,10 +106,11 @@ namespace DNA3.Controllers {
 			return View("Detail", instance);
 		}
 
-		// Save (Post)
-		[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpPost]
-		[ValidateAntiForgeryToken]
+        // Save (Post)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrators")]
+        [ApiExplorerSettings(IgnoreApi = true)]
 		public async Task<IActionResult> Save(User instance) {
 			string message = "Data entry error(s)";
 			try {
@@ -134,10 +137,11 @@ namespace DNA3.Controllers {
 			return View("Detail", instance);
 		}
 
-		// Delete
-		[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpPost]
-		[ValidateAntiForgeryToken]
+        // Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrators")]
+        [ApiExplorerSettings(IgnoreApi = true)]
 		public async Task<IActionResult> Delete(User instance) {
 			string message = "";
 			try {
@@ -161,9 +165,9 @@ namespace DNA3.Controllers {
 		}
 
         // Profile (Get)
+        [HttpGet]
         [Authorize(Policy = "Users")]
         [ApiExplorerSettings(IgnoreApi = true)]
-		[HttpGet]
 		public async Task<IActionResult> Profile() {
 			string message;
 			User instance = new User();
@@ -178,10 +182,10 @@ namespace DNA3.Controllers {
 		}
 
         // Profile (Post)
-        [Authorize(Policy = "Managers")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Users")]
         [ApiExplorerSettings(IgnoreApi = true)]
-		[HttpPost]
-		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Profile(User instance) {
 			string message;
 			try {
@@ -200,9 +204,10 @@ namespace DNA3.Controllers {
 			return View(instance);
 		}
 
-		// Close
-		[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpGet]
+        // Close
+        [HttpGet]
+        [Authorize(Policy = "Users")]
+        [ApiExplorerSettings(IgnoreApi = true)]
 		public IActionResult Close() {
 			string message;
 			try {

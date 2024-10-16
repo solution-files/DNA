@@ -10,10 +10,28 @@
 
     <script>
 
-        function ProjectGridRowSelected(args) {
-            window.location.href = '@Url.Action("Edit", "Project")/' + args.data.ProjectId;
+        function GridRowSelected(args) {
+            $.ajax({
+                url: "/Project/ModalEdit/" + args.data.ProjectId,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (response) {
+                    alert(JSON.stringify(response)); // (Useful to determine the object property names and values returned from the controller)
+                    $("#ProjectId").val(response.projectId);
+                    $("#Date").val(response.date);
+                    $("#Subject").val(response.subject);
+                    $("#Content").val(response.content);
+                    $("#StatusId").val(response.statusId);
+                    $("#detailModal").modal("show");
+                },
+                error: function (response) {
+                    alert(JSON.stringify(response)); // (Useful to determine the object property names and values returned from the controller)
+                },
+            });
+            return false;
         }
-
+            
         function ExportToExcel() {
             var gridObj = document.getElementById("ProjectGrid").ej2_instances[0];
             gridObj.excelExport();
@@ -24,6 +42,98 @@
             gridObj.pdfExport();
         }
 
+        function New() {
+            var res = validate();
+            if (res == false) {
+                return false;
+            }
+            var empObj = {
+                EmployeeID: $("#EmployeeID").val(),
+                Name: $("#Name").val(),
+                Age: $("#Age").val(),
+                State: $("#State").val(),
+                Country: $("#Country").val()
+            };
+            $.ajax({
+                url: "/Home/Add",
+                data: JSON.stringify(empObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    loadData();
+                    $("#myModal").modal("hide");
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
+        function Save() {
+            var res = validate();
+            if (res == false) {
+                return false;
+            }
+            var empObj = {
+                EmployeeID: $("#EmployeeID").val(),
+                Name: $("#Name").val(),
+                Age: $("#Age").val(),
+                State: $("#State").val(),
+                Country: $("#Country").val(),
+            };
+            $.ajax({
+                url: "/Home/Update",
+                data: JSON.stringify(empObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    loadData();
+                    $("#myModal").modal("hide");
+                    $("#EmployeeID").val("");
+                    $("#Name").val("");
+                    $("#Age").val("");
+                    $("#State").val("");
+                    $("#Country").val("");
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
+        function Delele(ID) {
+            var ans = confirm("Are you sure you want to delete this Record?");
+            if (ans) {
+                $.ajax({
+                    url: "/Home/Delete/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loadData();
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+
+        function Reset() {
+            $("#EmployeeID").val("");
+            $("#Name").val("");
+            $("#Age").val("");
+            $("#State").val("");
+            $("#Country").val("");
+            $("#btnUpdate").hide();
+            $("#btnAdd").show();
+            $("#Name").css("border-color", "lightgrey");
+            $("#Age").css("border-color", "lightgrey");
+            $("#State").css("border-color", "lightgrey");
+            $("#Country").css("border-color", "lightgrey");
+        }
 
     </script>
 
@@ -73,7 +183,7 @@
                         </tbody>
                     </table>
                 } else {
-                    <ejs-grid id="MenuGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" rowSelected="ProjectGridRowSelected">
+                    <ejs-grid id="ProjectGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" rowSelected="GridRowSelected">
                         <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
                         <e-grid-columns>
                             <e-grid-column field="ProjectId" headerText="Project" textAlign="Left" width="120"></e-grid-column>
@@ -87,5 +197,62 @@
     </section>
 </div>
 <!-- /.content-wrapper -->
-<!-- Report Options Dialog -->
-<partial name="_Options" />
+<!-- Project Detail Dialog -->
+<div id="detailModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Project Detail</h5>
+                <div class="ml-auto">
+                    <button asp-action="Save" form="Master" class="btn btn-tool btn-sm">
+                        <i class="far fa-floppy-disk"></i>
+                    </button>
+                    <button asp-action="Delete" form="Master" class="btn btn-tool btn-sm">
+                        <i class="far fa-trash-can"></i>
+                    </button>
+                    <a href="/report/viewer.html?Report=Project.rdl" formaction="Master" class="btn btn-tool btn-sm" target="_blank">
+                        <i class="fas fa-print"></i>
+                    </a>
+                    <a asp-action="Index" class="btn btn-tool btn-sm">
+                        <i class="fas fa-xmark"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form id="Parameters" asp-action="#" autocomplete="off">
+                    <div class="row mb-0">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="Date">Date</label>
+                                <input type="text" id="Date" name="Date" class="form-control" placeholder="Date" autofocus />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="StatusId">Status</label>
+                                <input type="text" id="StatusId" name="StatusId" class="form-control" placeholder="Status" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="Subject">Subject</label>
+                                <input type="text" id="Subject" name="Subject" class="form-control" placeholder="Subject" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="Content">Content</label>
+                                <input type="text" id="Content" name="Content" class="form-control" placeholder="Content" />
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="ProjectId" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

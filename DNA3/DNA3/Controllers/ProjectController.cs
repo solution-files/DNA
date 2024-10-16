@@ -78,6 +78,13 @@ namespace DNA3.Controllers {
             return View("Detail", instance);
         }
 
+        [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public JsonResult ModalEdit(int id) {
+            Project project = Context.Project.Find(id);
+            return Json(project);
+        }
+
         // Edit (Get)
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
