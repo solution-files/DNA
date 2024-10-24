@@ -51,4 +51,4 @@ The parent website and dashboard modules can be themed separately. Themes consis
 - Documentation is not yet complete
 - Many reports are still being refactored for SSMS
 - An interface is being constructed to automate program setup and configuration
-- Multifactor Authentication (MFA) is not yet complete
+- Multifactor Authentication (MFA) for local accounts is not yet complete

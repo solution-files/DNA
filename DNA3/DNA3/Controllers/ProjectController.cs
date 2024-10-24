@@ -102,9 +102,9 @@ namespace DNA3.Controllers {
         }
 
         // Save (Post)
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Save(Project instance) {
             string message;
             try {
