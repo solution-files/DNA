@@ -81,6 +81,11 @@ Assembly DashboardAssembly = typeof(DNA3.Controllers.DashboardController).GetTyp
 AssemblyPart DashboardPart = new(DashboardAssembly);
 services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(DashboardPart));
 
+// SMO Assembly Part
+Assembly SMOAssembly = typeof(SMO.Controllers.HomeController).GetTypeInfo().Assembly;
+AssemblyPart SMOPart = new(SMOAssembly);
+services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(SMOPart));
+
 // Cookie Authentication
 //
 //services.AddAuthentication(options => {

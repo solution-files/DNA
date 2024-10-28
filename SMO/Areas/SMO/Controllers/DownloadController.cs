@@ -48,7 +48,7 @@ namespace SMO.Controllers {
         public IActionResult Index() {
             List<Backup> files = new();
             try {
-                string[] f = Directory.GetFiles(@Configuration["SMO:BackupStoragePath"], "*.bak");
+                string[] f = Directory.GetFiles(@Configuration["SMOSettings:BackupStoragePath"], "*.bak");
                 foreach (string file in f) {
                     files.Add(new Backup { FileName = Path.GetFileName(file) });
                 }
@@ -77,7 +77,7 @@ namespace SMO.Controllers {
         [HttpGet, HttpPost]
         [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Stream(string id) {
-            string path = @Configuration["SMO:BackupStoragePath"];
+            string path = @Configuration["SMOSettings:BackupStoragePath"];
             try {
                 string filePath = $@"{path}{id}";
                 Response.Headers.Clear();

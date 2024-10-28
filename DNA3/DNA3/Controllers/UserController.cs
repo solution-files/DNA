@@ -1,6 +1,5 @@
 ﻿#region Usings
 
-using DNA3.Classes;
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

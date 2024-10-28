@@ -1,0 +1,110 @@
+﻿@model IList<DNA3.Models.Databases>
+@{
+    Layout = "_Dashboard";
+    string Title = "Backup";
+    string Plural = "Backups";
+}
+@section CSS {
+
+}
+@section Scripts {
+
+    <script>
+        function RunSelected() {
+            try {
+                var selected = [];
+                var grid = document.getElementById("BackupGrid").ej2_instances[0];
+                grid.select().each(function () {
+                    selected.push(grid.dataItem(this));
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "/SMO/Backup/Run",
+                    data: JSON.stringify(selected),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        window.location = "/SMO/Backup";
+                    },
+                    error: function (xhr, opt, err) {
+                        alert('Error: ' + xhr.status + ' - ' + xhr.statusText + ' - ' + xhr.responseText);
+                        console.log('Error: ' + xhr.status + ' - ' + xhr.statusText + ' - ' + xhr.responseText);
+                    }
+                });
+            } catch (ex) {
+                alert(ex);
+            }
+        }
+
+        function ExportToExcel() {
+            var gridObj = document.getElementById("BackupGrid").ej2_instances[0];
+            gridObj.excelExport();
+        }
+
+        function ExportToPDF() {
+            var gridObj = document.getElementById("BackupGrid").ej2_instances[0];
+            gridObj.pdfExport();
+        }
+
+    </script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>@Title Manager</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item active">@Title Manager</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <partial name="_Messages" />
+        <div class="card card-primary">
+            <div class="card-header border-0">
+                <h3 class="card-title">@Plural</h3>
+                <div class="card-tools">
+                    <button class="btn btn-tool btn-sm" onclick="RunSelected()">
+                        <i class="fas fa-play" title="Run"></i>
+                    </button>
+                    <a asp-controller="Backup" asp-action="Help" class="btn btn-tool btn-sm">
+                        <i class="fas fa-question" title="Help"></i>
+                    </a>
+                    <a asp-action="Index" class="btn btn-tool btn-sm">
+                        <i class="fas fa-xmark" title="Close"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                @if (Model.Count() == 0) {
+                    <emptyresult icon="fa-solid fa-key"></emptyresult>
+                } else {
+                    <ejs-grid id="BackupGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true">
+                        <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
+                        <e-grid-columns>
+                            <e-grid-column field="database_id" headerText="Database" textAlign="Left" width="120"></e-grid-column>
+                            <e-grid-column field="name" headerText="Name" textAlign="Left" width="120"></e-grid-column>
+                            <e-grid-column field="user_access_desc" headerText="Access"></e-grid-column>
+                            <e-grid-column field="create_date" headerText="Created"></e-grid-column>
+                        </e-grid-columns>
+                    </ejs-grid>
+                }
+            </div>
+        </div>
+    </section>
+</div>
+<!-- /.content-wrapper -->
+<!-- Report Options Dialog -->
+<partial name="_Options" />
