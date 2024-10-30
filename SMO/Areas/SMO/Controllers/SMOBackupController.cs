@@ -51,7 +51,7 @@ namespace SMO.Controllers {
         public async Task<IActionResult> Index() {
             string message;
             try {
-                var result = await Context.Databases.FromSqlRaw("SELECT database_id, [name], user_access_desc, create_date FROM sys.databases WHERE [name] NOT IN('master', 'tempdb', 'model', 'msdb')").ToListAsync();
+                IList<Databases> result = await Context.Databases.FromSqlRaw<DNA3.Models.Databases>("SELECT database_id, name, user_access_desc, create_date FROM sys.databases WHERE name NOT IN('master', 'tempdb', 'model', 'msdb')").ToListAsync();
                 Log.Logger.ForContext("UserId", User.UserId()).Information($"View Database List");
                 return View("Index", result);
             } catch (Exception ex) {

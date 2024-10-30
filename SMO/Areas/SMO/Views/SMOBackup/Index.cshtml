@@ -12,19 +12,16 @@
     <script>
         function RunSelected() {
             try {
-                var selected = [];
                 var grid = document.getElementById("BackupGrid").ej2_instances[0];
-                grid.select().each(function () {
-                    selected.push(grid.dataItem(this));
-                });
+                var selected = grid.getSelectedRecords();
                 $.ajax({
                     type: "POST",
-                    url: "/SMO/Backup/Run",
+                    url: "/SMO/SMOBackup/Run",
                     data: JSON.stringify(selected),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
-                        window.location = "/SMO/Backup";
+                        window.location = "/SMO/SMOBackup";
                     },
                     error: function (xhr, opt, err) {
                         alert('Error: ' + xhr.status + ' - ' + xhr.statusText + ' - ' + xhr.responseText);
@@ -91,8 +88,8 @@
                 @if (Model.Count() == 0) {
                     <emptyresult icon="fa-solid fa-key"></emptyresult>
                 } else {
-                    <ejs-grid id="BackupGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true">
-                        <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
+                    <ejs-grid id="BackupGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" allowSelection="true">
+                        <e-grid-selectionsettings type="Multiple"></e-grid-selectionsettings>
                         <e-grid-columns>
                             <e-grid-column field="database_id" headerText="Database" textAlign="Left" width="120"></e-grid-column>
                             <e-grid-column field="name" headerText="Name" textAlign="Left" width="120"></e-grid-column>
