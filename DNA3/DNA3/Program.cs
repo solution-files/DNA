@@ -109,9 +109,9 @@ services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.Ap
 //    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 //
 services.AddAuthentication(options => {
-    options.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 }).AddCookie(options => {
     options.LoginPath = "/Dashboard/Login";
     options.LogoutPath = "/Dashboard/Logout";
