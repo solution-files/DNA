@@ -23,12 +23,12 @@ namespace Utilities {
             StringBuilder result = new StringBuilder();
             try {
                 if (opts == null) opts = new PasswordOptions() {
-                    RequiredLength = Conf.AppSetting<int>("Password:RequiredLength"),
-                    RequiredUniqueChars = Conf.AppSetting<int>("Password:RequiredUniqueChars"),
-                    RequireDigit = Conf.AppSetting<bool>("Password:RequiedDigit"),
-                    RequireLowercase = Conf.AppSetting<bool>("Password:RequireLowerCase"),
-                    RequireNonAlphanumeric = Conf.AppSetting<bool>("Password:RequireNonAlphanumeric"),
-                    RequireUppercase = Conf.AppSetting<bool>("Password:RequireUppercase")
+                    RequiredLength = Conf.AppSetting<int>("PasswordRules:RequiredLength"),
+                    RequiredUniqueChars = Conf.AppSetting<int>("PasswordRules:RequiredUniqueChars"),
+                    RequireDigit = Conf.AppSetting<bool>("PasswordRules:RequiedDigit"),
+                    RequireLowercase = Conf.AppSetting<bool>("PasswordRules:RequireLowerCase"),
+                    RequireNonAlphanumeric = Conf.AppSetting<bool>("PasswordRules:RequireNonAlphanumeric"),
+                    RequireUppercase = Conf.AppSetting<bool>("PasswordRules:RequireUppercase")
                 };
 
                 result.AppendLine("<h6>Passwords must:</h6>");
