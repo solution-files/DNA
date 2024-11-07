@@ -30,6 +30,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DNA3\DNA3\DNA3.csproj" />
     <ProjectReference Include="..\SMO\SMO.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />

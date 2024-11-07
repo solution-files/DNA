@@ -6,12 +6,18 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
@@ -81,11 +87,6 @@ Assembly DashboardAssembly = typeof(DNA3.Controllers.DashboardController).GetTyp
 AssemblyPart DashboardPart = new(DashboardAssembly);
 services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(DashboardPart));
 
-// SMO Assembly Part
-Assembly SMOAssembly = typeof(SMO.Controllers.HomeController).GetTypeInfo().Assembly;
-AssemblyPart SMOPart = new(SMOAssembly);
-services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(SMOPart));
-
 // Cookie Authentication
 //
 //services.AddAuthentication(options => {
@@ -108,9 +109,9 @@ services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.Ap
 //    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 //
 services.AddAuthentication(options => {
-    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 }).AddCookie(options => {
     options.LoginPath = "/Dashboard/Login";
     options.LogoutPath = "/Dashboard/Logout";

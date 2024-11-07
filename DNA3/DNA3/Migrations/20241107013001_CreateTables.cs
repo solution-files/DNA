@@ -1,21 +1,25 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace DNA3.Migrations
 {
+    /// <inheritdoc />
     public partial class CreateTables : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "Account",
                 columns: table => new
                 {
-                    AccountId = table.Column<int>(nullable: false)
+                    AccountId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<string>(maxLength: 10, nullable: true),
-                    Name = table.Column<string>(maxLength: 30, nullable: true),
-                    Description = table.Column<string>(maxLength: 100, nullable: true)
+                    Code = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -26,12 +30,12 @@ namespace DNA3.Migrations
                 name: "Campaign",
                 columns: table => new
                 {
-                    CampaignId = table.Column<int>(nullable: false)
+                    CampaignId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Icon = table.Column<string>(maxLength: 30, nullable: true),
-                    Code = table.Column<string>(maxLength: 30, nullable: false),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    Icon = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,11 +46,11 @@ namespace DNA3.Migrations
                 name: "Condition",
                 columns: table => new
                 {
-                    ConditionId = table.Column<int>(nullable: false)
+                    ConditionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(unicode: false, maxLength: 10, nullable: true),
-                    Name = table.Column<string>(unicode: false, maxLength: 30, nullable: true),
-                    Description = table.Column<string>(unicode: false, nullable: true)
+                    Code = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: true),
+                    Name = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
+                    Description = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,32 +61,32 @@ namespace DNA3.Migrations
                 name: "Config",
                 columns: table => new
                 {
-                    Name = table.Column<string>(nullable: false),
-                    ShortName = table.Column<string>(nullable: false),
-                    Version = table.Column<string>(nullable: false),
-                    Author = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    Keywords = table.Column<string>(nullable: false),
-                    Tagline = table.Column<string>(nullable: false),
-                    Copyright = table.Column<string>(nullable: false),
-                    Company = table.Column<string>(nullable: false),
-                    Address = table.Column<string>(nullable: false),
-                    City = table.Column<string>(nullable: false),
-                    State = table.Column<string>(nullable: false),
-                    Zip = table.Column<string>(nullable: false),
-                    Phone = table.Column<string>(nullable: false),
-                    Themename = table.Column<string>(nullable: false),
-                    Themepath = table.Column<string>(nullable: false),
-                    Apple = table.Column<string>(nullable: true),
-                    Facebook = table.Column<string>(nullable: true),
-                    GitHub = table.Column<string>(nullable: true),
-                    Google = table.Column<string>(nullable: true),
-                    InstaGram = table.Column<string>(nullable: true),
-                    LinkedIn = table.Column<string>(nullable: true),
-                    Mastodon = table.Column<string>(nullable: true),
-                    Microsoft = table.Column<string>(nullable: true),
-                    Twitter = table.Column<string>(nullable: true),
-                    Xing = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShortName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Version = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Keywords = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Tagline = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Copyright = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Company = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Zip = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Themename = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Themepath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Apple = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Facebook = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GitHub = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Google = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InstaGram = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LinkedIn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Mastodon = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Microsoft = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Twitter = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Xing = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -92,13 +96,13 @@ namespace DNA3.Migrations
                 name: "DailyServiceSummary",
                 columns: table => new
                 {
-                    Year = table.Column<int>(nullable: true),
-                    Month = table.Column<int>(nullable: true),
-                    Day = table.Column<int>(nullable: true),
-                    Labor = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Parts = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Other = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Total = table.Column<decimal>(type: "numeric(10, 2)", nullable: true)
+                    Year = table.Column<int>(type: "int", nullable: true),
+                    Month = table.Column<int>(type: "int", nullable: true),
+                    Day = table.Column<int>(type: "int", nullable: true),
+                    Labor = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Parts = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Other = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Total = table.Column<decimal>(type: "numeric(10,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -108,11 +112,11 @@ namespace DNA3.Migrations
                 name: "Databases",
                 columns: table => new
                 {
-                    database_id = table.Column<int>(nullable: false)
+                    database_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(nullable: true),
-                    user_access_desc = table.Column<string>(nullable: true),
-                    create_date = table.Column<DateTime>(nullable: false)
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    user_access_desc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    create_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,17 +127,17 @@ namespace DNA3.Migrations
                 name: "Device",
                 columns: table => new
                 {
-                    DeviceId = table.Column<int>(nullable: false)
+                    DeviceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Hostname = table.Column<string>(maxLength: 30, nullable: false),
-                    Ipv4 = table.Column<string>(maxLength: 15, nullable: false),
-                    Ipv4Gateway = table.Column<string>(nullable: true),
-                    Ipv4Public = table.Column<string>(nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Hostname = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Ipv4 = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Ipv4Gateway = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ipv4Public = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Connected = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Message = table.Column<string>(maxLength: 100, nullable: true)
+                    Message = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -144,11 +148,11 @@ namespace DNA3.Migrations
                 name: "Disposition",
                 columns: table => new
                 {
-                    DispositionId = table.Column<int>(nullable: false)
+                    DispositionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<string>(maxLength: 30, nullable: true),
-                    Name = table.Column<string>(maxLength: 100, nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Code = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -159,29 +163,29 @@ namespace DNA3.Migrations
                 name: "Homeowner",
                 columns: table => new
                 {
-                    HomeownerId = table.Column<int>(nullable: false)
+                    HomeownerId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Name1 = table.Column<string>(maxLength: 100, nullable: true),
-                    First1 = table.Column<string>(maxLength: 50, nullable: true),
-                    Last1 = table.Column<string>(maxLength: 50, nullable: true),
-                    Phone1 = table.Column<string>(maxLength: 13, nullable: true),
-                    Name2 = table.Column<string>(maxLength: 100, nullable: true),
-                    First2 = table.Column<string>(maxLength: 50, nullable: true),
-                    Last2 = table.Column<string>(maxLength: 50, nullable: true),
-                    Phone2 = table.Column<string>(maxLength: 13, nullable: true),
-                    Address = table.Column<string>(maxLength: 100, nullable: true),
-                    City = table.Column<string>(maxLength: 50, nullable: true),
-                    State = table.Column<string>(maxLength: 20, nullable: true),
-                    Zip = table.Column<string>(maxLength: 5, nullable: true),
-                    Plus4 = table.Column<string>(maxLength: 4, nullable: true),
-                    Carrier = table.Column<string>(maxLength: 10, nullable: true),
-                    County = table.Column<string>(maxLength: 30, nullable: true),
+                    Name1 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    First1 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Last1 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Phone1 = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true),
+                    Name2 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    First2 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Last2 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Phone2 = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    State = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Zip = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
+                    Plus4 = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
+                    Carrier = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    County = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     Recorded = table.Column<DateTime>(type: "date", nullable: true),
                     Published = table.Column<DateTime>(type: "date", nullable: true),
-                    Value = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Comments = table.Column<string>(nullable: true),
-                    SourceId = table.Column<int>(nullable: true),
-                    DispositionId = table.Column<int>(nullable: true)
+                    Value = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SourceId = table.Column<int>(type: "int", nullable: true),
+                    DispositionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -192,11 +196,11 @@ namespace DNA3.Migrations
                 name: "ListingType",
                 columns: table => new
                 {
-                    ListingtypeId = table.Column<int>(nullable: false)
+                    ListingtypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(unicode: false, maxLength: 30, nullable: true),
-                    Name = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
-                    Description = table.Column<string>(unicode: false, nullable: true)
+                    Code = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
+                    Name = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    Description = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -207,11 +211,11 @@ namespace DNA3.Migrations
                 name: "MonthlyServiceSummary",
                 columns: table => new
                 {
-                    Year = table.Column<int>(nullable: true),
-                    Month = table.Column<string>(nullable: true),
-                    Labor = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Parts = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Total = table.Column<decimal>(type: "numeric(10, 2)", nullable: true)
+                    Year = table.Column<int>(type: "int", nullable: true),
+                    Month = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Labor = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Parts = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Total = table.Column<decimal>(type: "numeric(10,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -221,14 +225,14 @@ namespace DNA3.Migrations
                 name: "Page",
                 columns: table => new
                 {
-                    PageId = table.Column<int>(nullable: false)
+                    PageId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
                     Date = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getdate())"),
-                    Slug = table.Column<string>(maxLength: 50, nullable: false),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    Subject = table.Column<string>(maxLength: 100, nullable: false),
-                    Content = table.Column<string>(nullable: false),
-                    Icon = table.Column<string>(maxLength: 50, nullable: false)
+                    Slug = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -239,11 +243,11 @@ namespace DNA3.Migrations
                 name: "Promotion",
                 columns: table => new
                 {
-                    PromotionId = table.Column<int>(nullable: false)
+                    PromotionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<string>(maxLength: 30, nullable: true),
-                    Name = table.Column<string>(maxLength: 100, nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Code = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -254,13 +258,13 @@ namespace DNA3.Migrations
                 name: "Reference",
                 columns: table => new
                 {
-                    ReferenceId = table.Column<int>(nullable: false)
+                    ReferenceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Name = table.Column<string>(maxLength: 100, nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Target = table.Column<string>(maxLength: 256, nullable: true),
-                    TargetName = table.Column<string>(maxLength: 100, nullable: true),
-                    Icon = table.Column<string>(maxLength: 50, nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Target = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    TargetName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Icon = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -271,17 +275,17 @@ namespace DNA3.Migrations
                 name: "Request",
                 columns: table => new
                 {
-                    RequestId = table.Column<int>(nullable: false)
+                    RequestId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
                     Date = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
-                    Company = table.Column<string>(maxLength: 50, nullable: true),
-                    First = table.Column<string>(maxLength: 100, nullable: false),
-                    Last = table.Column<string>(maxLength: 100, nullable: false),
-                    Email = table.Column<string>(maxLength: 190, nullable: false),
-                    Subject = table.Column<string>(maxLength: 100, nullable: false),
-                    Content = table.Column<string>(nullable: false),
-                    Subscribe = table.Column<string>(maxLength: 50, nullable: true),
-                    Type = table.Column<string>(maxLength: 30, nullable: true)
+                    Company = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    First = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Last = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(190)", maxLength: 190, nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Subscribe = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -292,12 +296,12 @@ namespace DNA3.Migrations
                 name: "Resource",
                 columns: table => new
                 {
-                    ResourceId = table.Column<int>(nullable: false)
+                    ResourceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    PartNumber = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(maxLength: 100, nullable: false),
-                    Unit = table.Column<string>(maxLength: 10, nullable: false),
-                    Price = table.Column<decimal>(type: "numeric(10, 2)", nullable: false)
+                    PartNumber = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Unit = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(10,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -308,11 +312,11 @@ namespace DNA3.Migrations
                 name: "Role",
                 columns: table => new
                 {
-                    RoleId = table.Column<int>(nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<string>(maxLength: 50, nullable: false),
-                    Name = table.Column<string>(maxLength: 100, nullable: true),
-                    Description = table.Column<string>(nullable: false)
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -323,13 +327,13 @@ namespace DNA3.Migrations
                 name: "Service",
                 columns: table => new
                 {
-                    ServiceId = table.Column<int>(nullable: false)
+                    ServiceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    Port = table.Column<int>(nullable: false),
-                    Protocol = table.Column<string>(nullable: true)
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Port = table.Column<int>(type: "int", nullable: false),
+                    Protocol = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -340,11 +344,11 @@ namespace DNA3.Migrations
                 name: "SortOrder",
                 columns: table => new
                 {
-                    SortorderId = table.Column<int>(nullable: false)
+                    SortorderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(unicode: false, maxLength: 30, nullable: true),
-                    Name = table.Column<string>(unicode: false, maxLength: 30, nullable: true),
-                    Description = table.Column<string>(unicode: false, nullable: true)
+                    Code = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
+                    Name = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
+                    Description = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -355,11 +359,11 @@ namespace DNA3.Migrations
                 name: "Source",
                 columns: table => new
                 {
-                    SourceId = table.Column<int>(nullable: false)
+                    SourceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<string>(maxLength: 10, nullable: false),
-                    Name = table.Column<string>(maxLength: 30, nullable: false),
-                    Description = table.Column<string>(maxLength: 100, nullable: true)
+                    Code = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -370,10 +374,10 @@ namespace DNA3.Migrations
                 name: "Table",
                 columns: table => new
                 {
-                    TableId = table.Column<int>(nullable: false),
-                    Code = table.Column<string>(maxLength: 3, nullable: false),
-                    Name = table.Column<string>(maxLength: 30, nullable: false),
-                    Description = table.Column<string>(maxLength: 100, nullable: false)
+                    TableId = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -384,11 +388,11 @@ namespace DNA3.Migrations
                 name: "Zone",
                 columns: table => new
                 {
-                    ZoneId = table.Column<int>(nullable: false)
+                    ZoneId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<string>(maxLength: 30, nullable: true),
-                    Name = table.Column<string>(maxLength: 100, nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Code = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -399,17 +403,17 @@ namespace DNA3.Migrations
                 name: "Section",
                 columns: table => new
                 {
-                    SectionId = table.Column<int>(nullable: false)
+                    SectionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    PageId = table.Column<int>(nullable: false),
+                    PageId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Slug = table.Column<string>(maxLength: 100, nullable: false),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    Subject = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    Icon = table.Column<string>(maxLength: 50, nullable: false),
-                    Columns = table.Column<int>(nullable: false),
-                    Limit = table.Column<int>(nullable: false)
+                    Slug = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Columns = table.Column<int>(type: "int", nullable: false),
+                    Limit = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -426,17 +430,17 @@ namespace DNA3.Migrations
                 name: "Menu",
                 columns: table => new
                 {
-                    MenuId = table.Column<int>(nullable: false)
+                    MenuId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    RoleId = table.Column<int>(nullable: false),
-                    Code = table.Column<string>(maxLength: 30, nullable: true),
-                    Name = table.Column<string>(maxLength: 30, nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Icon = table.Column<string>(maxLength: 30, nullable: true),
-                    Target = table.Column<string>(maxLength: 100, nullable: true),
-                    TargetName = table.Column<string>(maxLength: 50, nullable: true),
-                    TopLevel = table.Column<bool>(nullable: false),
-                    Weight = table.Column<int>(nullable: true)
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Icon = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Target = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    TargetName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    TopLevel = table.Column<bool>(type: "bit", nullable: false),
+                    Weight = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -453,10 +457,10 @@ namespace DNA3.Migrations
                 name: "Deviceservice",
                 columns: table => new
                 {
-                    DeviceserviceId = table.Column<int>(nullable: false)
+                    DeviceserviceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DeviceId = table.Column<int>(nullable: false),
-                    ServiceId = table.Column<int>(nullable: false)
+                    DeviceId = table.Column<int>(type: "int", nullable: false),
+                    ServiceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -479,29 +483,29 @@ namespace DNA3.Migrations
                 name: "Residence",
                 columns: table => new
                 {
-                    ResidenceId = table.Column<int>(nullable: false)
+                    ResidenceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Name1 = table.Column<string>(maxLength: 100, nullable: true),
-                    First1 = table.Column<string>(maxLength: 50, nullable: true),
-                    Last1 = table.Column<string>(maxLength: 50, nullable: true),
-                    Phone1 = table.Column<string>(maxLength: 13, nullable: true),
-                    Name2 = table.Column<string>(maxLength: 100, nullable: true),
-                    First2 = table.Column<string>(maxLength: 50, nullable: true),
-                    Last2 = table.Column<string>(maxLength: 50, nullable: true),
-                    Phone2 = table.Column<string>(maxLength: 13, nullable: true),
-                    Address = table.Column<string>(maxLength: 100, nullable: true),
-                    City = table.Column<string>(maxLength: 50, nullable: true),
-                    State = table.Column<string>(maxLength: 20, nullable: true),
-                    Zip = table.Column<string>(maxLength: 5, nullable: true),
-                    Plus4 = table.Column<string>(maxLength: 4, nullable: true),
-                    Carrier = table.Column<string>(maxLength: 10, nullable: true),
-                    County = table.Column<string>(maxLength: 30, nullable: true),
+                    Name1 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    First1 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Last1 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Phone1 = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true),
+                    Name2 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    First2 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Last2 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Phone2 = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    State = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Zip = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
+                    Plus4 = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
+                    Carrier = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    County = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     Recorded = table.Column<DateTime>(type: "date", nullable: true),
                     Published = table.Column<DateTime>(type: "date", nullable: true),
-                    Value = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Comments = table.Column<string>(nullable: true),
-                    SourceId = table.Column<int>(nullable: false),
-                    DispositionId = table.Column<int>(nullable: false)
+                    Value = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SourceId = table.Column<int>(type: "int", nullable: false),
+                    DispositionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -524,12 +528,12 @@ namespace DNA3.Migrations
                 name: "Status",
                 columns: table => new
                 {
-                    StatusId = table.Column<int>(nullable: false)
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    TableId = table.Column<int>(nullable: false),
-                    Code = table.Column<string>(maxLength: 30, nullable: false),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(nullable: false)
+                    TableId = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -546,15 +550,15 @@ namespace DNA3.Migrations
                 name: "Category",
                 columns: table => new
                 {
-                    CategoryId = table.Column<int>(nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    SectionId = table.Column<int>(nullable: false),
+                    SectionId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Slug = table.Column<string>(maxLength: 50, nullable: false),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    Subject = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    Icon = table.Column<string>(maxLength: 50, nullable: true)
+                    Slug = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -571,19 +575,19 @@ namespace DNA3.Migrations
                 name: "Action",
                 columns: table => new
                 {
-                    ActionId = table.Column<int>(nullable: false)
+                    ActionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    MenuId = table.Column<int>(nullable: true),
-                    RoleId = table.Column<int>(nullable: true),
-                    Code = table.Column<string>(maxLength: 30, nullable: false),
-                    Name = table.Column<string>(maxLength: 30, nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    Icon = table.Column<string>(maxLength: 30, nullable: true),
-                    Class = table.Column<string>(maxLength: 30, nullable: true),
-                    Target = table.Column<string>(maxLength: 100, nullable: true),
-                    TargetName = table.Column<string>(maxLength: 50, nullable: true),
-                    Weight = table.Column<int>(nullable: false),
-                    NewWindow = table.Column<bool>(nullable: false, defaultValue: false)
+                    MenuId = table.Column<int>(type: "int", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Icon = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Class = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Target = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    TargetName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Weight = table.Column<int>(type: "int", nullable: false),
+                    NewWindow = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -606,29 +610,29 @@ namespace DNA3.Migrations
                 name: "Associate",
                 columns: table => new
                 {
-                    AssociateId = table.Column<int>(nullable: false)
+                    AssociateId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<int>(nullable: true),
-                    First = table.Column<string>(maxLength: 30, nullable: false),
-                    Last = table.Column<string>(maxLength: 30, nullable: false),
-                    Address = table.Column<string>(maxLength: 100, nullable: true),
-                    City = table.Column<string>(maxLength: 30, nullable: true),
-                    State = table.Column<string>(maxLength: 30, nullable: true),
-                    Zip = table.Column<string>(maxLength: 5, nullable: true),
-                    Plus4 = table.Column<string>(maxLength: 4, nullable: true),
-                    Phone = table.Column<string>(maxLength: 20, nullable: true),
-                    EMail = table.Column<string>(maxLength: 100, nullable: true),
-                    Owner = table.Column<bool>(nullable: false),
-                    Setter = table.Column<bool>(nullable: false),
-                    Verifier = table.Column<bool>(nullable: false),
-                    Confirmer = table.Column<bool>(nullable: false),
-                    Promoter = table.Column<bool>(nullable: false),
-                    Salesrep = table.Column<bool>(nullable: false),
-                    Servicetech = table.Column<bool>(nullable: false),
-                    Dialer = table.Column<bool>(nullable: false),
-                    Exclude = table.Column<bool>(nullable: false),
-                    Comments = table.Column<string>(nullable: true),
-                    StatusId = table.Column<int>(nullable: false)
+                    Code = table.Column<int>(type: "int", nullable: true),
+                    First = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Last = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    State = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Zip = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
+                    Plus4 = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    EMail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Owner = table.Column<bool>(type: "bit", nullable: false),
+                    Setter = table.Column<bool>(type: "bit", nullable: false),
+                    Verifier = table.Column<bool>(type: "bit", nullable: false),
+                    Confirmer = table.Column<bool>(type: "bit", nullable: false),
+                    Promoter = table.Column<bool>(type: "bit", nullable: false),
+                    Salesrep = table.Column<bool>(type: "bit", nullable: false),
+                    Servicetech = table.Column<bool>(type: "bit", nullable: false),
+                    Dialer = table.Column<bool>(type: "bit", nullable: false),
+                    Exclude = table.Column<bool>(type: "bit", nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -645,10 +649,10 @@ namespace DNA3.Migrations
                 name: "Cart",
                 columns: table => new
                 {
-                    CartId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: true),
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime", nullable: false),
-                    StatusId = table.Column<int>(nullable: true)
+                    StatusId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -665,22 +669,22 @@ namespace DNA3.Migrations
                 name: "Client",
                 columns: table => new
                 {
-                    ClientId = table.Column<int>(nullable: false)
+                    ClientId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Company = table.Column<string>(maxLength: 100, nullable: false),
-                    Address1 = table.Column<string>(maxLength: 50, nullable: false),
-                    Address2 = table.Column<string>(maxLength: 100, nullable: true),
-                    City = table.Column<string>(maxLength: 50, nullable: true),
-                    State = table.Column<string>(maxLength: 50, nullable: true),
-                    Zip = table.Column<string>(maxLength: 50, nullable: true),
-                    Zip1 = table.Column<string>(maxLength: 50, nullable: true),
-                    First = table.Column<string>(nullable: true),
-                    Last = table.Column<string>(nullable: true),
-                    Phone = table.Column<string>(maxLength: 50, nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Comment = table.Column<string>(maxLength: 100, nullable: true),
-                    Avitar = table.Column<string>(nullable: true),
-                    StatusId = table.Column<int>(nullable: false)
+                    Company = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Address1 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address2 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    State = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Zip = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Zip1 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    First = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Last = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Comment = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Avitar = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -697,17 +701,17 @@ namespace DNA3.Migrations
                 name: "Facility",
                 columns: table => new
                 {
-                    FacilityId = table.Column<int>(nullable: false)
+                    FacilityId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<string>(maxLength: 30, nullable: false),
-                    Name = table.Column<string>(maxLength: 30, nullable: false),
-                    Address = table.Column<string>(maxLength: 100, nullable: true),
-                    City = table.Column<string>(maxLength: 30, nullable: false),
-                    State = table.Column<string>(maxLength: 30, nullable: false),
-                    Zip = table.Column<string>(maxLength: 10, nullable: false),
-                    Contact = table.Column<string>(maxLength: 100, nullable: true),
-                    Phone = table.Column<string>(maxLength: 30, nullable: true),
-                    StatusId = table.Column<int>(nullable: false)
+                    Code = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    State = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Zip = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Contact = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -724,18 +728,18 @@ namespace DNA3.Migrations
                 name: "Product",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(nullable: false)
+                    ProductId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<string>(maxLength: 30, nullable: false),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    Features = table.Column<string>(nullable: true),
-                    Image = table.Column<string>(maxLength: 260, nullable: true),
-                    Target = table.Column<string>(maxLength: 100, nullable: true),
-                    TargetName = table.Column<string>(maxLength: 30, nullable: true),
-                    Price = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Icon = table.Column<string>(maxLength: 30, nullable: true),
-                    StatusId = table.Column<int>(nullable: false)
+                    Code = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Features = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(260)", maxLength: 260, nullable: true),
+                    Target = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    TargetName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Price = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Icon = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -749,15 +753,37 @@ namespace DNA3.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Project",
+                columns: table => new
+                {
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "10000, 1"),
+                    Date = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Project", x => x.ProjectId);
+                    table.ForeignKey(
+                        name: "FK_Project_Status_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Status",
+                        principalColumn: "StatusId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Task",
                 columns: table => new
                 {
-                    TaskId = table.Column<int>(nullable: false)
+                    TaskId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<string>(maxLength: 30, nullable: true),
-                    Name = table.Column<string>(maxLength: 100, nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    StatusId = table.Column<int>(nullable: true)
+                    Code = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StatusId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -774,20 +800,20 @@ namespace DNA3.Migrations
                 name: "Vendor",
                 columns: table => new
                 {
-                    VendorId = table.Column<int>(nullable: false)
+                    VendorId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<string>(maxLength: 30, nullable: false),
-                    Name = table.Column<string>(maxLength: 30, nullable: false),
-                    Address = table.Column<string>(maxLength: 100, nullable: true),
-                    City = table.Column<string>(maxLength: 30, nullable: true),
-                    State = table.Column<string>(maxLength: 30, nullable: true),
-                    Zip = table.Column<string>(maxLength: 5, nullable: true),
-                    Zip4 = table.Column<string>(maxLength: 4, nullable: true),
-                    Contact = table.Column<string>(maxLength: 100, nullable: true),
-                    Phone = table.Column<string>(maxLength: 30, nullable: false),
-                    Email = table.Column<string>(maxLength: 100, nullable: true),
-                    Comment = table.Column<string>(nullable: true),
-                    StatusId = table.Column<int>(nullable: false)
+                    Code = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    State = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Zip = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
+                    Zip4 = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
+                    Contact = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -804,22 +830,22 @@ namespace DNA3.Migrations
                 name: "Article",
                 columns: table => new
                 {
-                    ArticleId = table.Column<int>(nullable: false)
+                    ArticleId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
                     Date = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
-                    PageId = table.Column<int>(nullable: false),
-                    SectionId = table.Column<int>(nullable: false),
-                    CategoryId = table.Column<int>(nullable: false),
-                    Icon = table.Column<string>(maxLength: 50, nullable: true),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Subject = table.Column<string>(maxLength: 300, nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    Image = table.Column<string>(maxLength: 260, nullable: true),
-                    Target = table.Column<string>(maxLength: 100, nullable: true),
-                    TargetName = table.Column<string>(maxLength: 50, nullable: true),
-                    Tags = table.Column<string>(maxLength: 300, nullable: true),
-                    Weight = table.Column<int>(nullable: true),
-                    StatusId = table.Column<int>(nullable: false)
+                    PageId = table.Column<int>(type: "int", nullable: false),
+                    SectionId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(260)", maxLength: 260, nullable: true),
+                    Target = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    TargetName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Tags = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    Weight = table.Column<int>(type: "int", nullable: true),
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -854,36 +880,36 @@ namespace DNA3.Migrations
                 name: "Customer",
                 columns: table => new
                 {
-                    CustomerId = table.Column<int>(nullable: false)
+                    CustomerId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Code = table.Column<string>(maxLength: 30, nullable: true),
-                    Company = table.Column<string>(nullable: true),
-                    First1 = table.Column<string>(maxLength: 30, nullable: false),
-                    Last1 = table.Column<string>(maxLength: 30, nullable: false),
-                    Phone1 = table.Column<string>(maxLength: 20, nullable: false),
-                    Phone1Exclude = table.Column<bool>(nullable: false),
-                    First2 = table.Column<string>(maxLength: 30, nullable: true),
-                    Last2 = table.Column<string>(maxLength: 30, nullable: true),
-                    Phone2 = table.Column<string>(maxLength: 20, nullable: true),
-                    Phone2Exclude = table.Column<bool>(nullable: false),
-                    Address = table.Column<string>(maxLength: 100, nullable: true),
-                    City = table.Column<string>(maxLength: 30, nullable: true),
-                    State = table.Column<string>(maxLength: 2, nullable: true),
-                    Zip = table.Column<string>(maxLength: 5, nullable: true),
-                    Plus4 = table.Column<string>(maxLength: 4, nullable: true),
-                    Email = table.Column<string>(maxLength: 100, nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Company = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    First1 = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Last1 = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Phone1 = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Phone1Exclude = table.Column<bool>(type: "bit", nullable: false),
+                    First2 = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Last2 = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Phone2 = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Phone2Exclude = table.Column<bool>(type: "bit", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    State = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
+                    Zip = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
+                    Plus4 = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Recorded = table.Column<DateTime>(type: "date", nullable: true),
                     Installed = table.Column<DateTime>(type: "date", nullable: true),
-                    Comments = table.Column<string>(nullable: true),
-                    AssociateId = table.Column<int>(nullable: true),
-                    CampaignId = table.Column<int>(nullable: true),
-                    SourceId = table.Column<int>(nullable: true),
-                    PromotionId = table.Column<int>(nullable: true),
-                    PromoIdentity = table.Column<string>(maxLength: 100, nullable: true),
-                    PromoFilled = table.Column<int>(nullable: true),
-                    HighRisk = table.Column<string>(maxLength: 30, nullable: true),
-                    Equipment = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(10, 2)", nullable: true)
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AssociateId = table.Column<int>(type: "int", nullable: true),
+                    CampaignId = table.Column<int>(type: "int", nullable: true),
+                    SourceId = table.Column<int>(type: "int", nullable: true),
+                    PromotionId = table.Column<int>(type: "int", nullable: true),
+                    PromoIdentity = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    PromoFilled = table.Column<int>(type: "int", nullable: true),
+                    HighRisk = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Equipment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(10,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -918,29 +944,29 @@ namespace DNA3.Migrations
                 name: "Material",
                 columns: table => new
                 {
-                    MaterialId = table.Column<int>(nullable: false)
+                    MaterialId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Name1 = table.Column<string>(maxLength: 100, nullable: true),
-                    First1 = table.Column<string>(maxLength: 50, nullable: true),
-                    Last1 = table.Column<string>(maxLength: 50, nullable: true),
-                    Name2 = table.Column<string>(maxLength: 100, nullable: true),
-                    First2 = table.Column<string>(maxLength: 50, nullable: true),
-                    Last2 = table.Column<string>(maxLength: 50, nullable: true),
-                    Address = table.Column<string>(maxLength: 100, nullable: true),
-                    City = table.Column<string>(maxLength: 50, nullable: true),
-                    State = table.Column<string>(maxLength: 20, nullable: true),
-                    Zip = table.Column<string>(maxLength: 5, nullable: true),
-                    Plus4 = table.Column<string>(maxLength: 4, nullable: true),
-                    Carrier = table.Column<string>(maxLength: 10, nullable: true),
-                    County = table.Column<string>(maxLength: 30, nullable: true),
+                    Name1 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    First1 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Last1 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Name2 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    First2 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Last2 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    State = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Zip = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
+                    Plus4 = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
+                    Carrier = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    County = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     Recorded = table.Column<DateTime>(type: "date", nullable: true),
                     Published = table.Column<DateTime>(type: "date", nullable: true),
-                    Value = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Phone1 = table.Column<string>(maxLength: 20, nullable: true),
-                    Phone2 = table.Column<string>(maxLength: 20, nullable: true),
-                    AssociateId = table.Column<int>(nullable: false),
-                    CampaignId = table.Column<int>(nullable: false),
-                    SourceId = table.Column<int>(nullable: false)
+                    Value = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Phone1 = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Phone2 = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    AssociateId = table.Column<int>(type: "int", nullable: false),
+                    CampaignId = table.Column<int>(type: "int", nullable: false),
+                    SourceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -969,23 +995,23 @@ namespace DNA3.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    ClientId = table.Column<int>(nullable: false),
-                    First = table.Column<string>(maxLength: 50, nullable: false),
-                    Last = table.Column<string>(maxLength: 50, nullable: false),
-                    RoleId = table.Column<int>(nullable: false),
-                    StatusId = table.Column<int>(nullable: false),
-                    Persist = table.Column<bool>(nullable: true, defaultValueSql: "((0))"),
-                    TotpKey = table.Column<string>(maxLength: 10, nullable: true),
-                    TotpManualSetup = table.Column<string>(maxLength: 30, nullable: true),
-                    TotpDeviceName = table.Column<string>(maxLength: 30, nullable: true),
-                    TotpCode = table.Column<string>(maxLength: 10, nullable: true),
-                    Token = table.Column<string>(maxLength: 512, nullable: true),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    First = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Last = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false),
+                    Persist = table.Column<bool>(type: "bit", nullable: true, defaultValueSql: "((0))"),
+                    TotpKey = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    TotpManualSetup = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    TotpDeviceName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    TotpCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Token = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
                     TokenDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Thumbprint = table.Column<string>(nullable: true),
-                    Certificate = table.Column<string>(nullable: true),
-                    Comment = table.Column<string>(maxLength: 100, nullable: true)
+                    Thumbprint = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Certificate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Comment = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1014,11 +1040,11 @@ namespace DNA3.Migrations
                 name: "Item",
                 columns: table => new
                 {
-                    ItemId = table.Column<int>(nullable: false)
+                    ItemId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    CartId = table.Column<int>(nullable: true),
-                    ProductId = table.Column<int>(nullable: true),
-                    Quantity = table.Column<int>(nullable: true)
+                    CartId = table.Column<int>(type: "int", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1041,17 +1067,17 @@ namespace DNA3.Migrations
                 name: "Asset",
                 columns: table => new
                 {
-                    AssetId = table.Column<int>(nullable: false)
+                    AssetId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    ClientId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(maxLength: 100, nullable: false),
-                    Model = table.Column<string>(maxLength: 30, nullable: true),
-                    Serial = table.Column<string>(maxLength: 30, nullable: true),
-                    FacilityId = table.Column<int>(nullable: true),
-                    Area = table.Column<string>(maxLength: 30, nullable: true),
-                    VendorId = table.Column<int>(nullable: true),
-                    Phone = table.Column<string>(maxLength: 30, nullable: true)
+                    ClientId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Model = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Serial = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    FacilityId = table.Column<int>(type: "int", nullable: true),
+                    Area = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    VendorId = table.Column<int>(type: "int", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1077,44 +1103,15 @@ namespace DNA3.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Appointment",
-                columns: table => new
-                {
-                    AppointmentId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "10000, 1"),
-                    CustomerId = table.Column<int>(nullable: true),
-                    Title = table.Column<string>(maxLength: 100, nullable: true),
-                    Start = table.Column<DateTime>(type: "datetime", nullable: false),
-                    End = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    IsAllDay = table.Column<bool>(nullable: false),
-                    StartTimezone = table.Column<string>(maxLength: 30, nullable: true),
-                    EndTimezone = table.Column<string>(maxLength: 30, nullable: true),
-                    RecurrenceRule = table.Column<string>(maxLength: 30, nullable: true),
-                    RecurrenceException = table.Column<string>(maxLength: 30, nullable: true),
-                    RecurrenceId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Appointment", x => x.AppointmentId);
-                    table.ForeignKey(
-                        name: "FK_Appointment_Customer_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customer",
-                        principalColumn: "CustomerId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Commission",
                 columns: table => new
                 {
-                    CommissionId = table.Column<int>(nullable: false)
+                    CommissionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    CustomerId = table.Column<int>(nullable: true),
-                    AssociateId = table.Column<int>(nullable: true),
-                    Amount = table.Column<decimal>(type: "decimal(10, 2)", nullable: true),
-                    Percentage = table.Column<decimal>(type: "decimal(10, 3)", nullable: true)
+                    CustomerId = table.Column<int>(type: "int", nullable: true),
+                    AssociateId = table.Column<int>(type: "int", nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
+                    Percentage = table.Column<decimal>(type: "decimal(10,3)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1137,21 +1134,21 @@ namespace DNA3.Migrations
                 name: "History",
                 columns: table => new
                 {
-                    HistoryId = table.Column<int>(nullable: false)
+                    HistoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    CustomerId = table.Column<int>(nullable: true),
-                    DispositionId = table.Column<int>(nullable: true),
+                    CustomerId = table.Column<int>(type: "int", nullable: true),
+                    DispositionId = table.Column<int>(type: "int", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Comments = table.Column<string>(nullable: true),
-                    Cycle = table.Column<string>(maxLength: 10, nullable: true),
-                    Saltunit = table.Column<int>(nullable: true),
-                    Saltlevel = table.Column<decimal>(type: "numeric(3, 1)", nullable: true),
-                    Hardness = table.Column<int>(nullable: true),
-                    Capacity = table.Column<int>(nullable: true),
-                    Parts = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Labor = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Tax = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Total = table.Column<decimal>(type: "numeric(10, 2)", nullable: true)
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Cycle = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Saltunit = table.Column<int>(type: "int", nullable: true),
+                    Saltlevel = table.Column<decimal>(type: "numeric(3,1)", nullable: true),
+                    Hardness = table.Column<int>(type: "int", nullable: true),
+                    Capacity = table.Column<int>(type: "int", nullable: true),
+                    Parts = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Labor = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Tax = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Total = table.Column<decimal>(type: "numeric(10,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1174,14 +1171,14 @@ namespace DNA3.Migrations
                 name: "Invoice",
                 columns: table => new
                 {
-                    InvoiceId = table.Column<int>(nullable: false)
+                    InvoiceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    CustomerId = table.Column<int>(nullable: true),
+                    CustomerId = table.Column<int>(type: "int", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Code = table.Column<int>(nullable: true),
-                    Reference = table.Column<string>(maxLength: 10, nullable: true),
-                    Comment = table.Column<string>(nullable: true),
-                    StatusId = table.Column<int>(nullable: true)
+                    Code = table.Column<int>(type: "int", nullable: true),
+                    Reference = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StatusId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1204,11 +1201,11 @@ namespace DNA3.Migrations
                 name: "Note",
                 columns: table => new
                 {
-                    NoteId = table.Column<int>(nullable: false)
+                    NoteId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    CustomerId = table.Column<int>(nullable: false),
-                    Subject = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(nullable: false)
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1225,20 +1222,20 @@ namespace DNA3.Migrations
                 name: "Workorder",
                 columns: table => new
                 {
-                    WorkorderId = table.Column<int>(nullable: false)
+                    WorkorderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    CustomerId = table.Column<int>(nullable: false),
-                    AssociateId = table.Column<int>(nullable: false),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    AssociateId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     EndDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Subject = table.Column<string>(maxLength: 300, nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    Labor = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Parts = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Other = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Type = table.Column<string>(maxLength: 30, nullable: false),
-                    Payment = table.Column<string>(maxLength: 10, nullable: true),
-                    Status = table.Column<string>(maxLength: 30, nullable: false)
+                    Subject = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Labor = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Parts = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Other = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Payment = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1261,14 +1258,14 @@ namespace DNA3.Migrations
                 name: "Activity",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Message = table.Column<string>(nullable: true),
-                    MessageTemplate = table.Column<string>(nullable: true),
-                    Level = table.Column<string>(nullable: true),
-                    TimeStamp = table.Column<DateTime>(nullable: false),
-                    Exception = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: true)
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MessageTemplate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Level = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Exception = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1285,12 +1282,12 @@ namespace DNA3.Migrations
                 name: "CustomerComment",
                 columns: table => new
                 {
-                    CustomerCommentId = table.Column<int>(nullable: false)
+                    CustomerCommentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    CustomerId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     CommentDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Description = table.Column<string>(nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1313,12 +1310,12 @@ namespace DNA3.Migrations
                 name: "Login",
                 columns: table => new
                 {
-                    LoginId = table.Column<int>(nullable: false)
+                    LoginId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    Provider = table.Column<string>(maxLength: 50, nullable: false),
-                    UserId = table.Column<int>(nullable: true),
-                    Email = table.Column<string>(maxLength: 190, nullable: true),
-                    Password = table.Column<string>(maxLength: 512, nullable: true)
+                    Provider = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(190)", maxLength: 190, nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1335,13 +1332,13 @@ namespace DNA3.Migrations
                 name: "Ticket",
                 columns: table => new
                 {
-                    TicketId = table.Column<int>(nullable: false)
+                    TicketId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    ClientId = table.Column<int>(nullable: false),
-                    FacilityId = table.Column<int>(nullable: false),
-                    TaskId = table.Column<int>(nullable: false),
-                    AssetId = table.Column<int>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    FacilityId = table.Column<int>(type: "int", nullable: false),
+                    TaskId = table.Column<int>(type: "int", nullable: false),
+                    AssetId = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Start = table.Column<DateTime>(type: "datetime", nullable: false),
                     Finish = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
@@ -1378,13 +1375,13 @@ namespace DNA3.Migrations
                 name: "InvoiceItem",
                 columns: table => new
                 {
-                    InvoiceItemId = table.Column<int>(nullable: false)
+                    InvoiceItemId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    InvoiceId = table.Column<int>(nullable: true),
-                    ProductId = table.Column<int>(nullable: false),
-                    Quantity = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Price = table.Column<decimal>(type: "numeric(10, 2)", nullable: true),
-                    Comment = table.Column<string>(nullable: true)
+                    InvoiceId = table.Column<int>(type: "int", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Price = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1407,12 +1404,12 @@ namespace DNA3.Migrations
                 name: "WorkorderComment",
                 columns: table => new
                 {
-                    WorkorderCommentId = table.Column<int>(nullable: false)
+                    WorkorderCommentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "10000, 1"),
-                    WorkorderId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
+                    WorkorderId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     CommentDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Description = table.Column<string>(nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1435,22 +1432,22 @@ namespace DNA3.Migrations
                 name: "Claimant",
                 columns: table => new
                 {
-                    Provider = table.Column<string>(nullable: false),
-                    Email = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: false),
-                    Persist = table.Column<bool>(nullable: false),
-                    Full = table.Column<string>(nullable: true),
-                    First = table.Column<string>(nullable: true),
-                    Last = table.Column<string>(nullable: true),
-                    ClientId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    LoginId = table.Column<int>(nullable: false),
-                    RoleCode = table.Column<string>(nullable: true),
-                    StatusCode = table.Column<string>(nullable: true),
-                    StatusMessage = table.Column<string>(nullable: true),
-                    Token = table.Column<string>(nullable: true),
-                    Tokendate = table.Column<DateTime>(nullable: true),
-                    ReturnUrl = table.Column<string>(nullable: true)
+                    Provider = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Persist = table.Column<bool>(type: "bit", nullable: false),
+                    Full = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    First = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Last = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    LoginId = table.Column<int>(type: "int", nullable: false),
+                    RoleCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StatusCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StatusMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Tokendate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ReturnUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1488,11 +1485,6 @@ namespace DNA3.Migrations
                 name: "IX_Activity_UserId",
                 table: "Activity",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Appointment_CustomerId",
-                table: "Appointment",
-                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Article_CategoryId",
@@ -1695,6 +1687,11 @@ namespace DNA3.Migrations
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Project_StatusId",
+                table: "Project",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Residence_DispositionId",
                 table: "Residence",
                 column: "DispositionId");
@@ -1780,6 +1777,7 @@ namespace DNA3.Migrations
                 column: "WorkorderId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -1790,9 +1788,6 @@ namespace DNA3.Migrations
 
             migrationBuilder.DropTable(
                 name: "Activity");
-
-            migrationBuilder.DropTable(
-                name: "Appointment");
 
             migrationBuilder.DropTable(
                 name: "Article");
@@ -1844,6 +1839,9 @@ namespace DNA3.Migrations
 
             migrationBuilder.DropTable(
                 name: "Note");
+
+            migrationBuilder.DropTable(
+                name: "Project");
 
             migrationBuilder.DropTable(
                 name: "Reference");

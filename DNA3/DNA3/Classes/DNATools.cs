@@ -304,7 +304,7 @@ namespace DNA3.Classes {
                     User u = new() { First = "System", Last = "Administrator", RoleId = await GetRoleKeyValue("Admin"), StatusId = statusid, Persist = true, Comment = "" };
                     u.Logins = new List<Login>();
                     c.Users.Add(u);
-                    Login l = new() { Provider = "Local", Email = "admin@clicktickdone.com", Password = Utilities.Security.CreateHash("P@ssw0rd") };
+                    Login l = new() { Provider = "Local", Email = "admin@companyone.com", Password = Utilities.Security.CreateHash("P@ssw0rd") };
                     u.Logins.Add(l);
                     Context.Client.Add(c);
 

@@ -14,6 +14,8 @@ using System.Linq;
 using MimeKit;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Http.Headers;
 
 #endregion
 
@@ -76,13 +78,16 @@ namespace SMO.Controllers {
         // Stream (Post)
         [HttpGet, HttpPost]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public IActionResult Stream(string id) {
+        public IActionResult Stream([FromBody] IList<Backup> backups) {
             string path = @Configuration["SMOSettings:BackupStoragePath"];
+            string filePath = "";
             try {
-                string filePath = $@"{path}{id}";
-                Response.Headers.Clear();
-                Response.Headers.Add("Content-Disposition", @$"attachment;filename={id}");
-                return PhysicalFile(filePath, MimeTypes.GetMimeType(filePath), Path.GetFileName(filePath));
+                foreach(Backup b in backups) {
+                    Response.Headers.Clear();
+                    filePath = $@"{path}{b.FileName}";
+                    Response.Headers["Content-Disposition"] = @$"attachment;filename={filePath}";
+                    return PhysicalFile(filePath, MimeTypes.GetMimeType(filePath), Path.GetFileName(filePath));
+                }
             } catch (Exception ex) {
                 Logger.LogError(ex, ex.Message);
                 Site.Messages.Enqueue(ex.Message);

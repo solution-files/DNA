@@ -14,11 +14,8 @@
 
         function DownloadSelected() {
             try {
-                var selected = [];
                 var grid = document.getElementById("DownloadGrid").ej2_instances[0];
-                grid.select().each(function () {
-                    selected.push(grid.dataItem(this));
-                });
+                var selected = grid.getSelectedRecords();
                 $.ajax({
                     type: "POST",
                     url: "/SMO/Download/Stream",
