@@ -1,15 +1,16 @@
 ﻿#region Usings
 
-using DNA3.Classes;
+using BoldReports;
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Syncfusion.EJ2.Base;
 using System;
+using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using Utilities;
@@ -34,15 +35,84 @@ namespace DNA3.Controllers {
         #region Class Methods
 
         // Constructor
-        public ProjectController(IConfiguration configuration, ILogger<ProjectController> logger) {
+        public ProjectController(IConfiguration configuration, MainContext context, ILogger<ProjectController> logger) {
             Configuration = configuration;
-            Context = new MainContext(new DbContextOptionsBuilder<MainContext>().Options, Configuration);
+            Context = context;
             Logger = logger;
         }
 
         #endregion
 
         #region Controller Actions
+
+        #region Inline Editing
+
+        // Create
+        public async Task<JsonResult> Create([FromBody] SyncfusionGrid<Project> instance) {
+            string message;
+            try {
+                if (ModelState.IsValid) {
+                    Context.Add(instance.value);
+                    await Context.SaveChangesAsync();
+                    message = $"Updated {Title} ({instance.value.ProjectId})";
+                }
+            } catch (Exception ex) {
+                message = ex.Message;
+                Logger.LogError(ex, message);
+            }
+            return Json(instance.value);
+        }
+
+        // Read (Inline)
+        public IActionResult Read([FromBody] DataManagerRequest dm) {
+            IEnumerable DataSource = Context.Project.OrderBy(x => x.ProjectId).ToList();
+            DataOperations operation = new DataOperations();
+            int count = DataSource.Cast<Project>().Count();
+            if (dm.Skip != 0) {
+                DataSource = operation.PerformSkip(DataSource, dm.Skip);   //Paging
+            }
+            if (dm.Take != 0) {
+                DataSource = operation.PerformTake(DataSource, dm.Take);
+            }
+            ViewBag.StatusList = Context.Status.OrderBy(x => x.Name).ToList();
+            return dm.RequiresCounts ? Json(new { result = DataSource, count = count }) : Json(DataSource);
+        }
+
+        // Update
+        public async Task<JsonResult> Update([FromBody] SyncfusionGrid<Project> instance) {
+            string message;
+            try {
+                if (ModelState.IsValid) {
+                    Context.Update(instance.value);
+                    await Context.SaveChangesAsync();
+                    message = $"Updated {Title} ({instance.value.ProjectId}) with StatusId: {instance.value.StatusId} of type {instance.value.StatusId.GetType().ToString()}";
+                }
+            } catch(Exception ex) {
+                message = ex.Message;
+                Logger.LogError(ex, message);
+            }
+            return Json(instance.value);
+        }
+
+        // Remove
+        public async Task<JsonResult> Remove([FromBody] SyncfusionGrid<Project> instance) {
+            string message;
+            try {
+                if (ModelState.IsValid) {
+                    Context.Remove(instance.value);
+                    await Context.SaveChangesAsync();
+                    message = $"Removed {Title} ({instance.value.ProjectId})";
+                }
+            } catch (Exception ex) {
+                message = ex.Message;
+                Logger.LogError(ex, message);
+            }
+            return Json(instance.value);
+        }
+
+        #endregion
+
+        #region Page Editing
 
         // Index
         [ApiExplorerSettings(IgnoreApi = true)]
@@ -52,6 +122,7 @@ namespace DNA3.Controllers {
             try {
                 var result = await Context.Project.OrderBy(x => x.Date).ToListAsync();
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} List");
+                ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
                 return View(result);
             } catch (Exception ex) {
                 message = ex.Message;
@@ -76,13 +147,6 @@ namespace DNA3.Controllers {
             }
             ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
-        }
-
-        [HttpGet]
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public JsonResult ModalEdit(int id) {
-            Project project = Context.Project.Find(id);
-            return Json(project);
         }
 
         // Edit (Get)
@@ -153,6 +217,10 @@ namespace DNA3.Controllers {
             return View("Detail", instance);
         }
 
+        #endregion
+
+        #region Common Actions
+
         // Close
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
@@ -168,8 +236,11 @@ namespace DNA3.Controllers {
             return RedirectToAction("Index", "Dashboard");
         }
 
+        #endregion
+
+        #endregion
+
     }
 
-    #endregion
 
 }

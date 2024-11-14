@@ -2,6 +2,7 @@
 @{
     Layout = "_Dashboard";
     string Title = "Project";
+    string Plural = "Projects";
 }
 @section CSS {
 
@@ -10,129 +11,38 @@
 
     <script>
 
-        function GridRowSelected(args) {
-            $.ajax({
-                url: "/Project/ModalEdit/" + args.data.ProjectId,
-                type: "GET",
-                contentType: "application/json;charset=UTF-8",
-                dataType: "json",
-                success: function (response) {
-                    // alert(JSON.stringify(response)); // (Useful to determine the object property names and values returned from the controller)
-                    $("#ProjectId").val(response.projectId);
-                    $("#Date").val(response.date);
-                    $("#Subject").val(response.subject);
-                    $("#Content").val(response.content);
-                    $("#StatusId").val(response.statusId);
-                    $("#detailModal").modal("show");
-                },
-                error: function (response) {
-                    alert(JSON.stringify(response)); // (Useful to determine the object property names and values returned from the controller)
-                },
-            });
-            return false;
+        function actionComplete() {
+
         }
-            
+
+        function SaveRecord() {
+            var grid = document.getElementById("ProjectGrid").ej2_instances[0];
+            grid.endEdit();
+        }
+
+        function AddRecord() {
+            var grid = document.getElementById("ProjectGrid").ej2_instances[0];
+            grid.addRecord();
+        }
+
+        function EditRecord() {
+            var grid = document.getElementById("ProjectGrid").ej2_instances[0];
+            grid.startEdit();
+        }
+
+        function DeleteRecord() {
+            var grid = document.getElementById("ProjectGrid").ej2_instances[0];
+            grid.deleteRecord();
+        }
+
         function ExportToExcel() {
-            var gridObj = document.getElementById("ProjectGrid").ej2_instances[0];
-            gridObj.excelExport();
+            var grid = document.getElementById("ProjectGrid").ej2_instances[0];
+            grid.excelExport();
         }
 
         function ExportToPDF() {
-            var gridObj = document.getElementById("ProjectGrid").ej2_instances[0];
-            gridObj.pdfExport();
-        }
-
-        function New() {
-            var res = validate();
-            if (res == false) {
-                return false;
-            }
-            var empObj = {
-                EmployeeID: $("#EmployeeID").val(),
-                Name: $("#Name").val(),
-                Age: $("#Age").val(),
-                State: $("#State").val(),
-                Country: $("#Country").val()
-            };
-            $.ajax({
-                url: "/Home/Add",
-                data: JSON.stringify(empObj),
-                type: "POST",
-                contentType: "application/json;charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    loadData();
-                    $("#myModal").modal("hide");
-                },
-                error: function (errormessage) {
-                    alert(errormessage.responseText);
-                }
-            });
-        }
-
-        function Save() {
-            var res = validate();
-            if (res == false) {
-                return false;
-            }
-            var empObj = {
-                EmployeeID: $("#EmployeeID").val(),
-                Name: $("#Name").val(),
-                Age: $("#Age").val(),
-                State: $("#State").val(),
-                Country: $("#Country").val(),
-            };
-            $.ajax({
-                url: "/Home/Update",
-                data: JSON.stringify(empObj),
-                type: "POST",
-                contentType: "application/json;charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    loadData();
-                    $("#myModal").modal("hide");
-                    $("#EmployeeID").val("");
-                    $("#Name").val("");
-                    $("#Age").val("");
-                    $("#State").val("");
-                    $("#Country").val("");
-                },
-                error: function (errormessage) {
-                    alert(errormessage.responseText);
-                }
-            });
-        }
-
-        function Delele(ID) {
-            var ans = confirm("Are you sure you want to delete this Record?");
-            if (ans) {
-                $.ajax({
-                    url: "/Home/Delete/" + ID,
-                    type: "POST",
-                    contentType: "application/json;charset=UTF-8",
-                    dataType: "json",
-                    success: function (result) {
-                        loadData();
-                    },
-                    error: function (errormessage) {
-                        alert(errormessage.responseText);
-                    }
-                });
-            }
-        }
-
-        function Reset() {
-            $("#EmployeeID").val("");
-            $("#Name").val("");
-            $("#Age").val("");
-            $("#State").val("");
-            $("#Country").val("");
-            $("#btnUpdate").hide();
-            $("#btnAdd").show();
-            $("#Name").css("border-color", "lightgrey");
-            $("#Age").css("border-color", "lightgrey");
-            $("#State").css("border-color", "lightgrey");
-            $("#Country").css("border-color", "lightgrey");
+            var grid = document.getElementById("ProjectGrid").ej2_instances[0];
+            grid.pdfExport();
         }
 
     </script>
@@ -163,8 +73,36 @@
         <partial name="_Messages" />
         <div class="card card-primary">
             <div class="card-header border-0">
-                <h3 class="card-title">Menus</h3>
-                @await Html.PartialAsync("_Tools", new { Report = "Projects.rdl" })
+                <h3 class="card-title">@Plural</h3>
+                <div class="card-tools">
+                    <a class="btn btn-tool btn-sm" onclick="SaveRecord()">
+                        <i class="fa-regular fa-floppy-disk" title="Save Record"></i>
+                    </a>
+                    <a class="btn btn-tool btn-sm" onclick="AddRecord()">
+                        <i class="fa-regular fa-file" title="New Record"></i>
+                    </a>
+                    <a class="btn btn-tool btn-sm" onclick="EditRecord()">
+                        <i class="fa-solid fa-pencil" title="Edit Selected"></i>
+                    </a>
+                    <a class="btn btn-tool btn-sm" onclick="DeleteRecord()">
+                        <i class="fa-solid fa-trash" title="Delete Selected"></i>
+                    </a>
+                    <a href="#" class="btn btn-tool btn-sm" onclick="ExportToExcel()">
+                        <i class="fas fa-file-excel" title="Export to Excel"></i>
+                    </a>
+                    <a href="#" class="btn btn-tool btn-sm" onclick="ExportToPDF()">
+                        <i class="fas fa-file-pdf" title="Export to PDF"></i>
+                    </a>
+                    <a href="#" class="btn btn-tool btn-sm">
+                        <i class="fas fa-envelope" title="E-Mail Report"></i>
+                    </a>
+                    <a href="/report/viewer.html?ReportPath=/report/Projects.rdl" class="btn btn-tool btn-sm" target="_blank">
+                        <i class="fas fa-print" title="Preview Report"></i>
+                    </a>
+                    <a asp-action="Close" class="btn btn-tool btn-sm">
+                        <i class="fas fa-xmark" title="Close"></i>
+                    </a>
+                </div>
             </div>
             <div class="card-body">
                 @if (Model.Count() == 0) {
@@ -183,12 +121,16 @@
                         </tbody>
                     </table>
                 } else {
-                    <ejs-grid id="ProjectGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" rowSelected="GridRowSelected">
+                    <ejs-grid id="ProjectGrid" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true">
                         <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
+                        <e-data-manager insertUrl="/Project/Create" url="/Project/Read" updateUrl="/Project/Update" removeUrl="/Project/Remove" adaptor="UrlAdaptor"></e-data-manager>
+                        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Normal"></e-grid-editSettings>
                         <e-grid-columns>
-                            <e-grid-column field="ProjectId" headerText="Project" textAlign="Left" width="120"></e-grid-column>
+                            <e-grid-column field="ProjectId" headerText="Project" isPrimaryKey="true" textAlign="Left" width="90"></e-grid-column>
                             <e-grid-column field="Date" headerText="Date" textAlign="Left" width="160" format="MM/dd/yy hh:mm"></e-grid-column>
-                            <e-grid-column field="Subject" headerText="Subject"></e-grid-column>
+                            <e-grid-column field="StatusId" type="number" headerText="Status" textAlign="Left" width="200" foreignKeyValue="Name" dataSource="ViewBag.StatusList"></e-grid-column>
+                            <e-grid-column field="Subject" headerText="Subject" textAlign="Left" width="300"></e-grid-column>
+                            <e-grid-column field="Content" headerText="Content"></e-grid-column>
                         </e-grid-columns>
                     </ejs-grid>
                 }
@@ -204,16 +146,16 @@
             <div class="modal-header">
                 <h5 class="modal-title">Project Detail</h5>
                 <div class="ml-auto">
-                    <button asp-action="Save" form="Master" class="btn btn-tool btn-sm">
+                    <button form="Master" class="btn btn-tool btn-sm" onclick="GridRowSave()">
                         <i class="far fa-floppy-disk"></i>
                     </button>
-                    <button asp-action="Delete" form="Master" class="btn btn-tool btn-sm">
+                    <button asp-action="ModalDelete" form="Master" class="btn btn-tool btn-sm">
                         <i class="far fa-trash-can"></i>
                     </button>
                     <a href="/report/viewer.html?Report=Project.rdl" formaction="Master" class="btn btn-tool btn-sm" target="_blank">
                         <i class="fas fa-print"></i>
                     </a>
-                    <a asp-action="Index" class="btn btn-tool btn-sm">
+                    <a class="btn btn-tool btn-sm" data-dismiss="modal" aria-label="Close Dialog">
                         <i class="fas fa-xmark"></i>
                     </a>
                 </div>
@@ -224,13 +166,15 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="Date">Date</label>
-                                <input type="text" id="Date" name="Date" class="form-control" placeholder="Date" autofocus />
+                                <input type="datetime-local" id="Date" name="Date" class="form-control" placeholder="Date" autofocus />
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="StatusId">Status</label>
-                                <input type="text" id="StatusId" name="StatusId" class="form-control" placeholder="Status" />
+                                <select id="StatusId" name="StatusId" class="form-control" asp-items="@(new SelectList(ViewBag.StatusList, "StatusId", "Name"))" placeholder="Select Status" data-lpignore="true" autocomplete="off" spellcheck="false">
+                                    <option value="">Select Status</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -250,7 +194,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" id="ProjectId" />
+                    <input type="hidden" id="ProjectId" name="ProjectId" /> <!-- Both element name and id must be specified here -->
                 </form>
             </div>
         </div>

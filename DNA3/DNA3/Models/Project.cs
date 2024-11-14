@@ -30,15 +30,12 @@ namespace DNA3.Models {
         public string Content { get; set; }
 
         [Display(Name = "Status")]
-        [Required(ErrorMessage = "Please select a valid {0} code from the list")]
+        [Required(ErrorMessage = "Please select a valid {0} from the list")]
         public int StatusId { get; set; }
 
         #endregion
 
-        #region Navigation Properties
-
-        [Display(Name = "Status")]
-        public Status Status { get; set; }
+        #region Navigation Properties (Not allowed in this Model. Use a separate View Model for reports, etc.)
 
         #endregion
 

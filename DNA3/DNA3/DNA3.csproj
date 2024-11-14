@@ -59,9 +59,9 @@
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.2" />
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="7.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />
-    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="26.2.14" />
-    <PackageReference Include="Syncfusion.EJ2.PdfViewer.AspNet.Core.Windows" Version="26.2.14" />
-    <PackageReference Include="Syncfusion.Licensing" Version="26.2.14" />
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="27.1.58" />
+    <PackageReference Include="Syncfusion.EJ2.PdfViewer.AspNet.Core.Windows" Version="27.1.58" />
+    <PackageReference Include="Syncfusion.Licensing" Version="27.1.58" />
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="Telerik.Documents.Spreadsheet.FormatProviders.OpenXml" Version="2023.3.1106" />
