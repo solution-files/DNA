@@ -126,11 +126,11 @@
                         <e-data-manager insertUrl="/Project/Create" url="/Project/Read" updateUrl="/Project/Update" removeUrl="/Project/Remove" adaptor="UrlAdaptor"></e-data-manager>
                         <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Normal"></e-grid-editSettings>
                         <e-grid-columns>
-                            <e-grid-column field="ProjectId" headerText="Project" width="90"  isIdentity="true" isPrimaryKey="true" defaultValue="0"></e-grid-column>
-                            <e-grid-column field="Date"      headerText="Date"    width="200" editType="datepickeredit" format="MM/dd/yy"></e-grid-column>
-                            <e-grid-column field="StatusId"  headerText="Status"  width="200" foreignKeyValue="Name" dataSource="ViewBag.StatusList"></e-grid-column>
+                            <e-grid-column field="ProjectId" headerText="Project" width="90" isIdentity="true" isPrimaryKey="true" defaultValue="0" hideAtMedia="(min-width:1200px)"></e-grid-column>
+                            <e-grid-column field="Date"      headerText="Date" width="200" editType="datepickeredit" format="MM/dd/yy" hideAtMedia="(min-width:1200px)"></e-grid-column>
+                            <e-grid-column field="StatusId" headerText="Status" width="200" foreignKeyValue="Name" dataSource="ViewBag.StatusList" hideAtMedia="(min-width:1200px)"></e-grid-column>
                             <e-grid-column field="Subject"   headerText="Subject" width="300"></e-grid-column>
-                            <e-grid-column field="Content"   headerText="Content" ></e-grid-column>
+                            <e-grid-column field="Content" headerText="Content" hideAtMedia="(min-width:1200px)"></e-grid-column>
                         </e-grid-columns>
                     </ejs-grid>
                 }
