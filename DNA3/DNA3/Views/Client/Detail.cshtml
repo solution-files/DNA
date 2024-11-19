@@ -75,22 +75,25 @@
 							<h3 class="card-title">@Title</h3>
 							<div class="card-tools">
 								<button asp-action="Save" form="Master" class="btn btn-tool btn-sm">
-									<i class="far fa-floppy-disk"></i>
+									<i class="far fa-floppy-disk" title="Save"></i>
 								</button>
 								<button asp-action="Delete" form="Master" class="btn btn-tool btn-sm">
-									<i class="far fa-trash-can"></i>
+									<i class="far fa-trash-can" title="Delete"></i>
 								</button>
-								<button asp-controller="User" asp-action="Index" asp-route-id="@Model.ClientId" form="Master" class="btn btn-tool btn-sm">
-									<i class="fas fa-users"></i>
+                                <button asp-action="Clean" form="Master" class="btn btn-tool btn-sm">
+                                    <i class="fas fa-broom" title="Clean Sweep"></i>
+                                </button>
+                                <button asp-controller="User" asp-action="Index" asp-route-id="@Model.ClientId" form="Master" class="btn btn-tool btn-sm">
+									<i class="fas fa-users" title="User List"></i>
 								</button>
 								<a href="/report/viewer.html?Report=Client.rdl" class="btn btn-tool btn-sm" target="_blank">
-									<i class="fas fa-print"></i>
+									<i class="fas fa-print" title="Preview Report"></i>
 								</a>
 								<button asp-area="Dashboard" asp-controller="Client" asp-action="Verify" form="Master" class="btn btn-tool btn-sm">
 									<i class="fas fa-envelope" title="Verify Address"></i>
 								</button>
 								<a asp-action="Index" class="btn btn-tool btn-sm">
-									<i class="fas fa-xmark"></i>
+									<i class="fas fa-xmark" title="Close"></i>
 								</a>
 							</div>
 						</div>

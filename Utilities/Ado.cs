@@ -1,5 +1,7 @@
 ﻿#region Usings
 
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;
 using System.Collections;
@@ -25,21 +27,10 @@ namespace Utilities {
             int userid;
             try {
 
-                // Company
-                using (SqlConnection conn = new(cs)) {
-                    using (SqlCommand cmd = new("INSERT INTO [Client](Company, Address1, First, Last, Email, StatusId) OUTPUT INSERTED.ClientId VALUES(@Company, '', @First, @Last, @Email, @StatusId)", conn)) {
-                        cmd.Parameters.AddWithValue("@Company", first + " " + last);
-                        cmd.Parameters.AddWithValue("@First", first);
-                        cmd.Parameters.AddWithValue("@Last", last);
-                        cmd.Parameters.AddWithValue("@Email", email);
-                        cmd.Parameters.AddWithValue("@StatusId", GetScalarValue<int>(cs, "StatusId", "Status", "Code", "Active"));
-                        conn.Open();
-                        clientid = (int)cmd.ExecuteScalar();
-                        if (conn.State == ConnectionState.Open) {
-                            conn.Close();
-                        }
-                    }
-                }
+                // Client ID
+                var builder = WebApplication.CreateBuilder();
+                builder.Configuration.AddJsonFile("C:\\DNASettings.json");
+                clientid = int.Parse(builder.Configuration["Default:ClientId"]);
 
                 // User
                 using (SqlConnection conn = new(cs)) {

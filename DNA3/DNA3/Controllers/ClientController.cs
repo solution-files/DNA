@@ -131,23 +131,52 @@ namespace DNA3.Controllers {
             return View("Detail", instance);
         }
 
-		// Delete
-		[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpPost]
+        // Delete
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id) {
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> Delete(Client instance) {
+            string message = "";
             try {
-                var client = await Context.Client.FindAsync(id);
-                if (client == null) {
-                    throw new Exception("Record not found. It may have been deleted by another user.");
+                if (instance == null) {
+                    throw new Exception($"{Title} not found. It may have been deleted by another user.");
                 }
-                Context.Client.Remove(client);
+                message = $"Deleted {Title} ({instance.ClientId})";
+                Context.Client.Remove(instance);
                 await Context.SaveChangesAsync();
+                Site.Messages.Enqueue(message);
+                Log.Logger.ForContext("UserId", User.UserId()).Warning(message);
+                return RedirectToAction("Index");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
                 Logger.LogError(ex, ex.Message);
             }
-            return RedirectToAction("Index");
+            return View("Detail", instance);
+        }
+
+        // Clean
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> Clean(Client instance) {
+            string message = "";
+            try {
+                if (instance == null) {
+                    throw new Exception($"{Title} not found. It may have been deleted by another user.");
+                }
+                await Context.Database.ExecuteSqlInterpolatedAsync($"DELETE [Login] FROM [Login] AS l JOIN [User] AS u ON l.UserId = u.UserId WHERE u.ClientId = {instance.ClientId}");
+                await Context.Database.ExecuteSqlInterpolatedAsync($"DELETE [User] FROM [User] AS u WHERE u.ClientId = {instance.ClientId}");
+                Context.Client.Remove(instance);
+                await Context.SaveChangesAsync();
+                message = $"Deleted Client ({instance.ClientId}) with Users and Identites";
+                Site.Messages.Enqueue(message);
+                Log.Logger.ForContext("UserId", User.UserId()).Warning(message);
+                return RedirectToAction("Index");
+            } catch (Exception ex) {
+                Site.Messages.Enqueue(ex.Message);
+                Logger.LogError(ex, ex.Message);
+            }
+            return View("Detail", instance);
         }
 
         // Verify
