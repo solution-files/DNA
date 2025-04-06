@@ -169,9 +169,9 @@ namespace DNA3.Controllers {
         [ApiExplorerSettings(IgnoreApi = true)]
 		public async Task<IActionResult> Profile() {
 			string message;
-			User instance = new User();
+			Login instance = new Login();
 			try {
-				instance = await Context.User.FindAsync(User.UserId());
+				instance = await Context.Login.Include(x => x.User).ThenInclude(x => x.Client).Where(x => x.Email == User.EmailAddress()).FirstOrDefaultAsync();
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);

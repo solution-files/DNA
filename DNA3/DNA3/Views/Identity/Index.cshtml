@@ -63,7 +63,7 @@
                     <ejs-grid id="IdentityGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" rowSelected="IdentityGridRowSelected">
                         <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
                         <e-grid-columns>
-                            <e-grid-column field="Provider" headerText="Provider" textAlign="Left" width="120"></e-grid-column>
+                            <e-grid-column field="Provider" headerText="Provider" textAlign="Left" width="120" hideAtMedia='(min-width:1024px)'></e-grid-column>
                             <e-grid-column field="Email" headerText="E-Mail"></e-grid-column>
                         </e-grid-columns>
                     </ejs-grid>

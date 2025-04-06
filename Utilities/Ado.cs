@@ -7,7 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
@@ -122,7 +122,7 @@ namespace Utilities {
 
         // Convert Datatable
         private static List<T> ConvertDataTable<T>(DataTable dt) {
-            List<T> data = new List<T>();
+            List<T> data = new();
             foreach (DataRow row in dt.Rows) {
                 T item = GetItem<T>(row);
                 data.Add(item);
@@ -151,7 +151,7 @@ namespace Utilities {
         public static string DatabaseNameFromConnectionString(string cs) {
             string result;
             try {
-                IDbConnection connection = new SqlConnection(cs);
+                SqlConnection connection = new(cs);
                 result = connection.Database;
             } catch (Exception ex) {
                 result = "";

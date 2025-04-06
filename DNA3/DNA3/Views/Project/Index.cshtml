@@ -105,35 +105,18 @@
                 </div>
             </div>
             <div class="card-body">
-                @if (Model.Count() == 0) {
-                    <table class="table table-hover">
-                        <tbody>
-                            <tr>
-                                <td style="border: none;"></td>
-                                <td style="border: none; text-align: center;"><i class="fa-solid fa-puzzle-piece fa-10x"></i></td>
-                                <td style="border: none;"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: none;"></td>
-                                <td style="border: none;" class="text-center font-size-18">No entries found. Click the button above to get started.</td>
-                                <td style="border: none;"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                } else {
-                    <ejs-grid id="ProjectGrid" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" allowTextWrap="true">
-                        <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
-                        <e-data-manager insertUrl="/Project/Create" url="/Project/Read" updateUrl="/Project/Update" removeUrl="/Project/Remove" adaptor="UrlAdaptor"></e-data-manager>
-                        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Normal"></e-grid-editSettings>
-                        <e-grid-columns>
-                            <e-grid-column field="ProjectId" headerText="Project" width="90" isIdentity="true" isPrimaryKey="true" defaultValue="0" hideAtMedia="(min-width:1200px)"></e-grid-column>
-                            <e-grid-column field="Date"      headerText="Date" width="200" editType="datepickeredit" format="MM/dd/yy" hideAtMedia="(min-width:1200px)"></e-grid-column>
-                            <e-grid-column field="StatusId" headerText="Status" width="200" foreignKeyValue="Name" dataSource="ViewBag.StatusList" hideAtMedia="(min-width:1200px)"></e-grid-column>
-                            <e-grid-column field="Subject"   headerText="Subject" width="300"></e-grid-column>
-                            <e-grid-column field="Content" headerText="Content" hideAtMedia="(min-width:1200px)"></e-grid-column>
-                        </e-grid-columns>
-                    </ejs-grid>
-                }
+                <ejs-grid id="ProjectGrid" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" allowTextWrap="true">
+                    <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
+                    <e-data-manager insertUrl="/Project/Create" url="/Project/Read" updateUrl="/Project/Update" removeUrl="/Project/Remove" adaptor="UrlAdaptor"></e-data-manager>
+                    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Normal"></e-grid-editSettings>
+                    <e-grid-columns>
+                        <e-grid-column field="ProjectId" headerText="Project" width="90" isIdentity="true" isPrimaryKey="true" defaultValue="0" hideAtMedia="(min-width:1200px)"></e-grid-column>
+                        <e-grid-column field="Date" headerText="Date" width="200" editType="datepickeredit" format="MM/dd/yy" hideAtMedia="(min-width:1200px)"></e-grid-column>
+                        <e-grid-column field="StatusId" headerText="Status" width="200" foreignKeyValue="Name" dataSource="ViewBag.StatusList" hideAtMedia="(min-width:1200px)"></e-grid-column>
+                        <e-grid-column field="Subject" headerText="Subject" width="300"></e-grid-column>
+                        <e-grid-column field="Content" headerText="Content" hideAtMedia="(min-width:1200px)"></e-grid-column>
+                    </e-grid-columns>
+                </ejs-grid>
             </div>
         </div>
     </section>

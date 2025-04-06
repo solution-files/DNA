@@ -16,7 +16,7 @@ using MimeKit;
 using MimeKit.Text;
 using Serilog;
 using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -780,10 +780,7 @@ namespace DNA3.Controllers {
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Confirmation(int id, [FromQuery] string Token) {
             try {
-                Login login = await Context.Login.Include(x => x.User).ThenInclude(x => x.Client).Where(x => x.LoginId == id).FirstAsync();
-                if (login == null) {
-                    throw new ArgumentException("User not found. Please sign up for a new account.");
-                }
+                Login login = await Context.Login.Include(x => x.User).ThenInclude(x => x.Client).Where(x => x.LoginId == id).FirstAsync() ?? throw new ArgumentException("User not found. Please sign up for a new account.");
                 if (string.IsNullOrEmpty(login.User.Token)) {
                     throw new ArgumentException("Verification token not found. Manual navigation prohibited.");
                 }
@@ -857,10 +854,7 @@ $@"
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Client() {
             try {
-                var client = await Context.Client.FindAsync(Convert.ToInt32(User.ClientId()));
-                if (client == null) {
-                    throw new ArgumentException("Client not found, please contact Support for assistance.");
-                }
+                var client = await Context.Client.FindAsync(Convert.ToInt32(User.ClientId())) ?? throw new ArgumentException("Client not found, please contact Support for assistance.");
                 ViewData["User"] = await Context.User.Include(x => x.Role).Include(x => x.Status).Where(x => x.UserId == User.UserId()).FirstOrDefaultAsync();
                 ViewData["Users"] = await Context.User.Include(x => x.Role).Include(x => x.Status).Where(x => x.ClientId == User.ClientId()).OrderBy(x => x.First).OrderBy(x => x.Last).ToListAsync();
                 return View(client);
@@ -902,10 +896,7 @@ $@"
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Profile() {
             try {
-                User user = await Context.User.FindAsync(Convert.ToInt32(User.UserId()));
-                if (user == null) {
-                    throw new ArgumentException("User not found.");
-                }
+                User user = await Context.User.FindAsync(Convert.ToInt32(User.UserId())) ?? throw new ArgumentException("User not found.");
                 ViewBag.RoleList = await Context.Role.OrderBy(x => x.Description).ToListAsync();
                 ViewBag.StatusList = await Context.Status.OrderBy(x => x.Description).ToListAsync();
                 ViewData["Logins"] = await Context.Login.Where(x => x.UserId == User.UserId()).ToListAsync();
@@ -913,7 +904,7 @@ $@"
 
                 // Two Factor QR Code
                 if (user.TotpKey == null) {
-                    user.TotpKey = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 10);
+                    user.TotpKey = Guid.NewGuid().ToString().Replace("-", "")[..10];
                     TwoFactorAuthenticator tfa = new();
                     SetupCode setupInfo = tfa.GenerateSetupCode("Click Tick Done", User.EmailAddress(), user.TotpKey, false, 3);
                     ViewData["QRCode"] = setupInfo.QrCodeSetupImageUrl;

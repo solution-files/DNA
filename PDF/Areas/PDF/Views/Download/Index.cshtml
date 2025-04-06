@@ -1,27 +1,31 @@
-﻿@model IList<DNA3.Models.Databases>
+﻿@model List<PDF.Models.Document>
+@using PDF.Models
 @{
     Layout = "_Dashboard";
-    string Title = "Backup";
-    string Plural = "Backups";
+    string Title = "PDF Download";
 }
 @section CSS {
 
 }
+
 @section Scripts {
 
     <script>
-        function RunSelected() {
+
+        function DownloadSelected() {
             try {
-                var grid = document.getElementById("BackupGrid").ej2_instances[0];
+                var grid = document.getElementById("PDFDownloadGrid").ej2_instances[0];
                 var selected = grid.getSelectedRecords();
                 $.ajax({
                     type: "POST",
-                    url: "/SMO/SMOBackup/Run",
+                    url: "/PDF/Download/Stream",
+                    xhrFields: {
+                        responseType: "blob"
+                    },
                     data: JSON.stringify(selected),
                     contentType: "application/json; charset=utf-8",
-                    dataType: "json",
                     success: function (result) {
-                        window.location = "/SMO/SMOBackup";
+                        window.location = "/PDF/Download";
                     },
                     error: function (xhr, opt, err) {
                         alert('Error: ' + xhr.status + ' - ' + xhr.statusText + ' - ' + xhr.responseText);
@@ -34,12 +38,12 @@
         }
 
         function ExportToExcel() {
-            var gridObj = document.getElementById("BackupGrid").ej2_instances[0];
+            var gridObj = document.getElementById("PDFDownloadGrid").ej2_instances[0];
             gridObj.excelExport();
         }
 
         function ExportToPDF() {
-            var gridObj = document.getElementById("BackupGrid").ej2_instances[0];
+            var gridObj = document.getElementById("PDFDownloadGrid").ej2_instances[0];
             gridObj.pdfExport();
         }
 
@@ -71,12 +75,12 @@
         <partial name="_Messages" />
         <div class="card card-primary">
             <div class="card-header border-0">
-                <h3 class="card-title">@Plural</h3>
+                <h3 class="card-title">Select Files</h3>
                 <div class="card-tools">
-                    <button class="btn btn-tool btn-sm" onclick="RunSelected()">
+                    <button class="btn btn-tool btn-sm" onclick="DownloadSelected()">
                         <i class="fas fa-play" title="Run"></i>
                     </button>
-                    <a asp-controller="Backup" asp-action="Help" class="btn btn-tool btn-sm">
+                    <a asp-action="Help" class="btn btn-tool btn-sm">
                         <i class="fas fa-question" title="Help"></i>
                     </a>
                     <a asp-action="Index" class="btn btn-tool btn-sm">
@@ -86,15 +90,12 @@
             </div>
             <div class="card-body">
                 @if (Model.Count() == 0) {
-                    <emptyresult icon="fa-solid fa-key"></emptyresult>
+                    <emptyresult icon="fa-solid fa-file-word"></emptyresult>
                 } else {
-                    <ejs-grid id="BackupGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" allowSelection="true">
-                        <e-grid-selectionsettings type="Multiple"></e-grid-selectionsettings>
+                    <ejs-grid id="PDFDownloadGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true">
+                        <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
                         <e-grid-columns>
-                            <e-grid-column field="database_id" headerText="Database" textAlign="Left" width="120"></e-grid-column>
-                            <e-grid-column field="name" headerText="Name" textAlign="Left" width="120"></e-grid-column>
-                            <e-grid-column field="user_access_desc" headerText="Access"></e-grid-column>
-                            <e-grid-column field="create_date" headerText="Created"></e-grid-column>
+                            <e-grid-column field="FileName"></e-grid-column>
                         </e-grid-columns>
                     </ejs-grid>
                 }
@@ -103,5 +104,3 @@
     </section>
 </div>
 <!-- /.content-wrapper -->
-<!-- Report Options Dialog -->
-<partial name="_Options" />

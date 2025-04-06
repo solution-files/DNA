@@ -32,7 +32,7 @@ namespace DNA3.Classes {
                     string first = context.Principal.FindFirst(ClaimTypes.GivenName).Value;
                     string last = context.Principal.FindFirst(ClaimTypes.Surname).Value;
                     if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(first) || string.IsNullOrEmpty(last)) {
-                        throw new ArgumentException("Google Account not found");
+                        throw new ArgumentException("Your Google account must specify your e-mail address along with your First and Last Name");
                     } else {
                         Utilities.Ado.CreateNewAccount(Utilities.Site.ConnectionString, email, first, last);
                     }

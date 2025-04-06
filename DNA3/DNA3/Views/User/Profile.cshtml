@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model Login
 @{
     Layout = "_Dashboard";
 }
@@ -36,9 +36,9 @@
 									 alt="User profile picture">
 							</div>
 
-							<h3 class="profile-username text-center">@Model.FullName</h3>
+							<h3 class="profile-username text-center">@Model.User.FullName</h3>
 
-							<p class="text-muted text-center">Software Engineer</p>
+							<p class="text-muted text-center">@User.EmailAddress()</p>
 
 							<ul class="list-group list-group-unbordered mb-3">
 								<li class="list-group-item">
@@ -74,7 +74,7 @@
 
 							<strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
 
-							<p class="text-muted">Malibu, California</p>
+							<p class="text-muted">@Model.User.Client.City, @Model.User.Client.State</p>
 
 							<hr>
 
@@ -92,7 +92,7 @@
 
 							<strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
 
-							<p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+							<p class="text-muted">@Model.User.Client.Comment</p>
 						</div>
 						<!-- /.card-body -->
 					</div>
@@ -322,17 +322,17 @@
 								<div class="tab-pane" id="settings">
 									<form class="form-horizontal">
 										<div class="form-group row">
-											<label asp-for="First" class="col-sm-2 col-form-label">@Html.DisplayNameFor(x => x.First)</label>
+											<label asp-for="User.First" class="col-sm-2 col-form-label">@Html.DisplayNameFor(x => x.User.First)</label>
 											<div class="col-sm-10">
-                                                <input asp-for="First" class="form-control" placeholder="@Html.DisplayNameFor(x => x.First)" data-lp-ignore autocomplete="off" autofocus>
-                                                <span asp-validation-for="First" class="text-danger text-xs"></span>
+                                                <input asp-for="User.First" class="form-control" placeholder="@Html.DisplayNameFor(x => x.User.First)" data-lp-ignore autocomplete="off" autofocus>
+                                                <span asp-validation-for="User.First" class="text-danger text-xs"></span>
                                             </div>
 										</div>
                                         <div class="form-group row">
-                                            <label asp-for="Last" class="col-sm-2 col-form-label">@Html.DisplayNameFor(x => x.Last)</label>
+                                            <label asp-for="User.Last" class="col-sm-2 col-form-label">@Html.DisplayNameFor(x => x.User.Last)</label>
                                             <div class="col-sm-10">
-                                                <input asp-for="Last" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Last)">
-                                                <span asp-validation-for="Last" class="text-danger text-xs"></span>
+                                                <input asp-for="User.Last" class="form-control" placeholder="@Html.DisplayNameFor(x => x.User.Last)">
+                                                <span asp-validation-for="User.Last" class="text-danger text-xs"></span>
                                             </div>
                                         </div>
 										<div class="form-group row">

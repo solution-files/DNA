@@ -1,0 +1,141 @@
+﻿@{
+	Layout = "_Dashboard";
+	string Title = "EBay Account";
+}
+@section CSS {
+
+}
+@section Scripts {
+
+	<!-- Automated Form Validation -->
+	<script src="~/common/plugins/jquery-validate/jquery.validate.min.js"></script>
+	<script src="~/common/plugins/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>@Title Detail</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">@Title Detail</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="container-fluid">
+			<partial name="_Messages" />
+			<div class="row">
+				<!-- left column -->
+				<div class="col-md-6">
+					<partial name="_Messages" />
+					<!-- general form elements -->
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">@Title</h3>
+							<div class="card-tools">
+								<button asp-action="Save" form="Master" class="btn btn-tool btn-sm">
+									<i class="far fa-floppy-disk" title="Save"></i>
+								</button>
+								<a href="/report/viewer.html?Report=EBay Account Detail.rdl" class="btn btn-tool btn-sm" target="_blank">
+									<i class="fas fa-print" title="Preview Report"></i>
+								</a>
+								<a asp-action="Index" class="btn btn-tool btn-sm">
+									<i class="fas fa-xmark" title="Close"></i>
+								</a>
+							</div>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						<form asp-action="#" id="Master">
+							<div class="card-body">
+								<div class="row mb-0">
+									<div class="col-lg-8">
+										<div class="form-group">
+
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="form-group">
+
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-lg-8">
+										<div class="form-group">
+
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="form-group">
+
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-lg-8">
+										<div class="form-group">
+
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="form-group">
+
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-lg-6">
+										<div class="form-group">
+
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="form-group">
+
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="form-group">
+
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="form-group">
+
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0">
+									<div class="col-12">
+										<div class="form-group">
+
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /.card-body -->
+						</form>
+					</div>
+					<!-- /.card -->
+				</div>
+				<!-- / Left Column -->
+			</div>
+			<!-- / Row -->
+		</div>
+		<!-- Container Fluid -->
+	</section>
+</div>
+<!-- / Content Wrapper -->

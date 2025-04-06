@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -80,6 +82,11 @@ services.AddMvc();
 Assembly DashboardAssembly = typeof(DNA3.Controllers.DashboardController).GetTypeInfo().Assembly;
 AssemblyPart DashboardPart = new(DashboardAssembly);
 services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(DashboardPart));
+
+// PDF Assembly Part
+Assembly PDFAssembly = typeof(PDF.Controllers.HomeController).GetTypeInfo().Assembly;
+AssemblyPart PDFPart = new(PDFAssembly);
+services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(PDFPart));
 
 // SMO Assembly Part
 Assembly SMOAssembly = typeof(SMO.Controllers.HomeController).GetTypeInfo().Assembly;
@@ -182,9 +189,9 @@ services.AddHttpContextAccessor();
 services.AddMvc(options => {
     options.RespectBrowserAcceptHeader = true;
 })
-  .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-  .AddDataAnnotationsLocalization()
-  .AddXmlSerializerFormatters();
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization()
+    .AddXmlSerializerFormatters();
 
 // Controller Options
 services.AddControllers(x => x.AllowEmptyInputInBodyModelBinding = true);

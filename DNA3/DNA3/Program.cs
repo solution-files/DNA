@@ -24,6 +24,8 @@ using System.Text;
 
 #endregion
 
+#nullable enable
+
 #region Configuration Manager Sources
 
 var builder = WebApplication.CreateBuilder(args);

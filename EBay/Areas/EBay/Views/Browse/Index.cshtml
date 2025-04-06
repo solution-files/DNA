@@ -1,0 +1,181 @@
+﻿@model EBay.Models.Root
+
+@{
+	Layout = "_Dashboard";
+	string Title = "Listing";
+}
+
+@section CSS {
+
+}
+
+@section Scripts {
+
+	<!-- Automated Form Validation -->
+	<script src="~/common/plugins/jquery-validate/jquery.validate.min.js"></script>
+	<script src="~/common/plugins/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+	<script>
+
+		$(document).ready(function () {
+			$("#optionsModal").on('shown.bs.modal', function () {
+				$('#Keywords').focus().select();
+				$("#optionsModal").keyup(function (event) {
+					if (event.keyCode == 13) {
+						event.preventDefault();
+						DisplaySpinner();
+						$('#Apply').click();
+					}
+				});
+			});
+		});
+
+		function DisplaySpinner() {
+			$('#Apply').prop("disabled", true);
+			$('#Apply').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...`);
+		}
+
+	</script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>@Title Browser</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">Menu Manager</li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="card card-primary">
+			<div class="card-header border-0">
+				<h3 class="card-title">Listings</h3>
+				@await Html.PartialAsync("_Tools", new { Report = "Listings.trdp" })
+			</div>
+			<div class="card-body">
+				@if (Model.itemSummaries.Count() == 0) {
+					<table class="table">
+						<tbody>
+							<tr>
+								<td style="border: none;"></td>
+								<td style="border: none; text-align: center;"><i class="fa-brands fa-ebay fa-10x"></i></td>
+								<td style="border: none;"></td>
+							</tr>
+							<tr>
+								<td style="border: none;"></td>
+								<td style="border: none;" class="text-center font-size-18">No listings found. Click a button above to get started.</td>
+								<td style="border: none;"></td>
+							</tr>
+						</tbody>
+					</table>
+				} else {
+					@foreach (EBay.Models.ItemSummary item in Model.itemSummaries) {
+						<div class="row mb-3">
+							<div class="col-lg-2">
+								<img style="max-width: 200px;" src="@item.image.imageUrl" />
+							</div>
+							<!-- item.shortDescription is almost never provided, do not include -->
+							<div class="col-lg-10">
+								<div class="row mb-0">
+									<a href="@item.itemWebUrl" target="_blank"><h4 class="mb-0">@item.title</h4></a>
+								</div>
+								@if (!string.IsNullOrEmpty(item.shortDescription)) {
+									<div class="row mb-0">
+										<span class="small">@item.shortDescription</span>
+									</div>
+								}
+								<div class="row mt-2 mb-0">
+									<div class="col-sm-4">
+										<div class="row mb-0">
+											<div class="col">
+												<h4 class="mb-0">@EBay.Classes.Common.FormatCurrentPrice(item)</h4>
+											</div>
+										</div>
+										<div class="row mb-0">
+											<div class="col">
+												@Html.Render(EBay.Classes.Common.FormatShippingDetails(item))
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="col">
+											<h5>@Html.Render(EBay.Classes.Common.FormatCondition(item))</h5>
+										</div>
+									</div>
+									<div class="col-lg-5">
+										@Html.Render(EBay.Classes.Common.FormatSellerInfo(item))<br />
+										<span>@Html.Render($"Item: {item.legacyItemId}")</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					}
+				}
+			</div>
+		</div>
+	</section>
+</div>
+<!-- /.content-wrapper -->
+<!-- Options Modal -->
+<div id="optionsModal" class="modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header border-0">
+				<h5 class="modal-title">Search Options</h5>
+				<div class="ml-auto">
+					<button asp-action="Index" class="btn btn-tool btn-sm" form="SearchOptions">
+						<i class="far fa-floppy-disk" title="Apply"></i>
+					</button>
+					<button class="btn btn-tool btn-sm" form="SearchOptions">
+						<i class="far fa-trash-can" title="Reset"></i>
+					</button>
+					<a class="btn btn-tool btn-sm" data-dismiss="modal" aria-label="Close">
+						<i class="fas fa-xmark" title="Close"></i>
+					</a>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="row mb-0">
+					<div class="col">
+						<form id="SearchOptions" method="post" autocomplete="off">
+							<div class="card-body">
+								<div class="row mb-0">
+									<div class="col">
+										<div class="form-group">
+											<label for="Keywords">Keywords</label>
+											<input id="Keywords" name="Keywords" class="form-control" placeholder="Keywords" spellcheck="false">
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /.card-body -->
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer d-flex justify-content-end align-items-end border-0">
+				<button id="Apply" asp-area="EBay" asp-controller="Browse" asp-action="Index" class="btn btn-primary" form="SearchOptions" onclick="DisplaySpinner();"><i class="far fa-floppy-disk mr-2"></i>Apply</button>
+				<button id="Reset" class="btn btn-danger ml-2" form="SearchOptions"><i class="far fa-trash-can mr-2"></i>Reset</button>
+				<a id="Close" class="btn btn-secondary ml-2" data-dismiss="modal" aria-label="Close"><i class="fas fa-close mr-2"></i>Close</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+

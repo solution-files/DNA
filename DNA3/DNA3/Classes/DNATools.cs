@@ -516,16 +516,19 @@ namespace DNA3.Classes {
                     if (!Context.Menu.Any(x => x.Code == code)) {
                         m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = "EBay Auction Manager", Description = name, Icon = "fab fa-ebay", Target = "javascript:void()", TargetName = name, Weight = 300 };
                         m.Actions = new List<Action>() {
-                            new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = $"{name} Dashboard", Icon = "far fa-circle", Target = "/EBAY", TargetName = "Dashboard", Weight = 100 },
-                            new() { RoleId = roleid, Code = "Account", Name = "Account", Description = $"{name} Account", Icon = "far fa-circle", Target = "/EBAY/Account", TargetName = "Account", Weight = 200 },
-                            new() { RoleId = roleid, Code = "Active", Name = "Active Listings", Description = $"{name} Active Listings", Icon = "far fa-circle", Target = "/EBAY/Active", TargetName = "Active Listings", Weight = 300 },
-                            new() { RoleId = roleid, Code = "Completed", Name = "Completed Listings", Description = $"{name} Completed Listings", Icon = "far fa-circle", Target = "/EBAY/Completed", TargetName = "Completed Listings", Weight = 400 },
-                            new() { RoleId = roleid, Code = "Copy", Name = "Copy Listing", Description = $"{name} Copy Listing", Icon = "far fa-circle", Target = "/EBAY/Browse", TargetName = "Copy Listing", Weight = 500 },
-                            new() { RoleId = roleid, Code = "Insights", Name = "Marketplace Insights", Description = $"{name} Marketplace Insights", Icon = "far fa-circle", Target = "/EBAY/Insights", TargetName = "Marketplace Insights", Weight = 600 },
-                            new() { RoleId = roleid, Code = "Estimate", Name = "Price Estimator", Description = $"{name} Price Estimator", Icon = "far fa-circle", Target = "/EBAY/Estimate", TargetName = "Price Estimator", Weight = 700 },
-                            new() { RoleId = roleid, Code = "Search", Name = "Search Listings", Description = $"{name} Search Listings", Icon = "far fa-circle", Target = "/EBAY/Search", TargetName = "Search Listings", Weight = 800 },
-                            new() { RoleId = roleid, Code = "Watch", Name = "Watch List", Description = $"{name} Watch List", Icon = "far fa-circle", Target = "/EBAY/Watch", TargetName = "Watch List", Weight = 900 },
-                            new() { RoleId = roleid, Code = "API", Name = "API Documentation", Description = $"{name} API Documentation", Icon = "far fa-circle", Target = "https://developer.ebay.com/", TargetName = "API Documentation", NewWindow = true, Weight = 1000 },
+                            new() { RoleId = roleid, Code = "Auth", Name = "Authentication", Description = $"{name} Authentication", Icon = "far fa-circle", Target = "/ebay/home/authenticate", TargetName = "Authenticate", Weight = 100 },
+                            new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = $"{name} Dashboard", Icon = "far fa-circle", Target = "/ebay", TargetName = "Dashboard", Weight = 200 },
+                            new() { RoleId = roleid, Code = "Account", Name = "Account", Description = $"{name} Account", Icon = "far fa-circle", Target = "/ebay/account", TargetName = "Account", Weight = 300 },
+                            new() { RoleId = roleid, Code = "Inventory", Name = "Inventory Manager", Description = $"{name} Inventory Manager", Icon = "far fa-circle", Target = "/ebay/inventory", TargetName = "Inventory Manager", Weight = 400 },
+                            new() { RoleId = roleid, Code = "Active", Name = "Active Listings", Description = $"{name} Active Listings", Icon = "far fa-circle", Target = "/ebay/listing/active", TargetName = "Active Listings", Weight = 500 },
+                            new() { RoleId = roleid, Code = "Completed", Name = "Completed Listings", Description = $"{name} Completed Listings", Icon = "far fa-circle", Target = "/ebay/listing/completed", TargetName = "Completed Listings", Weight = 600 },
+                            new() { RoleId = roleid, Code = "Copy", Name = "Copy Listing", Description = $"{name} Copy Listing", Icon = "far fa-circle", Target = "/ebay/listing/copy", TargetName = "Copy Listing", Weight = 700 },
+                            new() { RoleId = roleid, Code = "Insights", Name = "Marketplace Insights", Description = $"{name} Marketplace Insights", Icon = "far fa-circle", Target = "/ebay/marketplace/insights", TargetName = "Marketplace Insights", Weight = 800 },
+                            new() { RoleId = roleid, Code = "Estimate", Name = "Price Estimator", Description = $"{name} Price Estimator", Icon = "far fa-circle", Target = "/ebay/listing/estimate", TargetName = "Price Estimator", Weight = 900 },
+                            new() { RoleId = roleid, Code = "Search", Name = "Search Listings", Description = $"{name} Search Listings", Icon = "far fa-circle", Target = "/ebay/listing/search", TargetName = "Search Listings", Weight = 1000 },
+                            new() { RoleId = roleid, Code = "Watch", Name = "Watch List", Description = $"{name} Watch List", Icon = "far fa-circle", Target = "/ebay/listing/watch", TargetName = "Watch List", Weight = 1100 },
+                            new() { RoleId = roleid, Code = "API", Name = "API Documentation", Description = $"{name} API Documentation", Icon = "far fa-circle", Target = "https://developer.ebay.com/", TargetName = "API Documentation", NewWindow = true, Weight = 1200 },
+                            new() { RoleId = roleid, Code = "APIX", Name = "API Explorer", Description = $"{name} API Explorer", Icon = "far fa-circle", Target = "https://developer.ebay.com/my/api_test_tool?index=0", TargetName = "API Explorer", NewWindow = true, Weight = 1300 },
                         };
                         Context.Menu.Add(m);
                         await Context.SaveChangesAsync();
@@ -711,7 +714,7 @@ namespace DNA3.Classes {
 
                 // About
                 if (!Context.Menu.Any(x => x.Code == "About")) {
-                    m = new() { RoleId = roleid, TopLevel = false, Code = "About", Name = "About", Description = "About Us", Icon = "fas fa-info-circle", Target = "/home/about", TargetName = "About Us", Weight = 1100 };
+                    m = new() { RoleId = roleid, TopLevel = false, Code = "About", Name = "About", Description = "About Us", Icon = "fas fa-info-circle", Target = "/home/about", TargetName = "About Us", Weight = 1200 };
                     m.Actions = new List<Action>() {
                             new() { RoleId = roleid, Code = "Home", Name = "Home", Description = "Home", Icon = "far fa-circle", Target = "/", TargetName = "Home Page", Weight = 100 },
                             new() { RoleId = roleid, Code = "About", Name = "About Us", Description = "About Us", Icon = "far fa-circle", Target = "/home/about", TargetName = "About Us", Weight = 200 },
@@ -722,11 +725,33 @@ namespace DNA3.Classes {
                     await Context.SaveChangesAsync();
                 }
 
+                code = "PDF";
+                name = "PDF";
+                if (GetAssemblyList().Any(x => x.FullName.Contains(code))) {
+                    if (!Context.Menu.Any(x => x.Code == code)) {
+                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = $"{name} Manager", Description = $"{name} Manager", Icon = "fas fa-file-pdf", Target = "javascript:void()", TargetName = name, Weight = 1300 };
+                        m.Actions = new List<Action>() {
+                            new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = $"{name} Dashboard", Icon = "far fa-circle", Target = $"/{code}", TargetName = "Dashboard", Weight = 100 },
+                            new() { RoleId = roleid, Code = "Upload", Name = "Upload Files", Description = $"{name} Upload Files", Icon = "far fa-circle", Target = $"/{code}/Upload", TargetName = "Upload", Weight = 200 },
+                            new() { RoleId = roleid, Code = "Download", Name = "Download Results", Description = $"{name} Download Results", Icon = "far fa-circle", Target = $"/{code}/Download", TargetName = "Download", Weight = 300 },
+                        };
+                        Context.Menu.Add(m);
+                        await Context.SaveChangesAsync();
+                    }
+                } else {
+                    if (Context.Menu.Any(x => x.Code == code)) {
+                        int menuid = Context.Menu.Where(x => x.Code == code).First().MenuId;
+                        Context.Action.RemoveRange(await Context.Action.Where(x => x.MenuId == menuid).ToListAsync());
+                        Context.Menu.RemoveRange(await Context.Menu.Where(x => x.Code == code).ToListAsync());
+                        await Context.SaveChangesAsync();
+                    }
+                }
+
                 code = "SMO";
                 name = "SQL Server";
                 if (GetAssemblyList().Any(x => x.FullName.Contains(code))) {
                     if (!Context.Menu.Any(x => x.Code == code)) {
-                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = $"{name} Management Objects", Description = $"{name} Management Objects", Icon = "fas fa-database", Target = "javascript:void()", TargetName = name, Weight = 1200 };
+                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = $"{name} Management Objects", Description = $"{name} Management Objects", Icon = "fas fa-database", Target = "javascript:void()", TargetName = name, Weight = 1400 };
                         m.Actions = new List<Action>() {
                             new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = $"{name} Dashboard", Icon = "far fa-circle", Target = $"/{code}", TargetName = "Dashboard", Weight = 100 },
                             new() { RoleId = roleid, Code = "Backup", Name = "Backup", Description = $"{name} Backup", Icon = "far fa-circle", Target = $"/{code}/Backup", TargetName = "Backup", Weight = 200 },
@@ -751,7 +776,7 @@ namespace DNA3.Classes {
                 name = "Namecheap";
                 if (GetAssemblyList().Any(x => x.FullName.Contains(code))) {
                     if (!Context.Menu.Any(x => x.Code == code)) {
-                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = name, Description = $"{name} System", Icon = "fas fa-file-signature", Target = "javascript:void()", TargetName = name, Weight = 1300 };
+                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = name, Description = $"{name} System", Icon = "fas fa-file-signature", Target = "javascript:void()", TargetName = name, Weight = 1500 };
                         m.Actions = new List<Action>() {
                             new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = $"{name} Dashboard", Icon = "far fa-circle", Target = $"/{code}", TargetName = "Dashboard", Weight = 100 },
                             new() { RoleId = roleid, Code = "Domain", Name = "Domain Registration", Description = $"{name} Domain Registration", Icon = "far fa-circle", Target = $"/{code}/Domain", TargetName = "Domains", Weight = 200 },
@@ -773,7 +798,7 @@ namespace DNA3.Classes {
                 name = "OVH Cloud";
                 if (GetAssemblyList().Any(x => x.FullName.Contains(code))) {
                     if (!Context.Menu.Any(x => x.Code == code)) {
-                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = name, Description = $"{name} System", Icon = "fas fa-cloud", Target = "javascript:void()", TargetName = name, Weight = 1400 };
+                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = name, Description = $"{name} System", Icon = "fas fa-cloud", Target = "javascript:void()", TargetName = name, Weight = 1600 };
                         m.Actions = new List<Action>() {
                             new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = "OVH Cloud Control Center Dashboard", Icon = "far fa-circle", Target = "/OVH", TargetName = "Dashboard", NewWindow = false, Weight = 100 },
                             new() { RoleId = roleid, Code = "API", Name = "API Manager", Description = "API Manager", Icon = "far fa-circle", Target = "/OVH/Api", TargetName = "API Manager", Weight = 200 },
@@ -799,7 +824,7 @@ namespace DNA3.Classes {
                 name = "USPS Web Tools";
                 if (GetAssemblyList().Any(x => x.FullName.Contains(code))) {
                     if (!Context.Menu.Any(x => x.Code == code)) {
-                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = "USPS Console", Description = "USPS Control Center", Icon = "fab fa-usps", Target = "javascript:void()", TargetName = "USPS Console", Weight = 1500 };
+                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = "USPS Console", Description = "USPS Control Center", Icon = "fab fa-usps", Target = "javascript:void()", TargetName = "USPS Console", Weight = 1700 };
                         m.Actions = new List<Action>() {
                             new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = "USPS Control Center Dashboard", Icon = "far fa-circle", Target = "/USPS", TargetName = "Dashboard", NewWindow = false, Weight = 100 },
                             new() { RoleId = roleid, Code = "Address", Name = "Address Correction", Description = "USPS Address Standardization and Correction", Icon = "far fa-circle", Target = "/USPS/Address", TargetName = "Address Correction", NewWindow = false, Weight = 200 },
@@ -829,7 +854,7 @@ namespace DNA3.Classes {
 
                 // About
                 if (!Context.Menu.Any(x => x.Code == "About")) {
-                    m = new() { RoleId = roleid, TopLevel = false, Code = "About", Name = "About", Description = "About Us", Icon = "fas fa-info-circle", Target = "/home/about", TargetName = "About Us", Weight = 1600 };
+                    m = new() { RoleId = roleid, TopLevel = false, Code = "About", Name = "About", Description = "About Us", Icon = "fas fa-info-circle", Target = "/home/about", TargetName = "About Us", Weight = 1800 };
                     m.Actions = new List<Action>() {
                             new() { RoleId = roleid, Code = "Home", Name = "Home", Description = "Home", Icon = "far fa-circle", Target = "/", TargetName = "Home Page", Weight = 100 },
                             new() { RoleId = roleid, Code = "About", Name = "About Us", Description = "About Us", Icon = "far fa-circle", Target = "/home/about", TargetName = "About Us", Weight = 200 },
@@ -842,7 +867,7 @@ namespace DNA3.Classes {
 
                 // Features
                 if (!Context.Menu.Any(x => x.Code == "Features")) {
-                    m = new Menu { RoleId = roleid, TopLevel = false, Code = "Features", Name = "Features", Description = "Features", Icon = "far fa-star", Target = "/home/features", TargetName = "Features", Weight = 1700 };
+                    m = new Menu { RoleId = roleid, TopLevel = false, Code = "Features", Name = "Features", Description = "Features", Icon = "far fa-star", Target = "/home/features", TargetName = "Features", Weight = 1900 };
                     m.Actions = new List<Action>() {
                         new() { RoleId = roleid, Code = "How", Name = "How It Works", Description = "How It Works", Icon = "far fa-circle", Target = "/home/features", TargetName = "How It Works", Weight = 100 },
                         new() { RoleId = roleid, Code = "Privacy", Name = "Privacy Policy", Description = "Privacy Policy", Icon = "far fa-circle", Target = "/home/privacy", TargetName = "Privacy Policy", Weight = 200 },
@@ -855,7 +880,7 @@ namespace DNA3.Classes {
 
                 // Footer
                 if (!Context.Menu.Any(x => x.Code == "Footer")) {
-                    m = new Menu { RoleId = roleid, TopLevel = false, Code = "Footer", Name = "Footer Menu", Description = "Footer Menu", Icon = "far fa-star", Target = "javascript:void()", TargetName = "Footer", Weight = 1800 };
+                    m = new Menu { RoleId = roleid, TopLevel = false, Code = "Footer", Name = "Footer Menu", Description = "Footer Menu", Icon = "far fa-star", Target = "javascript:void()", TargetName = "Footer", Weight = 2000 };
                     m.Actions = new List<Action>() {
                         new() { RoleId = roleid, Code = "How", Name = "How It Works", Description = "How It Works", Icon = "far fa-circle", Target = "/home/features", TargetName = "How It Works", Weight = 100 },
                         new() { RoleId = roleid, Code = "Privacy", Name = "Privacy Policy", Description = "Privacy Policy", Icon = "far fa-circle", Target = "/home/privacy", TargetName = "Privacy Policy", Weight = 200 },

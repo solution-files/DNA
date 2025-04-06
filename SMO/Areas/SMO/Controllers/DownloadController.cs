@@ -1,21 +1,17 @@
 ﻿#region Usings
 
-using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MimeKit;
+using Serilog;
+using SMO.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Utilities;
-using SMO.Models;
 using System.Linq;
-using MimeKit;
-using Microsoft.Extensions.Configuration;
-using Serilog;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using Microsoft.AspNetCore.Http.Headers;
+using Utilities;
 
 #endregion
 

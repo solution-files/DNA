@@ -22,20 +22,20 @@ namespace SMO.Controllers {
 
     [Area("SMO")]
     [Authorize(Policy = "Administrators")]
-    public class SMOBackupController : Controller {
+    public class BackupController : Controller {
 
         #region Properties and Variables
 
         private readonly IConfiguration Configuration;
         private readonly MainContext Context;
-        private readonly ILogger<SMOBackupController> Logger;
+        private readonly ILogger<BackupController> Logger;
 
         #endregion
 
         #region Class Methods
 
         // Constructor
-        public SMOBackupController(IConfiguration configuration, MainContext context, ILogger<SMOBackupController> logger) {
+        public BackupController(IConfiguration configuration, MainContext context, ILogger<BackupController> logger) {
             Configuration = configuration;
             Context = context;
             Logger = logger;
