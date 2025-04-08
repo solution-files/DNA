@@ -10,7 +10,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2024-09-28T22:53:58.7324453Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-04-08T18:29:16.5883084Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <Author>DNA</Author>
@@ -19,9 +19,10 @@
     <DataSource Name="dsReport">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=dotnetadmin.com;Initial Catalog=DNA;User ID=dna;Password=D7@gd7e!9</ConnectString>
+        <ConnectString>Data Source=db16818.public.databaseasp.net;Initial Catalog=db16818;User=db16818;Password=L74!!!gtbn;TrustServerCertificate=True;</ConnectString>
+        <Prompt>Specify a user name and password for data source dsReport:</Prompt>
       </ConnectionProperties>
-      <rd:SecurityType>None</rd:SecurityType>
+      <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>78d2994c-a3bc-4af0-8acd-e647164a8cb6</rd:DataSourceID>
     </DataSource>
   </DataSources>

@@ -27,7 +27,7 @@ var builder = WebApplication.CreateBuilder(args);
 // The Configuration Manager can load settings from a wide variety of sources including JSON Files, XML Files, INI Files, Command-Line Arguments,
 // Environment Variables, In-Memory .NET Objects, Secret Manager Storage, and the Azure Key Vault. In this case, we load application secrets from
 // an encrypted JSON file stored outside of the source-code tree to prevent propagation to Version Control archives.
-builder.Configuration.AddJsonFile("C:\\DNASettings.json");
+builder.Configuration.AddJsonFile("/DNASettings.json");
 
 // JWT Key must be accessible to the Configuration Manager
 string? jwtkey = builder.Configuration["Jwt:Key"];
@@ -220,9 +220,9 @@ services.AddSwaggerGen(c => {
 var app = builder.Build();
 
 // Error Handling
-//app.UseDeveloperExceptionPage();
-app.UseExceptionHandler("/Home/Error");
-app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
+app.UseDeveloperExceptionPage();
+//app.UseExceptionHandler("/Home/Error");
+//app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
 
 // Global Cross-Origin Request Policy
 app.UseCors(x => x
