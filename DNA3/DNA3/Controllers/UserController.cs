@@ -2,6 +2,8 @@
 
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +27,7 @@ namespace DNA3.Controllers {
 		private readonly IConfiguration Configuration;
 		private readonly MainContext Context;
 		private readonly ILogger<UserController> Logger;
+        private readonly IHttpContextAccessor HttpContextAccessor;
 		private readonly string Title = "User";
 
 		#endregion
@@ -32,11 +35,12 @@ namespace DNA3.Controllers {
 		#region Class Methods
 
 		// Constructor
-		public UserController(IConfiguration configuration, MainContext context, ILogger<UserController> logger) {
+		public UserController(IConfiguration configuration, MainContext context, ILogger<UserController> logger, IHttpContextAccessor httpContextAccessor) {
 			Configuration = configuration;
 			Context = context;
 			Logger = logger;
-		}
+            HttpContextAccessor = httpContextAccessor;
+        }
 
         #endregion
 
@@ -61,7 +65,7 @@ namespace DNA3.Controllers {
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return RedirectToAction("Index", "Dashboard");
 		}
@@ -71,17 +75,18 @@ namespace DNA3.Controllers {
         [Authorize(Policy = "Administrators")]
         [ApiExplorerSettings(IgnoreApi = true)]
 		public async Task<IActionResult> New() {
-			User instance = new User();
+			User instance = new();
 			try {
 				instance.ClientId = User.ClientId();
 				ViewBag.ClientList = await Context.Client.OrderBy(x => x.Company).ToListAsync();
 				ViewBag.RoleList = await Context.Role.OrderBy(x => x.Description).ToListAsync();
 				ViewBag.StatusList = await Context.Status.OrderBy(x => x.Description).ToListAsync();
-				Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
+                HttpContextAccessor.HttpContext.Session.SetString("userReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
 			} catch (Exception ex) {
 				string message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View("Detail", instance);
 		}
@@ -91,16 +96,17 @@ namespace DNA3.Controllers {
         [Authorize(Policy = "Administrators")]
         [ApiExplorerSettings(IgnoreApi = true)]
 		public IActionResult Edit(int? id) {
-			User instance = new User();
+			User instance = new();
 			try {
                 instance = Context.User.Where(x => x.UserId == id).SingleOrDefault();
                 ViewBag.ClientList = Context.Client.OrderBy(x => x.Company).ToList();
 				ViewBag.RoleList = Context.Role.OrderBy(x => x.Description).ToList();
 				ViewBag.StatusList = Context.Status.OrderBy(x => x.Description).ToList();
+                HttpContextAccessor.HttpContext.Session.SetString("userReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.UserId})");
 			} catch (Exception ex) {
 				Site.Messages.Enqueue(ex.Message);
-				Logger.LogError(ex, ex.Message);
+				Logger.LogError(ex, "{message}", ex.Message);
 			}
 			return View("Detail", instance);
 		}
@@ -128,7 +134,7 @@ namespace DNA3.Controllers {
 				}
 			} catch (Exception ex) {
 				message = ex.Message;
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			ViewBag.ClientList = await Context.Client.OrderBy(x => x.Company).ToListAsync();
 			ViewBag.RoleList = await Context.Role.OrderBy(x => x.Description).ToListAsync();
@@ -147,7 +153,9 @@ namespace DNA3.Controllers {
 				if (instance == null) {
 					throw new Exception($"{Title} not found. It may have been deleted by another user.");
 				}
-				message = $"Deleted {Title} ({instance.UserId})";
+				message = $"Deleted {Title} ({instance.UserId}) and all its identities";
+                var identities = Context.Login.Where(x => x.UserId == instance.UserId);
+                Context.RemoveRange(identities);
 				Context.User.Remove(instance);
 				await Context.SaveChangesAsync();
 				Site.Messages.Enqueue(message);
@@ -155,7 +163,7 @@ namespace DNA3.Controllers {
 				return RedirectToAction("Index");
 			} catch (Exception ex) {
 				Site.Messages.Enqueue(ex.Message);
-				Logger.LogError(ex, ex.Message);
+				Logger.LogError(ex, "{message}", ex.Message);
 			}
 			ViewBag.ClientList = await Context.Client.OrderBy(x => x.Company).ToListAsync();
 			ViewBag.RoleList = await Context.Role.OrderBy(x => x.Description).ToListAsync();
@@ -169,13 +177,13 @@ namespace DNA3.Controllers {
         [ApiExplorerSettings(IgnoreApi = true)]
 		public async Task<IActionResult> Profile() {
 			string message;
-			Login instance = new Login();
+			Login instance = new();
 			try {
 				instance = await Context.Login.Include(x => x.User).ThenInclude(x => x.Client).Where(x => x.Email == User.EmailAddress()).FirstOrDefaultAsync();
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View(instance);
 		}
@@ -198,13 +206,13 @@ namespace DNA3.Controllers {
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View(instance);
 		}
 
         // Close
-        [HttpGet]
+        [HttpGet, HttpPost]
         [Authorize(Policy = "Users")]
         [ApiExplorerSettings(IgnoreApi = true)]
 		public IActionResult Close() {
@@ -214,13 +222,28 @@ namespace DNA3.Controllers {
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
-			return RedirectToAction("Index", "Dashboard");
-		}
+            return RedirectPermanent(HttpContextAccessor.HttpContext.Session.GetString("userReturnUrl"));
+        }
 
-	}
+        // Close Index
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet, HttpPost]
+        public IActionResult CloseIndex() {
+            string message;
+            try {
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
+            } catch (Exception ex) {
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
+            }
+            return RedirectToAction("Index", "Dashboard");
+        }
 
-	#endregion
+    }
+
+    #endregion
 
 }

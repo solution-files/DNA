@@ -75,7 +75,17 @@
 								</ul>
 								<div class="tab-content" id="general-tab-content">
 									<div class="tab-pane fade show active" id="general-content" role="tabpanel" aria-labelledby="general-content">
-										<div class="row mb-0 mt-3">
+                                        <div class="row mb-0 mt-3">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label asp-for="ClientId" class="mr-2">@Html.DisplayNameFor(x => x.ClientId)</label>
+                                                    <a asp-controller="Client" asp-action="New" class="small mr-2">New</a><a asp-controller="Client" asp-action="Edit" asp-route-id="@Model.ClientId" class="small">Edit</a>
+                                                    <select asp-for="ClientId" class="form-control" asp-items="@(new SelectList(ViewBag.ClientList, "ClientId", "Company"))" placeholder="@Html.DisplayNameFor(model => model.ClientId)" autocomplete="off" spellcheck="false"></select>
+                                                    <span asp-validation-for="ClientId" class="text-danger small"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+										<div class="row mb-0">
 											<div class="col-lg-6">
 												<div class="form-group">
 													<label asp-for="First">@Html.DisplayNameFor(x => x.First)</label>

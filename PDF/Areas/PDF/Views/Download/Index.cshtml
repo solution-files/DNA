@@ -1,4 +1,4 @@
-﻿@model List<PDF.Models.Document>
+﻿@model IList<PDF.Models.Document>
 @using PDF.Models
 @{
     Layout = "_Dashboard";
@@ -14,7 +14,7 @@
 
         function DownloadSelected() {
             try {
-                var grid = document.getElementById("PDFDownloadGrid").ej2_instances[0];
+                var grid = document.getElementById("DownloadGrid").ej2_instances[0];
                 var selected = grid.getSelectedRecords();
                 $.ajax({
                     type: "POST",
@@ -38,12 +38,12 @@
         }
 
         function ExportToExcel() {
-            var gridObj = document.getElementById("PDFDownloadGrid").ej2_instances[0];
+            var gridObj = document.getElementById("DownloadGrid").ej2_instances[0];
             gridObj.excelExport();
         }
 
         function ExportToPDF() {
-            var gridObj = document.getElementById("PDFDownloadGrid").ej2_instances[0];
+            var gridObj = document.getElementById("DownloadGrid").ej2_instances[0];
             gridObj.pdfExport();
         }
 
@@ -80,7 +80,7 @@
                     <button class="btn btn-tool btn-sm" onclick="DownloadSelected()">
                         <i class="fas fa-play" title="Run"></i>
                     </button>
-                    <a asp-action="Help" class="btn btn-tool btn-sm">
+                    <a asp-controller="Download" asp-action="Help" class="btn btn-tool btn-sm">
                         <i class="fas fa-question" title="Help"></i>
                     </a>
                     <a asp-action="Index" class="btn btn-tool btn-sm">
@@ -90,17 +90,18 @@
             </div>
             <div class="card-body">
                 @if (Model.Count() == 0) {
-                    <emptyresult icon="fa-solid fa-file-word"></emptyresult>
+                    <emptyresult icon="fa-solid fa-puzzle-piece"></emptyresult>
                 } else {
-                    <ejs-grid id="PDFDownloadGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true">
+                    <ejs-grid id="DownloadGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true">
                         <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
                         <e-grid-columns>
-                            <e-grid-column field="FileName"></e-grid-column>
+                            <e-grid-column field="FileName" headerText="File Name" textAlign="Left"></e-grid-column>
                         </e-grid-columns>
                     </ejs-grid>
                 }
             </div>
         </div>
     </section>
+    )
 </div>
 <!-- /.content-wrapper -->

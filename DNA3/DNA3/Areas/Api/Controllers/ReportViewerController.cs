@@ -1,7 +1,9 @@
 ﻿#region Usings
 
+using BoldReports.Web;
 using BoldReports.Web.ReportViewer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.IO;
 
@@ -19,15 +21,18 @@ public class ReportViewerController : Controller, IReportController {
     // IWebHostEnvironment used with sample to get the application data from wwwroot.
     private Microsoft.AspNetCore.Hosting.IWebHostEnvironment _hostingEnvironment;
 
+    private IConfiguration _configuration;
+
     #endregion
 
     #region Methods
 
     // Post action to process the report from server-based JSON parameters and send the result back to the client.
     public ReportViewerController(Microsoft.Extensions.Caching.Memory.IMemoryCache memoryCache,
-    Microsoft.AspNetCore.Hosting.IWebHostEnvironment hostingEnvironment) {
+    Microsoft.AspNetCore.Hosting.IWebHostEnvironment hostingEnvironment, IConfiguration configuration) {
         _cache = memoryCache;
         _hostingEnvironment = hostingEnvironment;
+        _configuration = configuration;
     }
 
     #endregion
@@ -44,6 +49,15 @@ public class ReportViewerController : Controller, IReportController {
     // Method will be called to initialize the report information to load the report with ReportHelper for processing.
     [NonAction]
     public void OnInitReportOptions(ReportViewerOptions reportOption) {
+
+        // Here, we set the Report Connection String to the value stored in the Configuration Manager
+        DataSourceCredentials dataSourceCredentials = new();
+        string connectionString = $"{_configuration["ConnectionStrings:MainContext"]}";
+        dataSourceCredentials.Name = "dsReport";
+        dataSourceCredentials.ConnectionString = connectionString;
+        reportOption.ReportModel.DataSourceCredentials = new List<DataSourceCredentials> { dataSourceCredentials };
+
+        // This begins the code as originally supplied by Bold Reports
         string basePath = _hostingEnvironment.WebRootPath;
         // Here, we have loaded the sales-order-detail.rdl report from the application folder wwwroot\Report. The sales-order-detail.rdl file should be in the wwwroot\Report application folder.
         FileStream inputStream = new FileStream(basePath

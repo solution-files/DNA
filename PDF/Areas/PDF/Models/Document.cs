@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 #endregion
 
-#nullable enable
+#nullable disable
 
 namespace PDF.Models {
 
@@ -15,7 +15,7 @@ namespace PDF.Models {
 
         [NotMapped]
         [Display(Name = "File Name")]
-        public string? FileName { get; set; }
+        public string FileName { get; set; }
 
         #endregion
 

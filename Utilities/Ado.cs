@@ -29,7 +29,8 @@ namespace Utilities {
 
                 // Client ID
                 var builder = WebApplication.CreateBuilder();
-                builder.Configuration.AddJsonFile("C:\\DNASettings.json");
+                builder.Configuration.AddJsonFile("appsettings.json");
+                builder.Configuration.AddJsonFile(builder.Configuration["App:Configuration"]);
                 clientid = int.Parse(builder.Configuration["Default:ClientId"]);
 
                 // User

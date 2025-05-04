@@ -26,7 +26,6 @@ namespace DNA3.Controllers {
         // Variables
         private readonly MainContext Context;
         private readonly ILogger<PageController> Logger;
-        private readonly IHttp Http;
         private readonly string Title = "Page";
 
         #endregion
@@ -34,10 +33,9 @@ namespace DNA3.Controllers {
         #region Methods
 
         // Constructor
-        public PageController(MainContext context, ILogger<PageController> logger, IHttp http) {
+        public PageController(MainContext context, ILogger<PageController> logger) {
             Context = context;
             Logger = logger;
-            Http = http;
         }
 
         #endregion
@@ -61,7 +59,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index", "Dashboard");
         }
@@ -70,14 +68,14 @@ namespace DNA3.Controllers {
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public IActionResult New() {
-            Page instance = new Page();
+            Page instance = new();
             try {
                 instance.Date = DateTime.Now;
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View("Detail", instance);
         }
@@ -86,14 +84,13 @@ namespace DNA3.Controllers {
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public async Task<IActionResult> Edit(int? id) {
-            Page instance = new Page();
+            Page instance = new();
             try {
-                Http.SetReferringUrl(HttpContext, "PageReturnUrl");
                 instance = await Context.Page.FindAsync(id);
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.PageId})");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return View("Detail", instance);
         }
@@ -116,17 +113,13 @@ namespace DNA3.Controllers {
                     await Context.SaveChangesAsync();
                     Site.Messages.Enqueue(message);
                     Log.Logger.ForContext("UserId", User.UserId()).Warning(message);
-                    string referrer = Http.GetReferringUrl(HttpContext, "PageReturnUrl");
-                    if (!string.IsNullOrEmpty(referrer)) {
-                        return Redirect(referrer);
-                    }
                     return RedirectToAction("Index");
                 } else {
                     message = "Please correct the data entry errors indicated below";
                 }
             } catch (Exception ex) {
                 message = ex.Message;
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View("Detail", instance);
         }
@@ -149,7 +142,7 @@ namespace DNA3.Controllers {
                 return RedirectToAction("Index");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return View("Detail", instance);
         }
@@ -161,12 +154,11 @@ namespace DNA3.Controllers {
             string message;
             string referrer = default;
             try {
-                Http.GetReferringUrl(HttpContext, "PageReferringUrl");
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message", message);
             }
             if (!string.IsNullOrEmpty(referrer)) {
                 return Redirect(referrer);

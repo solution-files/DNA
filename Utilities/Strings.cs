@@ -1,5 +1,8 @@
 ﻿#region Usings
 
+using Microsoft.Identity.Client;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -211,6 +214,17 @@ namespace Utilities {
         public static string Base64Decode(string value) {
             byte[] decodedBytes = Convert.FromBase64String(Convert.ToBase64String(System.Text.Encoding.Unicode.GetBytes(value)));
             return System.Text.Encoding.UTF8.GetString(decodedBytes);
+        }
+
+        // Get property from a JSON String without known the schema in advance
+        public static string GetJsonProperty(object json, string name) {
+            string result;
+            try {
+                result = JsonConvert.DeserializeObject<JToken>(json.ToString())[name].ToString();
+            } catch(Exception ex) {
+                result = json.ToString();
+            }
+            return result;
         }
 
         #endregion

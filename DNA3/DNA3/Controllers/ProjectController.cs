@@ -1,6 +1,7 @@
 ﻿#region Usings
 
 using BoldReports;
+using DNA3.Classes;
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,7 @@ namespace DNA3.Controllers {
         private readonly IConfiguration Configuration;
         private readonly MainContext Context;
         private readonly ILogger<ProjectController> Logger;
+        private readonly IDNATools DNATools;
         private readonly string Title = "Project";
 
         #endregion
@@ -35,10 +37,11 @@ namespace DNA3.Controllers {
         #region Class Methods
 
         // Constructor
-        public ProjectController(IConfiguration configuration, MainContext context, ILogger<ProjectController> logger) {
+        public ProjectController(IConfiguration configuration, MainContext context, ILogger<ProjectController> logger, IDNATools dnatools) {
             Configuration = configuration;
             Context = context;
             Logger = logger;
+            DNATools = dnatools;
         }
 
         #endregion
@@ -66,7 +69,7 @@ namespace DNA3.Controllers {
         // Read (Inline)
         public IActionResult Read([FromBody] DataManagerRequest dm) {
             IEnumerable DataSource = Context.Project.OrderBy(x => x.ProjectId).ToList();
-            DataOperations operation = new DataOperations();
+            DataOperations operation = new();
             int count = DataSource.Cast<Project>().Count();
             if (dm.Skip != 0) {
                 DataSource = operation.PerformSkip(DataSource, dm.Skip);   //Paging
@@ -85,7 +88,7 @@ namespace DNA3.Controllers {
                 if (ModelState.IsValid) {
                     Context.Update(instance.value);
                     await Context.SaveChangesAsync();
-                    message = $"Updated {Title} ({instance.value.ProjectId}) with StatusId: {instance.value.StatusId} of type {instance.value.StatusId.GetType().ToString()}";
+                    message = $"Updated {Title} ({instance.value.ProjectId}) with StatusId: {instance.value.StatusId} of type {instance.value.StatusId.GetType()}";
                 }
             } catch(Exception ex) {
                 message = ex.Message;
@@ -139,6 +142,7 @@ namespace DNA3.Controllers {
             Project instance = new();
             try {
                 instance.Date = DateTime.Now;
+                instance.StatusId = await DNATools.GetStatusKeyValue("Active");
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
             } catch (Exception ex) {
                 string message = ex.Message;
@@ -183,7 +187,7 @@ namespace DNA3.Controllers {
                     await Context.SaveChangesAsync();
                     Site.Messages.Enqueue(message);
                     Log.Logger.ForContext("UserId", User.UserId()).Warning(message);
-                    return RedirectToAction("Edit", "Project", new { id = instance.ProjectId });
+                    return RedirectToAction("Index", "Project");
                 }
             } catch (Exception ex) {
                 message = ex.Message;

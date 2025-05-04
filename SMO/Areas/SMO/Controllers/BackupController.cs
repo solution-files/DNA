@@ -101,7 +101,7 @@ namespace SMO.Controllers {
                     };
 
                     BackupDeviceItem bdi = default;
-                    bdi = new BackupDeviceItem($"{Utilities.Strings.BackupFileName(database.name)}.bak", DeviceType.File);
+                    bdi = new BackupDeviceItem(Path.Combine(Configuration["SMOSettings:BackupStoragePath"], $"{Utilities.Strings.BackupFileName(database.name)}.bak"), DeviceType.File);
 
                     bk.Devices.Add(bdi);
                     bk.Incremental = false;

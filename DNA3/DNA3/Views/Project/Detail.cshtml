@@ -1,20 +1,18 @@
-﻿@model DNA3.Models.Project
+﻿@model Project
 @{
 	Layout = "_Dashboard";
 	string Title = "Project";
 }
-
 @section CSS {
 
 }
-
 @section Scripts {
 
 	<!-- Automated Form Validation -->
 	<script src="~/common/plugins/jquery-validate/jquery.validate.min.js"></script>
 	<script src="~/common/plugins/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-}
 
+}
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -48,19 +46,16 @@
 							<h3 class="card-title">@Title</h3>
 							<div class="card-tools">
 								<button asp-action="Save" form="Master" class="btn btn-tool btn-sm">
-									<i class="far fa-floppy-disk"></i>
+									<i class="far fa-floppy-disk" title="Save"></i>
 								</button>
 								<button asp-action="Delete" form="Master" class="btn btn-tool btn-sm">
-									<i class="far fa-trash-can"></i>
+									<i class="far fa-trash-can" title="Delete"></i>
 								</button>
-								<button asp-controller="Action" asp-action="Index" asp-route-id="@Model.ProjectId" form="Master" class="btn btn-tool btn-sm">
-									<i class="fas fa-link"></i>
-								</button>
-								<a href="/report/viewer.html?Report=Project.rdl" formaction="Master" class="btn btn-tool btn-sm" target="_blank">
-									<i class="fas fa-print"></i>
+								<a href="/report/viewer.html?Report=Project.rdl" class="btn btn-tool btn-sm" target="_blank">
+									<i class="fas fa-print" title="Print"></i>
 								</a>
 								<a asp-action="Index" class="btn btn-tool btn-sm">
-									<i class="fas fa-xmark"></i>
+									<i class="fas fa-xmark" title="Close"></i>
 								</a>
 							</div>
 						</div>
@@ -69,14 +64,14 @@
 						<form asp-action="#" id="Master">
 							<div class="card-body">
 								<div class="row mb-0">
-									<div class="col-lg-6">
+									<div class="col-lg-4">
 										<div class="form-group">
                                             <label asp-for="Date">@Html.DisplayNameFor(x => x.Date)</label>
-                                            <input asp-for="Date" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Date)" autocomplete="off" spellcheck="false" autofocus>
+                                            <input asp-for="Date" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Date)">
                                             <span asp-validation-for="Date" class="text-danger small"></span>
 										</div>
 									</div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
                                         <div class="form-group">
                                             <label asp-for="StatusId" class="mr-2">@Html.DisplayNameFor(x => x.StatusId)</label>
                                             <a asp-controller="Status" asp-action="New" class="small mr-2">New</a><a asp-controller="Status" asp-action="Edit" asp-route-id="@Model.StatusId" class="small">Edit</a>
@@ -85,25 +80,25 @@
                                         </div>
                                     </div>
                                 </div>
-								<div class="row mb-0">
-									<div class="col-12">
+								<div class="row mb=0">
+									<div class="col">
 										<div class="form-group">
                                             <label asp-for="Subject">@Html.DisplayNameFor(x => x.Subject)</label>
-                                            <input asp-for="Subject" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Subject)">
+                                            <input asp-for="Subject" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Subject)" autofocus>
                                             <span asp-validation-for="Subject" class="text-danger small"></span>
 										</div>
 									</div>
 								</div>
-								<div class="row mb-0">
-									<div class="col-12">
-										<div class="form-group">
+                                <div class="row mb=0">
+                                    <div class="col">
+                                        <div class="form-group">
                                             <label asp-for="Content">@Html.DisplayNameFor(x => x.Content)</label>
-                                            <input asp-for="Content" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Content)">
+                                            <textarea asp-for="Content" rows="4" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Content)"></textarea>
                                             <span asp-validation-for="Content" class="text-danger small"></span>
-										</div>
-									</div>
-								</div>
-							</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 							<!-- /.card-body -->
 							<input asp-for="ProjectId" type="hidden" />
 						</form>

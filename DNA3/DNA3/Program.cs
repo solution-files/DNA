@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,8 +26,6 @@ using System.Text;
 
 #endregion
 
-#nullable enable
-
 #region Configuration Manager Sources
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,7 +33,11 @@ var builder = WebApplication.CreateBuilder(args);
 // The Configuration Manager can load settings from a wide variety of sources including JSON Files, XML Files, INI Files, Command-Line Arguments,
 // Environment Variables, In-Memory .NET Objects, Secret Manager Storage, and the Azure Key Vault. In this case, we load application secrets from
 // an encrypted JSON file stored outside of the source-code tree to prevent propagation to Version Control archives.
-builder.Configuration.AddJsonFile("C:\\DNASettings.json");
+string? externalconfigurationpath = builder.Configuration["App:Configuration"];
+if (string.IsNullOrEmpty(externalconfigurationpath)) {
+    throw new ArgumentException("External Configuration Path must exist and be accessible to the Configuration Manager");
+}
+builder.Configuration.AddJsonFile(externalconfigurationpath);
 
 // JWT Key must be accessible to the Configuration Manager
 string? jwtkey = builder.Configuration["Jwt:Key"];
@@ -177,7 +181,6 @@ services.AddDataProtection();
 // Other Services
 services.AddScoped<DNA3.Classes.IAuth, DNA3.Classes.Auth>();
 services.AddScoped<DNA3.Classes.ITools, DNA3.Classes.Tools>();
-services.AddScoped<Utilities.IHttp, Utilities.Http>();
 services.AddScoped<IDNATools, DNATools>();
 services.AddHttpContextAccessor();
 
@@ -185,9 +188,9 @@ services.AddHttpContextAccessor();
 services.AddMvc(options => {
     options.RespectBrowserAcceptHeader = true;
 })
-  .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-  .AddDataAnnotationsLocalization()
-  .AddXmlSerializerFormatters();
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization()
+    .AddXmlSerializerFormatters();
 
 // Controller Options
 services.AddControllers(x => x.AllowEmptyInputInBodyModelBinding = true);
@@ -216,9 +219,9 @@ services.AddSwaggerGen(c => {
 var app = builder.Build();
 
 // Error Handling
-//app.UseDeveloperExceptionPage();
-app.UseExceptionHandler("/Home/Error");
-app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
+app.UseDeveloperExceptionPage();
+//app.UseExceptionHandler("/Home/Error");
+//app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
 
 // Global Cross-Origin Request Policy
 app.UseCors(x => x
@@ -262,7 +265,7 @@ app.MapControllerRoute(
     pattern: "{area:exists=Dashboard}/{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // Syncfusion
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(builder.Configuration["Syncfusion:License"]);

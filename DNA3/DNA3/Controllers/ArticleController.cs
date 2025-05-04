@@ -18,46 +18,31 @@ using Utilities;
 namespace DNA3.Controllers {
 
     [Authorize(Policy = "Administrators")]
-    public class ArticleController : Controller {
+    public class ArticleController(IConfiguration configuration, MainContext context, ILogger<ArticleController> logger) : Controller {
 
         #region Variables
 
         // Variables
-        private readonly IConfiguration Configuration;
-        private readonly MainContext Context;
-        private readonly ILogger<ArticleController> Logger;
-        private readonly IHttp Http;
+        private readonly IConfiguration Configuration = configuration;
+        private readonly MainContext Context = context;
+        private readonly ILogger<ArticleController> Logger = logger;
         private readonly string Title = "Article";
 
         #endregion
 
-        #region Methods
+        #region Controller Actions
 
-        // Constructor
-        public ArticleController(IConfiguration configuration, MainContext context, ILogger<ArticleController> logger, IHttp http) {
-            Configuration = configuration;
-            Context = context;
-            Logger = logger;
-            Http = http;
-        }
-
-		#endregion
-
-		#region Controller Actions
-
-		// Index
-		[ApiExplorerSettings(IgnoreApi = true)]
+        // Index
+        [ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> Index() {
-            string message;
             try {
 				var result = await Context.Article.Include(x => x.Page).Include(x => x.Section).Include(x => x.Category).Include(x => x.Status).OrderBy(x => x.Page.Name).ThenBy(x => x.Section.Name).ThenBy(x => x.Category.Name).ThenBy(x => x.Name).ToListAsync();
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} List");
                 return View("Index", result);
             } catch (Exception ex) {
-                message = ex.Message;
-                Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Site.Messages.Enqueue(ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return RedirectToAction("Index", "Dashboard");
         }
@@ -67,16 +52,14 @@ namespace DNA3.Controllers {
 		[HttpGet]
 		public async Task<IActionResult> New(Article instance) {
             try {
-				if (instance == null) {
-                    instance = new Article {
+				instance ??= new Article {
                         Date = DateTime.Now
                     };
-                }
 				Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             ViewBag.PageList = await Context.Page.OrderBy(x => x.Name).ToListAsync();
             ViewBag.SectionList = await Context.Section.OrderBy(x => x.Name).ToListAsync();
@@ -89,14 +72,13 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> Edit(int? id) {
-            Article instance = new Article();
+            Article instance = new();
             try {
-                Http.SetReferringUrl(HttpContext, "ArticleReturnUrl");
                 instance = await Context.Article.FindAsync(id);
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.ArticleId})");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             ViewBag.PageList = await Context.Page.OrderBy(x => x.Name).ToListAsync();
             ViewBag.SectionList = await Context.Section.OrderBy(x => x.Name).ToListAsync();
@@ -123,15 +105,11 @@ namespace DNA3.Controllers {
                     await Context.SaveChangesAsync();
                     Site.Messages.Enqueue(message);
                     Log.Logger.ForContext("UserId", User.UserId()).Warning(message);
-                    var referrer = Http.GetReferringUrl(HttpContext, "ArticleReturnUrl");
-                    if (!string.IsNullOrEmpty(referrer)) {
-                        return Redirect(referrer);
-                    }
                     return RedirectToAction("Index");
                 }
             } catch (Exception ex) {
                 message = ex.Message;
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             ViewBag.PageList = await Context.Page.OrderBy(x => x.Name).ToListAsync();
             ViewBag.SectionList = await Context.Section.OrderBy(x => x.Name).ToListAsync();
@@ -158,7 +136,7 @@ namespace DNA3.Controllers {
                 return RedirectToAction("Index");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             ViewBag.PageList = await Context.Page.OrderBy(x => x.Name).ToListAsync();
             ViewBag.SectionList = await Context.Section.OrderBy(x => x.Name).ToListAsync();
@@ -174,12 +152,11 @@ namespace DNA3.Controllers {
             string message;
             string referrer = default;
             try {
-                referrer = Http.GetReferringUrl(HttpContext, "ArticleReturnUrl");
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             if (!string.IsNullOrEmpty(referrer)) {
                 return Redirect(referrer);

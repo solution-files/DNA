@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -27,7 +25,11 @@ var builder = WebApplication.CreateBuilder(args);
 // The Configuration Manager can load settings from a wide variety of sources including JSON Files, XML Files, INI Files, Command-Line Arguments,
 // Environment Variables, In-Memory .NET Objects, Secret Manager Storage, and the Azure Key Vault. In this case, we load application secrets from
 // an encrypted JSON file stored outside of the source-code tree to prevent propagation to Version Control archives.
-builder.Configuration.AddJsonFile("/DNASettings.json");
+string? externalconfigurationpath = builder.Configuration["App:Configuration"];
+if (string.IsNullOrEmpty(externalconfigurationpath)) {
+    throw new ArgumentException("External Configuration Path must exist and be accessible to the Configuration Manager");
+}
+builder.Configuration.AddJsonFile(externalconfigurationpath);
 
 // JWT Key must be accessible to the Configuration Manager
 string? jwtkey = builder.Configuration["Jwt:Key"];
@@ -82,16 +84,6 @@ services.AddMvc();
 Assembly DashboardAssembly = typeof(DNA3.Controllers.DashboardController).GetTypeInfo().Assembly;
 AssemblyPart DashboardPart = new(DashboardAssembly);
 services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(DashboardPart));
-
-// PDF Assembly Part
-Assembly PDFAssembly = typeof(PDF.Controllers.HomeController).GetTypeInfo().Assembly;
-AssemblyPart PDFPart = new(PDFAssembly);
-services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(PDFPart));
-
-// SMO Assembly Part
-Assembly SMOAssembly = typeof(SMO.Controllers.HomeController).GetTypeInfo().Assembly;
-AssemblyPart SMOPart = new(SMOAssembly);
-services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(SMOPart));
 
 // Cookie Authentication
 //
@@ -179,9 +171,9 @@ services.AddSession(options => {
 services.AddDataProtection();
 
 // Other Services
+services.AddHttpClient();
 services.AddScoped<DNA3.Classes.IAuth, DNA3.Classes.Auth>();
 services.AddScoped<DNA3.Classes.ITools, DNA3.Classes.Tools>();
-services.AddScoped<Utilities.IHttp, Utilities.Http>();
 services.AddScoped<IDNATools, DNATools>();
 services.AddHttpContextAccessor();
 
@@ -236,8 +228,12 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions {
 });
 
 // Services
+
+
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+
 //if (Directory.Exists(@"C:\Virtual\Homeowners")) {
 //    app.UseStaticFiles(new StaticFileOptions {
 //        FileProvider = new PhysicalFileProvider(@"C:\Virtual\Homeowners"),

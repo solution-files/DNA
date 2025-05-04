@@ -67,7 +67,7 @@
 			<partial name="_Messages" />
 			<div class="row">
 				<!-- left column -->
-				<div class="col-md-6">
+				<div class="col-md-7">
 					<partial name="_Messages" />
 					<!-- general form elements -->
 					<div class="card card-primary">
@@ -92,9 +92,9 @@
 								<button asp-area="Dashboard" asp-controller="Client" asp-action="Verify" form="Master" class="btn btn-tool btn-sm">
 									<i class="fas fa-envelope" title="Verify Address"></i>
 								</button>
-								<a asp-action="Index" class="btn btn-tool btn-sm">
+								<button asp-action="Close" form="Master" class="btn btn-tool btn-sm">
 									<i class="fas fa-xmark" title="Close"></i>
-								</a>
+								</button>
 							</div>
 						</div>
 						<!-- /.card-header -->

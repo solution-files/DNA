@@ -23,13 +23,11 @@
 .iconpicker-popover.popover.topLeft,
 .iconpicker-popover.popover.topRight,
 .iconpicker-popover.popover.topRightCorner {
-  opacity: 1;
   margin-top: -10px;
 }
 .iconpicker-popover.popover.right,
 .iconpicker-popover.popover.rightTop,
 .iconpicker-popover.popover.rightBottom {
-  opacity: 1;
   margin-left: 10px;
 }
 .iconpicker-popover.popover.bottom,
@@ -37,13 +35,11 @@
 .iconpicker-popover.popover.bottomRight,
 .iconpicker-popover.popover.bottomLeft,
 .iconpicker-popover.popover.bottomLeftCorner {
-  opacity: 1;
   margin-top: 10px;
 }
 .iconpicker-popover.popover.left,
 .iconpicker-popover.popover.leftBottom,
 .iconpicker-popover.popover.leftTop {
-  opacity: 1;
   margin-left: -10px;
 }
 .iconpicker-popover.popover.inline {

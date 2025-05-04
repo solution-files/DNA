@@ -18,7 +18,7 @@ namespace DNA3.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS")
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -96,8 +96,7 @@ namespace DNA3.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("Weight")
-                        .IsRequired()
+                    b.Property<int>("Weight")
                         .HasColumnType("int");
 
                     b.HasKey("ActionId");
@@ -150,8 +149,7 @@ namespace DNA3.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArticleId"), 10000L);
 
-                    b.Property<int?>("CategoryId")
-                        .IsRequired()
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Date")
@@ -176,16 +174,13 @@ namespace DNA3.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("PageId")
-                        .IsRequired()
+                    b.Property<int>("PageId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SectionId")
-                        .IsRequired()
+                    b.Property<int>("SectionId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StatusId")
-                        .IsRequired()
+                    b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("Subject")
@@ -400,8 +395,7 @@ namespace DNA3.Migrations
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("Date")
-                        .IsRequired()
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime");
 
                     b.Property<int?>("StatusId")
@@ -573,8 +567,7 @@ namespace DNA3.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("StatusId")
-                        .IsRequired()
+                    b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("Zip")
@@ -884,16 +877,14 @@ namespace DNA3.Migrations
                     b.Property<DateTime?>("CommentDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("CustomerId")
-                        .IsRequired()
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .IsRequired()
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("CustomerCommentId");
@@ -1006,12 +997,10 @@ namespace DNA3.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeviceserviceId"));
 
-                    b.Property<int?>("DeviceId")
-                        .IsRequired()
+                    b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ServiceId")
-                        .IsRequired()
+                    b.Property<int>("ServiceId")
                         .HasColumnType("int");
 
                     b.HasKey("DeviceserviceId");
@@ -1087,8 +1076,7 @@ namespace DNA3.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int?>("StatusId")
-                        .IsRequired()
+                    b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("Zip")
@@ -1304,8 +1292,7 @@ namespace DNA3.Migrations
                     b.Property<decimal?>("Price")
                         .HasColumnType("numeric(10, 2)");
 
-                    b.Property<int?>("ProductId")
-                        .IsRequired()
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("Quantity")
@@ -1579,8 +1566,7 @@ namespace DNA3.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NoteId"), 10000L);
 
-                    b.Property<int?>("CustomerId")
-                        .IsRequired()
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -1611,8 +1597,7 @@ namespace DNA3.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("Date")
-                        .IsRequired()
+                    b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
                         .HasDefaultValueSql("(getdate())");
@@ -1678,8 +1663,7 @@ namespace DNA3.Migrations
                     b.Property<decimal?>("Price")
                         .HasColumnType("numeric(10, 2)");
 
-                    b.Property<int?>("StatusId")
-                        .IsRequired()
+                    b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("Target")
@@ -1706,7 +1690,6 @@ namespace DNA3.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"), 10000L);
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
@@ -1721,8 +1704,6 @@ namespace DNA3.Migrations
                         .HasColumnType("nvarchar(300)");
 
                     b.HasKey("ProjectId");
-
-                    b.HasIndex("StatusId");
 
                     b.ToTable("Project");
                 });
@@ -1945,12 +1926,10 @@ namespace DNA3.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("PartNumber")
-                        .IsRequired()
+                    b.Property<int>("PartNumber")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("Price")
-                        .IsRequired()
+                    b.Property<decimal>("Price")
                         .HasColumnType("numeric(10, 2)");
 
                     b.Property<string>("Unit")
@@ -1997,8 +1976,7 @@ namespace DNA3.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SectionId"), 10000L);
 
-                    b.Property<int?>("Columns")
-                        .IsRequired()
+                    b.Property<int>("Columns")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Date")
@@ -2013,8 +1991,7 @@ namespace DNA3.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("Limit")
-                        .IsRequired()
+                    b.Property<int>("Limit")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -2227,26 +2204,22 @@ namespace DNA3.Migrations
                     b.Property<int?>("AssetId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ClientId")
-                        .IsRequired()
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FacilityId")
-                        .IsRequired()
+                    b.Property<int>("FacilityId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Finish")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime?>("Start")
-                        .IsRequired()
+                    b.Property<DateTime>("Start")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("TaskId")
-                        .IsRequired()
+                    b.Property<int>("TaskId")
                         .HasColumnType("int");
 
                     b.HasKey("TicketId");
@@ -2384,8 +2357,7 @@ namespace DNA3.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int?>("StatusId")
-                        .IsRequired()
+                    b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("Zip")
@@ -2411,12 +2383,10 @@ namespace DNA3.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WorkorderId"), 10000L);
 
-                    b.Property<int?>("AssociateId")
-                        .IsRequired()
+                    b.Property<int>("AssociateId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CustomerId")
-                        .IsRequired()
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -2481,12 +2451,10 @@ namespace DNA3.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .IsRequired()
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WorkorderId")
-                        .IsRequired()
+                    b.Property<int>("WorkorderId")
                         .HasColumnType("int");
 
                     b.HasKey("WorkorderCommentId");
@@ -2904,17 +2872,6 @@ namespace DNA3.Migrations
                 });
 
             modelBuilder.Entity("DNA3.Models.Product", b =>
-                {
-                    b.HasOne("DNA3.Models.Status", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("DNA3.Models.Project", b =>
                 {
                     b.HasOne("DNA3.Models.Status", "Status")
                         .WithMany()

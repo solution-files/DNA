@@ -1,9 +1,11 @@
 ﻿#region Usings
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.SqlServer.Management.Smo;
 using MimeKit;
 using Serilog;
 using SMO.Models;
@@ -44,11 +46,11 @@ namespace SMO.Controllers {
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public IActionResult Index() {
-            List<Backup> files = new();
+            List<SMO.Models.Backup> files = new();
             try {
-                string[] f = Directory.GetFiles(@Configuration["SMOSettings:BackupStoragePath"], "*.bak");
+                string[] f = Directory.GetFiles(Path.Combine(Utilities.FileServer.GetUNCPath("/private/backups"), @Configuration["SMOSettings:BackupStoragePath"]), "*.bak");
                 foreach (string file in f) {
-                    files.Add(new Backup { FileName = Path.GetFileName(file) });
+                    files.Add(new SMO.Models.Backup { FileName = Path.GetFileName(file) });
                 }
                 files = files.OrderByDescending(x => x.FileName).ToList();
             } catch (Exception ex) {
@@ -74,11 +76,11 @@ namespace SMO.Controllers {
         // Stream (Post)
         [HttpGet, HttpPost]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public IActionResult Stream([FromBody] IList<Backup> backups) {
+        public IActionResult Stream([FromBody] IList<SMO.Models.Backup> backups) {
             string path = @Configuration["SMOSettings:BackupStoragePath"];
             string filePath = "";
             try {
-                foreach(Backup b in backups) {
+                foreach(SMO.Models.Backup b in backups) {
                     Response.Headers.Clear();
                     filePath = $@"{path}{b.FileName}";
                     Response.Headers["Content-Disposition"] = @$"attachment;filename={filePath}";

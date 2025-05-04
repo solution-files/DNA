@@ -39,7 +39,7 @@
 
 	<!--====== Favicon Icon ======-->
 	<link rel="shortcut icon"
-		  href="@Configuration["Theme:Path"]/assets/images/favicon.svg"
+		  href="assets/images/favicon.svg"
 		  type="image/svg" />
 
     <!--====== Syncfusion =======-->
@@ -47,10 +47,14 @@
     <script src="https://cdn.syncfusion.com/ej2/23.2.7/dist/ej2.min.js"></script>
 
 	<!-- ===== Other CSS files ===== -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/css/bootstrap.min.css" />
+@* 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-	<link rel="stylesheet" href="https://cdn.lineicons.com/3.0/lineicons.css" />
-	<link rel="stylesheet" href="@Configuration["Theme:Path"]/assets/css/ud-styles.css" />
+	<link rel="stylesheet" href="https://cdn.lineicons.com/3.0/lineicons.css" /> *@	
+ 
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/animate.min.css" />
+    <link rel="stylesheet" href="assets/css/lineicons.css" />
+    <link rel="stylesheet" href="assets/css/ud-styles.css" />
 
 	<!-- ===== Page Specific Files ===== -->
 	@RenderSection("CSS", required: false)
@@ -64,7 +68,7 @@
 				<div class="col-lg-12">
 					<nav class="navbar navbar-expand-lg">
 						<a class="navbar-brand" href="/">
-							<img src="@Configuration["Theme:Path"]/assets/images/logo/logo.svg" alt="Logo" />
+							<img src="assets/images/logo/logo.svg" alt="Logo" />
 						</a>
 						<button class="navbar-toggler">
 							<span class="toggler-icon"> </span>
@@ -168,13 +172,13 @@
 	<!-- ====== Footer Start ====== -->
 	<footer class="ud-footer wow fadeInUp" data-wow-delay=".15s">
 		<div class="shape shape-1">
-			<img src="@Configuration["Theme:Path"]/assets/images/footer/shape-1.svg" alt="shape" />
+			<img src="assets/images/footer/shape-1.svg" alt="shape" />
 		</div>
 		<div class="shape shape-2">
-			<img src="@Configuration["Theme:Path"]/assets/images/footer/shape-2.svg" alt="shape" />
+			<img src="assets/images/footer/shape-2.svg" alt="shape" />
 		</div>
 		<div class="shape shape-3">
-			<img src="@Configuration["Theme:Path"]/assets/images/footer/shape-3.svg" alt="shape" />
+			<img src="assets/images/footer/shape-3.svg" alt="shape" />
 		</div>
 		<div class="ud-footer-widgets">
 			<div class="container">
@@ -220,7 +224,7 @@
 									<a href="https://ayroui.com/"
 									   rel="nofollow noopner"
 									   target="_blank">
-										<img src="@Configuration["Theme:Path"]/assets/images/footer/brands/ayroui.svg"
+										<img src="assets/images/footer/brands/ayroui.svg"
 											 alt="ayroui" />
 									</a>
 								</li>
@@ -228,7 +232,7 @@
 									<a href="https://ecommercehtml.com/"
 									   rel="nofollow noopner"
 									   target="_blank">
-										<img src="@Configuration["Theme:Path"]/assets/images/footer/brands/ecommerce-html.svg"
+										<img src="assets/images/footer/brands/ecommerce-html.svg"
 											 alt="ecommerce-html" />
 									</a>
 								</li>
@@ -236,7 +240,7 @@
 									<a href="https://graygrids.com/"
 									   rel="nofollow noopner"
 									   target="_blank">
-										<img src="@Configuration["Theme:Path"]/assets/images/footer/brands/graygrids.svg"
+										<img src="assets/images/footer/brands/graygrids.svg"
 											 alt="graygrids" />
 									</a>
 								</li>
@@ -244,7 +248,7 @@
 									<a href="https://lineicons.com/"
 									   rel="nofollow noopner"
 									   target="_blank">
-										<img src="@Configuration["Theme:Path"]/assets/images/footer/brands/lineicons.svg"
+										<img src="assets/images/footer/brands/lineicons.svg"
 											 alt="lineicons" />
 									</a>
 								</li>
@@ -252,7 +256,7 @@
 									<a href="https://uideck.com/"
 									   rel="nofollow noopner"
 									   target="_blank">
-										<img src="@Configuration["Theme:Path"]/assets/images/footer/brands/uideck.svg"
+										<img src="assets/images/footer/brands/uideck.svg"
 											 alt="uideck" />
 									</a>
 								</li>
@@ -260,7 +264,7 @@
 									<a href="https://tailwindtemplates.co/"
 									   rel="nofollow noopner"
 									   target="_blank">
-										<img src="@Configuration["Theme:Path"]/assets/images/footer/brands/tailwindtemplates.svg"
+										<img src="assets/images/footer/brands/tailwindtemplates.svg"
 											 alt="tailwindtemplates" />
 									</a>
 								</li>
@@ -334,7 +338,7 @@
 	<!-- ====== All Javascript Files ====== -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
-	<script src="@Configuration["Theme:Path"]/assets/js/main.js"></script>
+	<script src="assets/js/main.js"></script>
 
 	@RenderSection("Scripts", required: false)
 	<script>

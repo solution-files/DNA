@@ -1,0 +1,80 @@
+﻿@using Syncfusion.EJ2.Inputs
+@using Syncfusion.EJ2
+@using System.Text.Json;
+
+@{
+    Layout = "_Dashboard";
+    string Title = "Assistant";
+    string Plural = "Assistant";
+}
+@section CSS {
+
+}
+@section Scripts {
+
+    <script>
+        function onQuery(args) {
+            fetch('/Assistant/GetGeminiResponse', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt: args.prompt })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                var aiAssistant = document.getElementById('aiAssistant').ej2_instances[0];
+                aiAssistant.addPromptResponse(data);
+            })
+            .catch(error => {
+                console.error('Error fetching Gemini response:', error);
+                var aiAssistant = document.getElementById('aiAssistant').ej2_instances[0];
+                aiAssistant.addMessage({ text: 'Sorry, I encountered an error.', type: 'Bot' });
+            });
+        }
+    </script>
+
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>@Title Manager</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item active">@Title Manager</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <partial name="_Messages" />
+        <div class="card card-primary">
+            <div class="card-header border-0">
+                <h3 class="card-title">@Plural</h3>
+                @await Html.PartialAsync("_Tools", new { Report = "Schedule.rdl" })
+            </div>
+            <div class="card-body">
+                <h3>Overview</h3>
+                <p>Gemini content will appear in this area, styled using the current theme.</p>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- /.content-wrapper -->
+<!-- Report Options Dialog -->
+<partial name="_Options" />

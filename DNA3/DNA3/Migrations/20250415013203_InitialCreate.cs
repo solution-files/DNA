@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DNA3.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateTables : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -237,6 +237,22 @@ namespace DNA3.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Page", x => x.PageId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Project",
+                columns: table => new
+                {
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "10000, 1"),
+                    Date = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StatusId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Project", x => x.ProjectId);
                 });
 
             migrationBuilder.CreateTable(
@@ -746,28 +762,6 @@ namespace DNA3.Migrations
                     table.PrimaryKey("PK_Product", x => x.ProductId);
                     table.ForeignKey(
                         name: "FK_Product_Status_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Status",
-                        principalColumn: "StatusId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Project",
-                columns: table => new
-                {
-                    ProjectId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "10000, 1"),
-                    Date = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Subject = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Project", x => x.ProjectId);
-                    table.ForeignKey(
-                        name: "FK_Project_Status_StatusId",
                         column: x => x.StatusId,
                         principalTable: "Status",
                         principalColumn: "StatusId",
@@ -1684,11 +1678,6 @@ namespace DNA3.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Product_StatusId",
                 table: "Product",
-                column: "StatusId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Project_StatusId",
-                table: "Project",
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(

@@ -2,6 +2,8 @@
 
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,27 +28,28 @@ namespace DNA3.Controllers {
         private readonly IConfiguration Configuration;
         private readonly MainContext Context;
         private readonly ILogger<ClientController> Logger;
+        private readonly IHttpContextAccessor HttpContextAccessor;
         private readonly string Title = "Client";
+        private readonly string returnUrl;
 
         #endregion
 
         #region Class Methods and Events
 
         // Constructor
-        public ClientController(IConfiguration configuration, MainContext context, ILogger<ClientController> logger) {
-
+        public ClientController(IConfiguration configuration, MainContext context, ILogger<ClientController> logger, IHttpContextAccessor httpcontextaccessor) {
             Configuration = configuration;
             Context = context;
             Logger = logger;
-
+            HttpContextAccessor = httpcontextaccessor;
         }
 
-		#endregion
+        #endregion
 
-		#region Controller Actions
+        #region Controller Actions
 
-		// Index
-		[ApiExplorerSettings(IgnoreApi = true)]
+        // Index
+        [ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> Index() {
             string message;
@@ -57,7 +60,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index", "Dashboard");
         }
@@ -66,7 +69,8 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public IActionResult New() {
-            Client client = new Client();
+            Client client = new();
+            HttpContextAccessor.HttpContext.Session.SetString("clientReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
             return View("Detail", client);
         }
 
@@ -74,12 +78,13 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> Edit(int? id) {
-            Client client = new Client();
+            Client client = new();
             try {
                 client = await Context.Client.FindAsync(id);
+                HttpContextAccessor.HttpContext.Session.SetString("clientReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
 			ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
             ViewData["Users"] = await Context.User.Include(x => x.Role).Include(x => x.Status).Where(x => x.ClientId == User.ClientId()).OrderBy(x => x.First).OrderBy(x => x.Last).ToListAsync();
@@ -124,7 +129,7 @@ namespace DNA3.Controllers {
                 }
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
 			ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
 			ViewData["Users"] = await Context.User.Include(x => x.Role).Include(x => x.Status).Where(x => x.ClientId == User.ClientId()).OrderBy(x => x.First).OrderBy(x => x.Last).ToListAsync();
@@ -136,12 +141,11 @@ namespace DNA3.Controllers {
         [ValidateAntiForgeryToken]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Delete(Client instance) {
-            string message = "";
             try {
                 if (instance == null) {
                     throw new Exception($"{Title} not found. It may have been deleted by another user.");
                 }
-                message = $"Deleted {Title} ({instance.ClientId})";
+                string message = $"Deleted {Title} ({instance.ClientId})";
                 Context.Client.Remove(instance);
                 await Context.SaveChangesAsync();
                 Site.Messages.Enqueue(message);
@@ -149,7 +153,7 @@ namespace DNA3.Controllers {
                 return RedirectToAction("Index");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return View("Detail", instance);
         }
@@ -159,7 +163,6 @@ namespace DNA3.Controllers {
         [ValidateAntiForgeryToken]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Clean(Client instance) {
-            string message = "";
             try {
                 if (instance == null) {
                     throw new Exception($"{Title} not found. It may have been deleted by another user.");
@@ -168,13 +171,13 @@ namespace DNA3.Controllers {
                 await Context.Database.ExecuteSqlInterpolatedAsync($"DELETE [User] FROM [User] AS u WHERE u.ClientId = {instance.ClientId}");
                 Context.Client.Remove(instance);
                 await Context.SaveChangesAsync();
-                message = $"Deleted Client ({instance.ClientId}) with Users and Identites";
+                string message = $"Deleted Client ({instance.ClientId}) with Users and Identites";
                 Site.Messages.Enqueue(message);
                 Log.Logger.ForContext("UserId", User.UserId()).Warning(message);
                 return RedirectToAction("Index");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return View("Detail", instance);
         }
@@ -186,7 +189,7 @@ namespace DNA3.Controllers {
         public async Task<IActionResult> Verify(Client instance) {
             string message;
             try {
-                USPSAddress request = new USPSAddress {
+                USPSAddress request = new() {
                     Address1 = instance.Address1,
                     City = instance.City,
                     State = instance.State,
@@ -203,17 +206,41 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
             ViewData["Users"] = await Context.User.Include(x => x.Role).Include(x => x.Status).Where(x => x.ClientId == User.ClientId()).OrderBy(x => x.First).OrderBy(x => x.Last).ToListAsync();
             return View("Detail", instance);
-        } 
-        
+        }
+
         // Close
+        [HttpGet, HttpPost]
+        [Authorize(Policy = "Users")]
         [ApiExplorerSettings(IgnoreApi = true)]
-		[HttpGet]
-		public IActionResult Close() {
+        public IActionResult Close() {
+            string message;
+            try {
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
+            } catch (Exception ex) {
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
+            }
+            return RedirectPermanent(HttpContextAccessor.HttpContext.Session.GetString("clientReturnUrl"));
+        }
+
+        // Close Index
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet, HttpPost]
+        public IActionResult CloseIndex() {
+            string message;
+            try {
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
+            } catch (Exception ex) {
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
+            }
             return RedirectToAction("Index", "Dashboard");
         }
 

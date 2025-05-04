@@ -21,12 +21,9 @@ namespace DNA3.Models {
 
         [Display(Name = "Subject")]
         [Required(ErrorMessage = "{0} cannot be blank")]
-        [MinLength(10, ErrorMessage = "{0} must be at least {1} characters long")]
         public string Subject { get; set; }
 
         [Display(Name = "Content")]
-        [Required(ErrorMessage = "{0} cannot be blank")]
-        [MinLength(10, ErrorMessage = "{0} must be at least {1} characters long")]
         public string Content { get; set; }
 
         [Display(Name = "Status")]
@@ -35,7 +32,7 @@ namespace DNA3.Models {
 
         #endregion
 
-        #region Navigation Properties (Not allowed in this Model. Use a separate View Model for reports, etc.)
+        #region Navigation Properties
 
         #endregion
 
