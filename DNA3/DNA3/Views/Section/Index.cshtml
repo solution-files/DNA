@@ -78,10 +78,10 @@
                     <ejs-grid id="SectionGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" rowSelected="SectionGridRowSelected">
                         <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
                         <e-grid-columns>
-                            <e-grid-column field="Name" headerText="Name" width="120"></e-grid-column>
                             <e-grid-column field="Page.Name" headerText="Page" textAlign="Left" width="120"></e-grid-column>
-                            <e-grid-column field="Slug" headerText="Slug" textAlign="Left" width="120"></e-grid-column>
-                            <e-grid-column field="Date" headerText="Date" customFormat="@(new { type = "date", format = "MM/dd/yyyy" })" width="120"></e-grid-column>
+                            <e-grid-column field="Name" headerText="Name" width="120" hideAtMedia="(min-width:800px)"></e-grid-column>
+                            <e-grid-column field="Slug" headerText="Slug" textAlign="Left" width="120" hideAtMedia="(min-width:800px)"></e-grid-column>
+                            <e-grid-column field="Date" headerText="Date" customFormat="@(new { type = "date", format = "MM/dd/yyyy" })" width="120" hideAtMedia="(min-width:800px)"></e-grid-column>
                             <e-grid-column field="Subject" headerText="Subject" textAlign="Left"></e-grid-column>
                         </e-grid-columns>
                     </ejs-grid>

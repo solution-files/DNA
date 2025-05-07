@@ -1,0 +1,6 @@
+Appointment Scheduler
+
+If the Appointment Scheduler had configurable sources, then a dropdown list could be provided such that
+each source could be displayed in a different color so conflicts between types could be detected
+and avoided. This would also be useful for determining when staff are available for corporate meetings and training
+activities.

@@ -39,7 +39,7 @@
 					<!-- general form elements -->
 					<div class="card card-primary">
 						<div class="card-header">
-							<h3 class="card-title">@Title</h3>
+                            <h3 class="card-title">@Title</h3>
 							<div class="card-tools">
 								<button asp-action="Save" form="Master" class="btn btn-tool btn-sm">
 									<i class="far fa-floppy-disk" title="Save"></i>
@@ -50,7 +50,7 @@
 								<a href="/report/viewer.html?Report=Role.rdl" class="btn btn-tool btn-sm" target="_blank">
 									<i class="fas fa-print" title="Print"></i>
 								</a>
-								<a asp-action="Index" class="btn btn-tool btn-sm">
+								<a asp-action="Close" class="btn btn-tool btn-sm">
 									<i class="fas fa-xmark" title="Close"></i>
 								</a>
 							</div>
@@ -60,16 +60,14 @@
 						<form asp-action="#" id="Master">
 							<div class="card-body">
 								<div class="row mb-0">
-									<div class="col">
+									<div class="col-md-6">
 										<div class="form-group">
 											<label asp-for="Code">@Html.DisplayNameFor(x => x.Code)</label>
-											<input asp-for="Code" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Code)">
+											<input asp-for="Code" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Code)" autofocus>
 											<span asp-validation-for="Code" class="text-danger small"></span>
 										</div>
 									</div>
-								</div>
-								<div class="row mb-0">
-									<div class="col">
+									<div class="col-md-6">
 										<div class="form-group">
 											<label asp-for="Name">@Html.DisplayNameFor(x => x.Name)</label>
 											<input asp-for="Name" class="form-control" placeholder="@Html.DisplayNameFor(x => x.Name)">

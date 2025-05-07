@@ -1,8 +1,8 @@
 ﻿#region Usings
 
-using DNA3.Classes;
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,33 +18,23 @@ using Utilities;
 namespace DNA3.Controllers {
 
     [Authorize(Policy = "Administrators")]
-    public class StatusController : Controller {
+    public class StatusController(IConfiguration configuration, MainContext context, ILogger<StatusController> logger, IHttpContextAccessor httpContextAccessor) : Controller {
 
         #region Variables
 
         // Variables
-        private readonly IConfiguration Configuration;
-        private readonly MainContext Context;
-        private readonly ILogger<StatusController> Logger;
+        private readonly IConfiguration Configuration = configuration;
+        private readonly MainContext Context = context;
+        private readonly ILogger<StatusController> Logger = logger;
+        private readonly IHttpContextAccessor HttpContextAccessor = httpContextAccessor;
         private readonly string Title = "Status";
 
         #endregion
 
-        #region Class Methods
+        #region Controller Actions
 
-        // Constructor
-        public StatusController(IConfiguration configuration, MainContext context, ILogger<StatusController> logger) {
-            Configuration = configuration;
-            Context = context;
-            Logger = logger;
-        }
-
-		#endregion
-
-		#region Controller Actions
-
-		// Index
-		[ApiExplorerSettings(IgnoreApi = true)]
+        // Index
+        [ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> Index() {
             string message;
@@ -55,7 +45,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index", "Dashboard");
         }
@@ -64,13 +54,14 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> NewAsync() {
-            Status instance = new Status();
+            Status instance = new();
             try {
+                HttpContextAccessor.HttpContext.Session.SetString("statusReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             ViewBag.TableList = await Context.Table.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
@@ -80,13 +71,14 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> Edit(int? id) {
-            DNA3.Models.Status instance = new DNA3.Models.Status();
+            DNA3.Models.Status instance = new();
             try {
                 instance = await Context.Status.FindAsync(id);
+                HttpContextAccessor.HttpContext.Session.SetString("statusReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.StatusId})");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             ViewBag.TableList = await Context.Table.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
@@ -114,7 +106,7 @@ namespace DNA3.Controllers {
                 }
             } catch (Exception ex) {
                 message = ex.Message;
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             ViewBag.TableList = await Context.Table.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
@@ -138,25 +130,41 @@ namespace DNA3.Controllers {
                 return RedirectToAction("Index");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             ViewBag.TableList = await Context.Table.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
         }
 
-		// Close
-		[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpGet]
-		public IActionResult Close() {
+        // Close
+        [HttpGet, HttpPost]
+        [Authorize(Policy = "Users")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public IActionResult Close() {
             string message;
             try {
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
-            return RedirectToAction("Index");
+            return RedirectPermanent(HttpContextAccessor.HttpContext.Session.GetString("statusReturnUrl"));
+        }
+
+        // Close Index
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet, HttpPost]
+        public IActionResult CloseIndex() {
+            string message;
+            try {
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
+            } catch (Exception ex) {
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
+            }
+            return RedirectToAction("Index", "Dashboard");
         }
 
     }

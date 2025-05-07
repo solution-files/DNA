@@ -20,71 +20,57 @@ using Utilities;
 
 namespace DNA3.Controllers {
 
-	public class FeaturesController : Controller {
+	public class FeaturesController(MainContext context, ApplicationPartManager partmanager, ILogger<FeaturesController> logger, ITools tools) : Controller {
 
         #region Variables
 
-        private readonly ApplicationPartManager PartManager;
-        private readonly ILogger<FeaturesController> Logger;
-        private readonly MainContext Context;
-        private readonly ITools Tools;
+        private readonly ApplicationPartManager PartManager = partmanager;
+        private readonly ILogger<FeaturesController> Logger = logger;
+        private readonly MainContext Context = context;
+        private readonly ITools Tools = tools;
         private readonly string Title = "Feature";
 
         #endregion
 
-        #region Class Events
+        #region Controller Actions
 
-        // Constructor
-        public FeaturesController(MainContext context, ApplicationPartManager partmanager, ILogger<FeaturesController> logger, ITools tools) {
-            Context = context;
-            PartManager = partmanager;
-            Logger = logger;
-            Tools = tools;
-        }
-
-		#endregion
-
-		#region Controller Actions
-
-		[ApiExplorerSettings(IgnoreApi = true)]
+        [ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
         public async Task<IActionResult> IndexAsync() {
-            FeaturesView ViewModel = new FeaturesView();
+            FeaturesView ViewModel = new();
             try {
 
                 // Features Page
                 ViewModel.FeaturesPage = await Context.Page.Where(x => x.Name == "Features").SingleOrDefaultAsync();
                 ViewModel.FeaturesSection = await Context.Section.Where(x => x.Name == "Features Section").SingleOrDefaultAsync();
-                if (ViewModel.FeaturesPage == null) {
-                    ViewModel.FeaturesPage = new Page {
+                ViewModel.FeaturesPage ??= new Page {
                         Subject = "Application Features",
                         Content = "Through the use of the application parts functionality of ASP.NET Core, Models, Views, and Controllers can be added via separate Projects. In this fashion, applications can be constructed to stand-alone or function as a part of a much larger solution."
                     };
-                }
 
                 // Assemblies
                 ViewModel.Assemblies = Tools.GetAssemblyList();
 
                 // Controllers
-                ControllerFeature ControllerFeature = new ControllerFeature();
+                ControllerFeature ControllerFeature = new();
                 PartManager.PopulateFeature(ControllerFeature);
-                ViewModel.Controllers = ControllerFeature.Controllers.OrderBy(x => x.Name).ToList();
+                ViewModel.Controllers = [.. ControllerFeature.Controllers.OrderBy(x => x.Name)];
 
                 // Tag Helpers
-                TagHelperFeature TagHelperFeature = new TagHelperFeature();
+                TagHelperFeature TagHelperFeature = new();
                 PartManager.PopulateFeature(TagHelperFeature);
-                ViewModel.TagHelpers = TagHelperFeature.TagHelpers.Where(x => !x.Namespace.Contains("Kendo") && !x.Namespace.Contains("Microsoft") && !x.Namespace.Contains("Syncfusion") && !x.Name.Contains("__")).OrderBy(x => x.Name).ToList();
+                ViewModel.TagHelpers = [.. TagHelperFeature.TagHelpers.Where(x => !x.Namespace.Contains("Kendo") && !x.Namespace.Contains("Microsoft") && !x.Namespace.Contains("Syncfusion") && !x.Name.Contains("__")).OrderBy(x => x.Name)];
 
                 // View Components
-                ViewComponentFeature ViewComponentFeature = new ViewComponentFeature();
+                ViewComponentFeature ViewComponentFeature = new();
                 PartManager.PopulateFeature(ViewComponentFeature);
-                ViewModel.ViewComponents = ViewComponentFeature.ViewComponents.ToList();
+                ViewModel.ViewComponents = [.. ViewComponentFeature.ViewComponents];
 
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} List");
 
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return View(ViewModel);
         }

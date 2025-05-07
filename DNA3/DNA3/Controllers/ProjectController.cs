@@ -1,9 +1,9 @@
 ﻿#region Usings
 
-using BoldReports;
 using DNA3.Classes;
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -21,28 +21,17 @@ using Utilities;
 namespace DNA3.Controllers {
 
     [Authorize(Policy = "Users")]
-    public class ProjectController : Controller {
+    public class ProjectController(IConfiguration configuration, MainContext context, ILogger<ProjectController> logger, IDNATools dnatools, IHttpContextAccessor httpContextAccessor) : Controller {
 
         #region Variables
 
         // Variables
-        private readonly IConfiguration Configuration;
-        private readonly MainContext Context;
-        private readonly ILogger<ProjectController> Logger;
-        private readonly IDNATools DNATools;
+        private readonly IConfiguration Configuration = configuration;
+        private readonly MainContext Context = context;
+        private readonly ILogger<ProjectController> Logger = logger;
+        private readonly IDNATools DNATools = dnatools;
+        private readonly IHttpContextAccessor HttpContextAccessor = httpContextAccessor;
         private readonly string Title = "Project";
-
-        #endregion
-
-        #region Class Methods
-
-        // Constructor
-        public ProjectController(IConfiguration configuration, MainContext context, ILogger<ProjectController> logger, IDNATools dnatools) {
-            Configuration = configuration;
-            Context = context;
-            Logger = logger;
-            DNATools = dnatools;
-        }
 
         #endregion
 
@@ -61,7 +50,7 @@ namespace DNA3.Controllers {
                 }
             } catch (Exception ex) {
                 message = ex.Message;
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return Json(instance.value);
         }
@@ -78,7 +67,7 @@ namespace DNA3.Controllers {
                 DataSource = operation.PerformTake(DataSource, dm.Take);
             }
             ViewBag.StatusList = Context.Status.OrderBy(x => x.Name).ToList();
-            return dm.RequiresCounts ? Json(new { result = DataSource, count = count }) : Json(DataSource);
+            return dm.RequiresCounts ? Json(new { result = DataSource, count }) : Json(DataSource);
         }
 
         // Update
@@ -92,7 +81,7 @@ namespace DNA3.Controllers {
                 }
             } catch(Exception ex) {
                 message = ex.Message;
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return Json(instance.value);
         }
@@ -108,7 +97,7 @@ namespace DNA3.Controllers {
                 }
             } catch (Exception ex) {
                 message = ex.Message;
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return Json(instance.value);
         }
@@ -130,7 +119,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index", "Dashboard");
         }
@@ -143,11 +132,12 @@ namespace DNA3.Controllers {
             try {
                 instance.Date = DateTime.Now;
                 instance.StatusId = await DNATools.GetStatusKeyValue("Active");
+                HttpContextAccessor.HttpContext.Session.SetString("projectReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
@@ -160,10 +150,11 @@ namespace DNA3.Controllers {
             Project instance = new();
             try {
                 instance = await Context.Project.FindAsync(id);
+                HttpContextAccessor.HttpContext.Session.SetString("projectReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.ProjectId})");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
@@ -191,7 +182,7 @@ namespace DNA3.Controllers {
                 }
             } catch (Exception ex) {
                 message = ex.Message;
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
@@ -215,7 +206,7 @@ namespace DNA3.Controllers {
                 return RedirectToAction("Index");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
@@ -226,8 +217,9 @@ namespace DNA3.Controllers {
         #region Common Actions
 
         // Close
+        [HttpGet, HttpPost]
+        [Authorize(Policy = "Users")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        [HttpGet]
         public IActionResult Close() {
             string message;
             try {
@@ -235,7 +227,22 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
+            }
+            return RedirectPermanent(HttpContextAccessor.HttpContext.Session.GetString("projectReturnUrl"));
+        }
+
+        // Close Index
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet, HttpPost]
+        public IActionResult CloseIndex() {
+            string message;
+            try {
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
+            } catch (Exception ex) {
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index", "Dashboard");
         }

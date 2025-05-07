@@ -57,7 +57,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index", "Dashboard");
         }
@@ -74,7 +74,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             ViewBag.RoleList = await Context.Role.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
@@ -90,7 +90,7 @@ namespace DNA3.Controllers {
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.ActionId})");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             ViewBag.RoleList = await Context.Role.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
@@ -118,7 +118,7 @@ namespace DNA3.Controllers {
                 }
             } catch (Exception ex) {
                 message = ex.Message;
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             ViewBag.RoleList = await Context.Role.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
@@ -142,7 +142,7 @@ namespace DNA3.Controllers {
                 return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("MenuId") });
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             ViewBag.RoleList = await Context.Role.OrderBy(x => x.Name).ToListAsync();
             return View("Detail", instance);
@@ -158,7 +158,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Edit", "Menu", new { id = HttpContext.Session.GetInt32("MenuId") });
         }

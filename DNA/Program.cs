@@ -85,6 +85,11 @@ Assembly DashboardAssembly = typeof(DNA3.Controllers.DashboardController).GetTyp
 AssemblyPart DashboardPart = new(DashboardAssembly);
 services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(DashboardPart));
 
+// Schedule Assembly Part
+Assembly ScheduleAssembly = typeof(Schedule.Controllers.HomeController).GetTypeInfo().Assembly;
+AssemblyPart SchedulePart = new(ScheduleAssembly);
+services.AddControllersWithViews().ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(SchedulePart));
+
 // Cookie Authentication
 //
 //services.AddAuthentication(options => {

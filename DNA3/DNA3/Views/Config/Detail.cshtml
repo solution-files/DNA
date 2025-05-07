@@ -1,4 +1,4 @@
-﻿@model AppSettings
+﻿@model DNA3.Models.AppSettings
 @{
 	Layout = "_Dashboard";
 	string Title = "Configuration";
@@ -113,9 +113,9 @@
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label asp-for="App.Url">@Html.DisplayNameFor(x => x.App.Url)</label>
-													<input asp-for="App.Url" class="form-control" placeholder="@Html.DisplayNameFor(x => x.App.Url)">
-													<span asp-validation-for="App.Url" class="text-danger small"></span>
+                                                    <label asp-for="App.URL">@Html.DisplayNameFor(x => x.App.URL)</label>
+                                                    <input asp-for="App.URL" class="form-control" placeholder="@Html.DisplayNameFor(x => x.App.URL)">
+                                                    <span asp-validation-for="App.URL" class="text-danger small"></span>
 												</div>
 											</div>
 											<div class="col-md-4">
@@ -185,8 +185,16 @@
 												</div>
 											</div>
 										</div>
-
-									</div>
+                                        <div class="row mb-0">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label asp-for="App.Configuration">@Html.DisplayNameFor(x => x.App.Configuration)</label>
+                                                    <input asp-for="App.Configuration" class="form-control" placeholder="@Html.DisplayNameFor(x => x.App.Configuration)">
+                                                    <span asp-validation-for="App.Configuration" class="text-danger small"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
 									<div class="tab-pane fade" id="corporation-content" role="tabpanel" aria-labelledby="corporation-content">
 

@@ -19,23 +19,13 @@ using Utilities;
 namespace DNA3.Controllers {
 
     [Authorize(Policy = "Users")]
-    public class CartController : Controller {
+    public class CartController(IConfiguration configuration, MainContext context, ILogger<CartController> logger) : Controller {
 
         #region Variables
 
-        private readonly IConfiguration Configuration;
-        private readonly MainContext Context;
-        private readonly ILogger<CartController> Logger;
-
-        #endregion
-
-        #region Class Methods
-
-        public CartController(IConfiguration configuration, MainContext context, ILogger<CartController> logger) {
-            Configuration = configuration;
-            Context = context;
-            Logger = logger;
-        }
+        private readonly IConfiguration Configuration = configuration;
+        private readonly MainContext Context = context;
+        private readonly ILogger<CartController> Logger = logger;
 
         #endregion
 
@@ -46,8 +36,9 @@ namespace DNA3.Controllers {
         [HttpGet, HttpPost]
         public async Task<IActionResult> IndexAsync() {
             string message;
-            Cart instance = new();
-            instance.Items = new List<Item>();
+            Cart instance = new() {
+                Items = []
+            };
             decimal? Total = 0;
             try {
                 string returnurl = HttpContext.Request.Query["ReturnUrl"].ToString();
@@ -58,15 +49,13 @@ namespace DNA3.Controllers {
                     }
                 }
                 ViewBag.Total = Total;
-                if (instance == null) {
-                    instance = new Cart {
-                        Items = new List<Item>()
+                instance ??= new Cart {
+                        Items = []
                     };
-                }
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View(instance);
         }
@@ -86,7 +75,7 @@ namespace DNA3.Controllers {
                         CartId = User.ClientId(),
                         UserId = User.UserId(),
                         Date = DateTime.Now,
-                        Items = new List<Item>()
+                        Items = []
                     };
                     Context.Cart.Add(cart);
                 }
@@ -110,7 +99,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index");
         }
@@ -132,7 +121,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index");
         }
@@ -150,7 +139,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index");
         }
@@ -165,7 +154,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index");
         }

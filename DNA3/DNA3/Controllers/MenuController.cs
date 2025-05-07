@@ -1,6 +1,5 @@
 ﻿#region Usings
 
-using DNA3.Classes;
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +26,7 @@ namespace DNA3.Controllers {
         private readonly IConfiguration Configuration;
 		private readonly MainContext Context;
 		private readonly ILogger<MenuController> Logger;
+        private readonly IHttpContextAccessor HttpContextAccessor;
         private readonly string Title = "Menu";
 
         #endregion
@@ -34,10 +34,11 @@ namespace DNA3.Controllers {
         #region Class Methods
 
         // Constructor
-        public MenuController(IConfiguration configuration, ILogger<MenuController> logger) {
+        public MenuController(IConfiguration configuration, ILogger<MenuController> logger, IHttpContextAccessor httpContextAccessor) {
             Configuration = configuration;
 			Context = new MainContext(new DbContextOptionsBuilder<MainContext>().Options, Configuration);
 			Logger = logger;
+            HttpContextAccessor = httpContextAccessor;
         }
 
 		#endregion
@@ -56,7 +57,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index", "Dashboard");
         }
@@ -65,13 +66,14 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public IActionResult New() {
-            Menu instance = new Menu();
+            Menu instance = new();
             try {
+                HttpContextAccessor.HttpContext.Session.SetString("menuReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View("Detail", instance);
         }
@@ -80,13 +82,14 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> Edit(int? id) {
-            Menu instance = new Menu();
+            Menu instance = new();
             try {
                 instance = await Context.Menu.FindAsync(id);
+                HttpContextAccessor.HttpContext.Session.SetString("menuReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.MenuId})");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return View("Detail", instance);
         }
@@ -113,7 +116,7 @@ namespace DNA3.Controllers {
                 }
             } catch (Exception ex) {
                 message = ex.Message;
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View("Detail", instance);
         }
@@ -137,22 +140,38 @@ namespace DNA3.Controllers {
                 return RedirectToAction("Index");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return View("Detail", instance);
         }
 
-		// Close
-		[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpGet]
-		public IActionResult Close() {
+        // Close
+        [HttpGet, HttpPost]
+        [Authorize(Policy = "Users")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public IActionResult Close() {
             string message;
             try {
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
+            }
+            return RedirectPermanent(HttpContextAccessor.HttpContext.Session.GetString("menuReturnUrl"));
+        }
+
+        // Close Index
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet, HttpPost]
+        public IActionResult CloseIndex() {
+            string message;
+            try {
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
+            } catch (Exception ex) {
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index", "Dashboard");
         }

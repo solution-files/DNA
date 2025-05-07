@@ -111,7 +111,7 @@
 									<div class="col-lg-6">
 										<div class="form-group">
 											<label asp-for="PageId" class="mr-2">@Html.DisplayNameFor(x => x.PageId)</label>
-											<a asp-controller="Page" asp-action="New" class="small mr-2">New</a><a asp-controller="Page" asp-action="Edit" asp-route-id="PageId" class="small">Edit</a>
+											<a asp-controller="Page" asp-action="New" class="small mr-2">New</a><a asp-controller="Page" asp-action="Edit" asp-route-id="@Model.PageId" class="small">Edit</a>
 											<select asp-for="PageId" class="form-control" asp-items="@(new SelectList(ViewBag.PageList, "PageId", "Name"))" placeholder="@Html.DisplayNameFor(model => model.PageId)" autocomplete="off" spellcheck="false"></select>
 											<span asp-validation-for="PageId" class="text-danger small"></span>
 										</div>

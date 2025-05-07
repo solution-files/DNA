@@ -2,9 +2,9 @@
 
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
@@ -16,24 +16,15 @@ using Utilities;
 namespace DNA3.Controllers {
 
     [Authorize(Policy = "Administrators")]
-    public class ReferenceController : Controller {
+    public class ReferenceController(MainContext context, ILogger<ReferenceController> logger, IHttpContextAccessor httpContextAccessor) : Controller {
 
         #region Variables
 
         // Variables
-        private readonly MainContext Context;
-        private readonly ILogger<ReferenceController> Logger;
+        private readonly MainContext Context = context;
+        private readonly ILogger<ReferenceController> Logger = logger;
+        private readonly IHttpContextAccessor HttpContextAccessor = httpContextAccessor;
         private readonly string Title = "Reference";
-
-        #endregion
-
-        #region Class Methods
-
-        // Constructor
-        public ReferenceController(MainContext context, ILogger<ReferenceController> logger) {
-            Context = context;
-            Logger = logger;
-        }
 
         #endregion
 
@@ -51,7 +42,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index", "Dashboard");
         }
@@ -60,13 +51,14 @@ namespace DNA3.Controllers {
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public IActionResult New() {
-            Reference instance = new Reference();
+            Reference instance = new();
             try {
+                HttpContextAccessor.HttpContext.Session.SetString("referenceReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View("Detail", instance);
         }
@@ -75,13 +67,14 @@ namespace DNA3.Controllers {
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public async Task<IActionResult> Edit(int? id) {
-            Reference instance = new Reference();
+            Reference instance = new();
             try {
                 instance = await Context.Reference.FindAsync(id);
+                HttpContextAccessor.HttpContext.Session.SetString("referenceReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.ReferenceId})");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return View("Detail", instance);
         }
@@ -108,7 +101,7 @@ namespace DNA3.Controllers {
                 }
             } catch (Exception ex) {
                 message = ex.Message;
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View("Detail", instance);
         }
@@ -131,14 +124,15 @@ namespace DNA3.Controllers {
                 return RedirectToAction("Index");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return View("Detail", instance);
         }
 
         // Close
+        [HttpGet, HttpPost]
+        [Authorize(Policy = "Users")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        [HttpGet]
         public IActionResult Close() {
             string message;
             try {
@@ -146,7 +140,22 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
+            }
+            return RedirectPermanent(HttpContextAccessor.HttpContext.Session.GetString("referenceReturnUrl"));
+        }
+
+        // Close Index
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet, HttpPost]
+        public IActionResult CloseIndex() {
+            string message;
+            try {
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
+            } catch (Exception ex) {
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index", "Dashboard");
         }

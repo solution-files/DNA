@@ -69,7 +69,7 @@
 		<div class="card card-primary">
 			<div class="card-header border-0">
 				<h3 class="card-title">@Plural</h3>
-				@await Html.PartialAsync("_Tools", new { Report = "Categories.rdl" })
+				@await Html.PartialAsync("_Tools", new { Report = "References.rdl" })
 			</div>
 			<div class="card-body">
 				@if (Model.Count() == 0) {
@@ -78,7 +78,7 @@
                     <ejs-grid id="ReferenceGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" rowSelected="PageGridRowSelected">
                         <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
                         <e-grid-columns>
-                            <e-grid-column field="ReferenceId" headerText="Reference" textAlign="Left" width="120"></e-grid-column>
+                            <e-grid-column field="ReferenceId" headerText="Reference" textAlign="Left" width="120" hideAtMedia="(min-width:800px)"></e-grid-column>
                             <e-grid-column field="Name" headerText="Name"></e-grid-column>
                         </e-grid-columns>
                     </ejs-grid>

@@ -1,17 +1,13 @@
 ﻿#region Usings
 
-using DNA3.Classes;
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Utilities;
 
 #endregion
@@ -54,7 +50,7 @@ namespace DNA3.Controllers {
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View();
 		}
@@ -69,7 +65,7 @@ namespace DNA3.Controllers {
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return RedirectToAction("Index", "Dashboard");
 		}

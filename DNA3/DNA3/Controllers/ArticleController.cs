@@ -3,6 +3,7 @@
 using DNA3.Classes;
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +19,7 @@ using Utilities;
 namespace DNA3.Controllers {
 
     [Authorize(Policy = "Administrators")]
-    public class ArticleController(IConfiguration configuration, MainContext context, ILogger<ArticleController> logger) : Controller {
+    public class ArticleController(IConfiguration configuration, MainContext context, ILogger<ArticleController> logger, IHttpContextAccessor httpContextAccessor) : Controller {
 
         #region Variables
 
@@ -26,6 +27,7 @@ namespace DNA3.Controllers {
         private readonly IConfiguration Configuration = configuration;
         private readonly MainContext Context = context;
         private readonly ILogger<ArticleController> Logger = logger;
+        private readonly IHttpContextAccessor HttpContextAccessor = httpContextAccessor;
         private readonly string Title = "Article";
 
         #endregion
@@ -55,7 +57,8 @@ namespace DNA3.Controllers {
 				instance ??= new Article {
                         Date = DateTime.Now
                     };
-				Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
+                HttpContextAccessor.HttpContext.Session.SetString("clientReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
@@ -145,12 +148,12 @@ namespace DNA3.Controllers {
             return View("Detail", instance);
         }
 
-		// Close
-		[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpGet]
-		public IActionResult Close() {
+        // Close
+        [HttpGet, HttpPost]
+        [Authorize(Policy = "Users")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public IActionResult Close() {
             string message;
-            string referrer = default;
             try {
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
             } catch (Exception ex) {
@@ -158,8 +161,20 @@ namespace DNA3.Controllers {
                 Site.Messages.Enqueue(message);
                 Logger.LogError(ex, "{message}", message);
             }
-            if (!string.IsNullOrEmpty(referrer)) {
-                return Redirect(referrer);
+            return RedirectPermanent(HttpContextAccessor.HttpContext.Session.GetString("articleReturnUrl"));
+        }
+
+        // Close Index
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet, HttpPost]
+        public IActionResult CloseIndex() {
+            string message;
+            try {
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
+            } catch (Exception ex) {
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index", "Dashboard");
         }

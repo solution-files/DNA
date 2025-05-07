@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DNA3\DNA3\DNA3.csproj" />
+    <ProjectReference Include="..\Schedule\Schedule.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
 

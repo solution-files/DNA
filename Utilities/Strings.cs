@@ -216,7 +216,7 @@ namespace Utilities {
             return System.Text.Encoding.UTF8.GetString(decodedBytes);
         }
 
-        // Get property from a JSON String without known the schema in advance
+        // Get property from a JSON String without knowing the schema in advance
         public static string GetJsonProperty(object json, string name) {
             string result;
             try {

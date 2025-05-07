@@ -11,37 +11,29 @@ using Serilog;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 #endregion
 
 namespace DNA3.Controllers {
 
     [Authorize(Policy = "Administrators")]
-    public class ActivityController : Controller {
+    public class ActivityController(MainContext context, ILogger<ActivityController> logger, IHttpContextAccessor httpContextAccessor) : Controller {
 
 		#region Variables
 
 		// Variables
-		private readonly MainContext Context;
-		private readonly ILogger<ActivityController> Logger;
+		private readonly MainContext Context = context;
+		private readonly ILogger<ActivityController> Logger = logger;
+        private readonly IHttpContextAccessor HttpContextAccessor = httpContextAccessor;
 		private readonly string Title = "Activity";
 
-		#endregion
+        #endregion
 
-		#region Class Methods
+        #region Controller Actions
 
-		// Constructor
-		public ActivityController(MainContext context, ILogger<ActivityController> logger) {
-			Context = context;
-			Logger = logger;
-		}
-
-		#endregion
-
-		#region Controller Actions
-
-		// Index (Get)
-		[ApiExplorerSettings(IgnoreApi = true)]
+        // Index (Get)
+        [ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> Index() {
 			string message;
@@ -52,7 +44,7 @@ namespace DNA3.Controllers {
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return RedirectToAction("Index", "Dashboard");
 		}
@@ -61,14 +53,15 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public IActionResult New() {
-			Activity instance = new Activity();
+			Activity instance = new();
 			try {
 				instance.TimeStamp = DateTime.Now;
-				Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
+                HttpContextAccessor.HttpContext.Session.SetString("activityReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
 			} catch (Exception ex) {
 				string message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View("Detail", instance);
 		}
@@ -77,14 +70,15 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> Edit(int? id) {
-			Activity instance = new Activity();
+			Activity instance = new();
 			try {
 				instance = await Context.Activity.FindAsync(id);
 				ViewBag.UserList = await Context.User.OrderBy(x => x.Last).ToListAsync();
-				Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.Id})");
+                HttpContextAccessor.HttpContext.Session.SetString("activityReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.Id})");
 			} catch (Exception ex) {
 				Site.Messages.Enqueue(ex.Message);
-				Logger.LogError(ex, ex.Message);
+				Logger.LogError(ex, "{message}", ex.Message);
 			}
 			return View("Detail", instance);
 		}
@@ -113,7 +107,7 @@ namespace DNA3.Controllers {
 				}
 			} catch (Exception ex) {
 				message = ex.Message;
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View("Detail", instance);
 		}
@@ -135,8 +129,9 @@ namespace DNA3.Controllers {
 				Log.Logger.ForContext("UserId", User.UserId()).Warning(message);
 				return RedirectToAction("Index");
 			} catch (Exception ex) {
-				Site.Messages.Enqueue(ex.Message);
-				Logger.LogError(ex, ex.Message);
+                message = ex.Message;
+				Site.Messages.Enqueue(message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View("Detail", instance);
 		}
@@ -151,7 +146,7 @@ namespace DNA3.Controllers {
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return RedirectToAction("Index", "Dashboard");
 		}
@@ -169,8 +164,9 @@ namespace DNA3.Controllers {
 				Site.Messages.Enqueue(message);
 				Log.Logger.ForContext("UserId", User.UserId()).Warning(message);
 			} catch (Exception ex) {
-				Site.Messages.Enqueue(ex.Message);
-				Logger.LogError(ex, ex.Message);
+                message = ex.Message;
+				Site.Messages.Enqueue(message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return RedirectToAction("Index");
 		}
@@ -188,8 +184,9 @@ namespace DNA3.Controllers {
 				Site.Messages.Enqueue(message);
 				Log.Logger.ForContext("UserId", User.UserId()).Warning(message);
 			} catch (Exception ex) {
-				Site.Messages.Enqueue(ex.Message);
-				Logger.LogError(ex, ex.Message);
+                message = ex.Message;
+				Site.Messages.Enqueue(message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return RedirectToAction("Index");
 		}

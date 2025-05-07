@@ -1,8 +1,8 @@
 ﻿#region Usings
 
-using DNA3.Classes;
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +26,7 @@ namespace DNA3.Controllers {
 		private readonly IConfiguration Configuration;
 		private readonly MainContext Context;
 		private readonly ILogger<ProductController> Logger;
+        private readonly IHttpContextAccessor HttpContextAccessor;
 		private readonly string Title = "Product";
 
 		#endregion
@@ -33,10 +34,11 @@ namespace DNA3.Controllers {
 		#region Class Methods
 
 		// Constructor
-		public ProductController(IConfiguration configuration, ILogger<ProductController> logger) {
+		public ProductController(IConfiguration configuration, ILogger<ProductController> logger, IHttpContextAccessor httpContextAccessor) {
 			Configuration = configuration;
 			Context = new MainContext(new DbContextOptionsBuilder<MainContext>().Options, Configuration);
 			Logger = logger;
+            HttpContextAccessor = httpContextAccessor;
 		}
 
 		#endregion
@@ -56,7 +58,7 @@ namespace DNA3.Controllers {
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return RedirectToAction("Index", "Dashboard");
 		}
@@ -65,13 +67,14 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> NewAsync() {
-			Product instance = new Product();
+			Product instance = new();
 			try {
-				Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
+                HttpContextAccessor.HttpContext.Session.SetString("pageReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
 			} catch (Exception ex) {
 				string message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
 			return View("Detail", instance);
@@ -81,14 +84,15 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> Edit(int? id) {
-			Product instance = new Product();
+			Product instance = new();
 			try {
 				instance = await Context.Product.FindAsync(id);
 				ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
-				Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.ProductId})");
+                HttpContextAccessor.HttpContext.Session.SetString("pagetReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.ProductId})");
 			} catch (Exception ex) {
 				Site.Messages.Enqueue(ex.Message);
-				Logger.LogError(ex, ex.Message);
+				Logger.LogError(ex, "{message}", ex.Message);
 			}
 			ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
 			return View("Detail", instance);
@@ -116,7 +120,7 @@ namespace DNA3.Controllers {
 				}
 			} catch (Exception ex) {
 				message = ex.Message;
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
 			return View("Detail", instance);
@@ -140,29 +144,45 @@ namespace DNA3.Controllers {
 				return RedirectToAction("Index");
 			} catch (Exception ex) {
 				Site.Messages.Enqueue(ex.Message);
-				Logger.LogError(ex, ex.Message);
+				Logger.LogError(ex, "{message}", ex.Message);
 			}
 			ViewBag.StatusList = await Context.Status.OrderBy(x => x.Name).ToListAsync();
 			return View("Detail", instance);
 		}
 
-		// Close
-		[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpGet]
-		public IActionResult Close() {
-			string message;
-			try {
-				Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
-			} catch (Exception ex) {
-				message = ex.Message;
-				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
-			}
-			return RedirectToAction("Index", "Dashboard");
-		}
+        // Close
+        [HttpGet, HttpPost]
+        [Authorize(Policy = "Users")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public IActionResult Close() {
+            string message;
+            try {
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
+            } catch (Exception ex) {
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
+            }
+            return RedirectPermanent(HttpContextAccessor.HttpContext.Session.GetString("productReturnUrl"));
+        }
 
-	}
+        // Close Index
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet, HttpPost]
+        public IActionResult CloseIndex() {
+            string message;
+            try {
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
+            } catch (Exception ex) {
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
+            }
+            return RedirectToAction("Index", "Dashboard");
+        }
 
-	#endregion
+    }
+
+    #endregion
 
 }

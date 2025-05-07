@@ -3,7 +3,6 @@
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,28 +18,16 @@ using Utilities;
 
 namespace DNA3.Controllers {
 
-    public class UserController : Controller {
+    public class UserController(IConfiguration configuration, MainContext context, ILogger<UserController> logger, IHttpContextAccessor httpContextAccessor) : Controller {
 
 		#region Variables
 
 		// Variables
-		private readonly IConfiguration Configuration;
-		private readonly MainContext Context;
-		private readonly ILogger<UserController> Logger;
-        private readonly IHttpContextAccessor HttpContextAccessor;
+		private readonly IConfiguration Configuration = configuration;
+		private readonly MainContext Context = context;
+		private readonly ILogger<UserController> Logger = logger;
+        private readonly IHttpContextAccessor HttpContextAccessor = httpContextAccessor;
 		private readonly string Title = "User";
-
-		#endregion
-
-		#region Class Methods
-
-		// Constructor
-		public UserController(IConfiguration configuration, MainContext context, ILogger<UserController> logger, IHttpContextAccessor httpContextAccessor) {
-			Configuration = configuration;
-			Context = context;
-			Logger = logger;
-            HttpContextAccessor = httpContextAccessor;
-        }
 
         #endregion
 

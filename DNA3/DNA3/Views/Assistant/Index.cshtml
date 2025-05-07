@@ -1,4 +1,5 @@
-﻿@using Syncfusion.EJ2.Inputs
+﻿@model DNA3.Models.Gemini
+@using Syncfusion.EJ2.Inputs
 @using Syncfusion.EJ2
 @using System.Text.Json;
 
@@ -11,33 +12,6 @@
 
 }
 @section Scripts {
-
-    <script>
-        function onQuery(args) {
-            fetch('/Assistant/GetGeminiResponse', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ prompt: args.prompt })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(data => {
-                var aiAssistant = document.getElementById('aiAssistant').ej2_instances[0];
-                aiAssistant.addPromptResponse(data);
-            })
-            .catch(error => {
-                console.error('Error fetching Gemini response:', error);
-                var aiAssistant = document.getElementById('aiAssistant').ej2_instances[0];
-                aiAssistant.addMessage({ text: 'Sorry, I encountered an error.', type: 'Bot' });
-            });
-        }
-    </script>
 
 }
 
@@ -66,12 +40,28 @@
         <div class="card card-primary">
             <div class="card-header border-0">
                 <h3 class="card-title">@Plural</h3>
-                @await Html.PartialAsync("_Tools", new { Report = "Schedule.rdl" })
+                @await Html.PartialAsync("_Tools", new { Report = "Support Assistant.rdl" })
             </div>
-            <div class="card-body">
-                <h3>Overview</h3>
-                <p>Gemini content will appear in this area, styled using the current theme.</p>
-            </div>
+            <form asp-action="#" id="Query">
+                <div class="card-body">
+                    <div class="row mb-5">
+                        <div class="col">
+                            <h3>Overview</h3>
+                            <p>Gemini content will appear in this area, styled using the current theme.</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <input asp-for="prompt" class="form-control" placeholder="How can I help you today?" autofocus></input>
+                        </div>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col">
+                            <button asp-action="Index" class="btn btn-lg btn-primary">Send Request</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </section>
 </div>

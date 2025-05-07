@@ -171,7 +171,7 @@ namespace DNA3.Classes {
         public async Task<int> GetRoleKeyValue(string value) {
             int result = 0;
             try {
-                Role instance = await Context.Role.Where(x => x.Name == value).FirstOrDefaultAsync();
+                Role instance = await Context.Role.Where(x => x.Code == value).FirstOrDefaultAsync();
                 if (instance == null) {
 
                 } else {
@@ -356,7 +356,7 @@ namespace DNA3.Classes {
                 IList<Page> Pages = await Context.Page.Where(x => x.PageId > 0).ToListAsync();
                 if (Pages.Count == 0) {
                     Context.Page.Add(new Page { Date = DateTime.Now, Slug = "introduction", Name = "Introduction", Subject = "Web Application Framework  for ASP.NET Core", Content = "A fully documented and modular solution to serve as the foundation for your next application", Icon = "fas fa-home" });
-                    Context.Page.Add(new Page { Date = DateTime.Now, Slug = "home", Name = "Home", Subject = "Web Application Template for ASP.NET Core", Content = "A responsive, cross-platform, open-source system completely refactored for ASP.NET Core, Syncfusion, and ML.NET", Icon = "fas fa-home" });
+                    Context.Page.Add(new Page { Date = DateTime.Now, Slug = "home", Name = "Home", Subject = "Web Application Development Kit", Content = "An AI enhanced, cross-platform, open-source system developed with ASP.NET Core and ML.NET", Icon = "fas fa-home" });
                     Context.Page.Add(new Page { Date = DateTime.Now, Slug = "features", Name = "Features", Subject = "Application Features", Content = "Just three projects provide everything you need for a complete solution. Authentication, Authorization, User Registration, and \r\nContent Management are all baked right in. Just add your own custom features.", Icon = "fas fa-home" });
                     Context.Page.Add(new Page { Date = DateTime.Now, Slug = "about", Name = "About", Subject = "Application DNA", Content = "<p>\r\n    A company website should be much more than an electronic business card. It should encompass every aspect of your business \r\n    from Marketing and Sales to Installation, Service and Support. The problem arises when you attempt to address these challenges \r\n    with nothing more than a canned application. Every business is unique, and a canned solution presents myriad features you may\r\n    not want or need.\r\n</p><p>\r\n    It’s the little things, like working a list across multiple screens without losing your place, entry forms that put your \r\n    cursor in the field containing an error. Pages that make the best use of available space, no matter how small or large that \r\n    space might be. The little things that add up to the excellence in user experience we’ve all come to know and expect.\r\n</p>", Icon = "fas fa-home" });
                     Context.Page.Add(new Page { Date = DateTime.Now, Slug = "products", Name = "Products", Subject = "Products", Content = "Our Products", Icon = "fas fa-home" });
@@ -628,7 +628,6 @@ namespace DNA3.Classes {
                         m.Actions = new List<Action>() {
                             new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = $"{name} Dashboard", Icon = "far fa-circle", Target = $"/{code}", TargetName = "Dashboard", Weight = 100 },
                             new() { RoleId = roleid, Code = "Associates", Name = "Associates", Description = $"{name} Associate List", Icon = "far fa-circle", Target = $"/{code}/Associate", TargetName = "Associates", Weight = 200 },
-                            new() { RoleId = roleid, Code = "Schedule", Name = "Schedule", Description = $"{name} Schedule", Icon = "far fa-circle", Target = $"/{code}/Schedule", TargetName = "Schedule", Weight = 300 },
                             new() { RoleId = roleid, Code = "Workorders", Name = "Workorders", Description = $"{name} Workorder List", Icon = "far fa-circle", Target = $"/{code}/Workorder", TargetName = "Workorders", Weight = 400 },
                         };
                         Context.Menu.Add(m);
@@ -748,11 +747,33 @@ namespace DNA3.Classes {
                     }
                 }
 
+                code = "Schedule";
+                name = "Schedule";
+                if (GetAssemblyList().Any(x => x.FullName.Contains(code))) {
+                    if (!Context.Menu.Any(x => x.Code == code)) {
+                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = $"{name} Manager", Description = $"{name} Management System", Icon = "fas fa-calendar-days", Target = "javascript:void()", TargetName = name, Weight = 1400 };
+                        m.Actions = new List<Action>() {
+                            new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = $"{name} Dashboard", Icon = "far fa-circle", Target = $"/{code}", TargetName = "Dashboard", Weight = 100 },
+                            new() { RoleId = roleid, Code = "Calendar", Name = "Calendar", Description = $"{name} Calendar", Icon = "far fa-circle", Target = $"/{code}/Calendar", TargetName = "Calendar", Weight = 200 },
+                            new() { RoleId = roleid, Code = "Synchronize", Name = "Synchronize", Description = $"{name} Synchronize", Icon = "far fa-circle", Target = $"/{code}/Synchronize", TargetName = "Synchronize", Weight = 300 },
+                        };
+                        Context.Menu.Add(m);
+                        await Context.SaveChangesAsync();
+                    }
+                } else {
+                    if (Context.Menu.Any(x => x.Code == code)) {
+                        int menuid = Context.Menu.Where(x => x.Code == code).First().MenuId;
+                        Context.Action.RemoveRange(await Context.Action.Where(x => x.MenuId == menuid).ToListAsync());
+                        Context.Menu.RemoveRange(await Context.Menu.Where(x => x.Code == code).ToListAsync());
+                        await Context.SaveChangesAsync();
+                    }
+                }
+
                 code = "SMO";
                 name = "SQL Server";
                 if (GetAssemblyList().Any(x => x.FullName.Contains(code))) {
                     if (!Context.Menu.Any(x => x.Code == code)) {
-                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = $"{name} Management Objects", Description = $"{name} Management Objects", Icon = "fas fa-database", Target = "javascript:void()", TargetName = name, Weight = 1400 };
+                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = $"{name} Management Objects", Description = $"{name} Management Objects", Icon = "fas fa-database", Target = "javascript:void()", TargetName = name, Weight = 1500 };
                         m.Actions = new List<Action>() {
                             new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = $"{name} Dashboard", Icon = "far fa-circle", Target = $"/{code}", TargetName = "Dashboard", Weight = 100 },
                             new() { RoleId = roleid, Code = "Backup", Name = "Backup", Description = $"{name} Backup", Icon = "far fa-circle", Target = $"/{code}/Backup", TargetName = "Backup", Weight = 200 },
@@ -777,7 +798,7 @@ namespace DNA3.Classes {
                 name = "Namecheap";
                 if (GetAssemblyList().Any(x => x.FullName.Contains(code))) {
                     if (!Context.Menu.Any(x => x.Code == code)) {
-                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = name, Description = $"{name} System", Icon = "fas fa-file-signature", Target = "javascript:void()", TargetName = name, Weight = 1500 };
+                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = name, Description = $"{name} System", Icon = "fas fa-file-signature", Target = "javascript:void()", TargetName = name, Weight = 1600 };
                         m.Actions = new List<Action>() {
                             new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = $"{name} Dashboard", Icon = "far fa-circle", Target = $"/{code}", TargetName = "Dashboard", Weight = 100 },
                             new() { RoleId = roleid, Code = "Domain", Name = "Domain Registration", Description = $"{name} Domain Registration", Icon = "far fa-circle", Target = $"/{code}/Domain", TargetName = "Domains", Weight = 200 },
@@ -799,7 +820,7 @@ namespace DNA3.Classes {
                 name = "OVH Cloud";
                 if (GetAssemblyList().Any(x => x.FullName.Contains(code))) {
                     if (!Context.Menu.Any(x => x.Code == code)) {
-                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = name, Description = $"{name} System", Icon = "fas fa-cloud", Target = "javascript:void()", TargetName = name, Weight = 1600 };
+                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = name, Description = $"{name} System", Icon = "fas fa-cloud", Target = "javascript:void()", TargetName = name, Weight = 1700 };
                         m.Actions = new List<Action>() {
                             new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = "OVH Cloud Control Center Dashboard", Icon = "far fa-circle", Target = "/OVH", TargetName = "Dashboard", NewWindow = false, Weight = 100 },
                             new() { RoleId = roleid, Code = "API", Name = "API Manager", Description = "API Manager", Icon = "far fa-circle", Target = "/OVH/Api", TargetName = "API Manager", Weight = 200 },
@@ -825,7 +846,7 @@ namespace DNA3.Classes {
                 name = "USPS Web Tools";
                 if (GetAssemblyList().Any(x => x.FullName.Contains(code))) {
                     if (!Context.Menu.Any(x => x.Code == code)) {
-                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = "USPS Console", Description = "USPS Control Center", Icon = "fab fa-usps", Target = "javascript:void()", TargetName = "USPS Console", Weight = 1700 };
+                        m = new Menu { RoleId = roleid, TopLevel = true, Code = code, Name = "USPS Console", Description = "USPS Control Center", Icon = "fab fa-usps", Target = "javascript:void()", TargetName = "USPS Console", Weight = 1800 };
                         m.Actions = new List<Action>() {
                             new() { RoleId = roleid, Code = "Dashboard", Name = "Dashboard", Description = "USPS Control Center Dashboard", Icon = "far fa-circle", Target = "/USPS", TargetName = "Dashboard", NewWindow = false, Weight = 100 },
                             new() { RoleId = roleid, Code = "Address", Name = "Address Correction", Description = "USPS Address Standardization and Correction", Icon = "far fa-circle", Target = "/USPS/Address", TargetName = "Address Correction", NewWindow = false, Weight = 200 },
@@ -855,7 +876,7 @@ namespace DNA3.Classes {
 
                 // About
                 if (!Context.Menu.Any(x => x.Code == "About")) {
-                    m = new() { RoleId = roleid, TopLevel = false, Code = "About", Name = "About", Description = "About Us", Icon = "fas fa-info-circle", Target = "/home/about", TargetName = "About Us", Weight = 1800 };
+                    m = new() { RoleId = roleid, TopLevel = false, Code = "About", Name = "About", Description = "About Us", Icon = "fas fa-info-circle", Target = "/home/about", TargetName = "About Us", Weight = 1900 };
                     m.Actions = new List<Action>() {
                             new() { RoleId = roleid, Code = "Home", Name = "Home", Description = "Home", Icon = "far fa-circle", Target = "/", TargetName = "Home Page", Weight = 100 },
                             new() { RoleId = roleid, Code = "About", Name = "About Us", Description = "About Us", Icon = "far fa-circle", Target = "/home/about", TargetName = "About Us", Weight = 200 },
@@ -868,7 +889,7 @@ namespace DNA3.Classes {
 
                 // Features
                 if (!Context.Menu.Any(x => x.Code == "Features")) {
-                    m = new Menu { RoleId = roleid, TopLevel = false, Code = "Features", Name = "Features", Description = "Features", Icon = "far fa-star", Target = "/home/features", TargetName = "Features", Weight = 1900 };
+                    m = new Menu { RoleId = roleid, TopLevel = false, Code = "Features", Name = "Features", Description = "Features", Icon = "far fa-star", Target = "/home/features", TargetName = "Features", Weight = 2000 };
                     m.Actions = new List<Action>() {
                         new() { RoleId = roleid, Code = "How", Name = "How It Works", Description = "How It Works", Icon = "far fa-circle", Target = "/home/features", TargetName = "How It Works", Weight = 100 },
                         new() { RoleId = roleid, Code = "Privacy", Name = "Privacy Policy", Description = "Privacy Policy", Icon = "far fa-circle", Target = "/home/privacy", TargetName = "Privacy Policy", Weight = 200 },
@@ -881,7 +902,7 @@ namespace DNA3.Classes {
 
                 // Footer
                 if (!Context.Menu.Any(x => x.Code == "Footer")) {
-                    m = new Menu { RoleId = roleid, TopLevel = false, Code = "Footer", Name = "Footer Menu", Description = "Footer Menu", Icon = "far fa-star", Target = "javascript:void()", TargetName = "Footer", Weight = 2000 };
+                    m = new Menu { RoleId = roleid, TopLevel = false, Code = "Footer", Name = "Footer Menu", Description = "Footer Menu", Icon = "far fa-star", Target = "javascript:void()", TargetName = "Footer", Weight = 2100 };
                     m.Actions = new List<Action>() {
                         new() { RoleId = roleid, Code = "How", Name = "How It Works", Description = "How It Works", Icon = "far fa-circle", Target = "/home/features", TargetName = "How It Works", Weight = 100 },
                         new() { RoleId = roleid, Code = "Privacy", Name = "Privacy Policy", Description = "Privacy Policy", Icon = "far fa-circle", Target = "/home/privacy", TargetName = "Privacy Policy", Weight = 200 },

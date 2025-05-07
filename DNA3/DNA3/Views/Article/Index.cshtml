@@ -81,12 +81,12 @@
                     <ejs-grid id="ArticleGrid" dataSource="@Model" allowExcelExport="true" allowPdfExport="true" allowPaging="true" allowSorting="true" rowSelected="ArticleGridRowSelected">
                         <e-grid-selectionsettings mode="Row"></e-grid-selectionsettings>
                         <e-grid-columns>
-                            <e-grid-column field="ArticleId" headerText="Article" textAlign="Left" width="120"></e-grid-column>
-                            <e-grid-column field="Page.Name" headerText="Page" width="120"></e-grid-column>
-                            <e-grid-column field="Section.Name" headerText="Section" textAlign="Left" width="120"></e-grid-column>
-                            <e-grid-column field="Category.Name" headerText="Category" width="120"></e-grid-column>
-                            <e-grid-column field="Status.Name" headerText="Status" width="120"></e-grid-column>
+                            <e-grid-column field="ArticleId" headerText="Article" textAlign="Left" width="120" hideAtMedia="(min-width:800px)"></e-grid-column>
+                            <e-grid-column field="Page.Name" headerText="Page" width="120" hideAtMedia="(min-width:800px)"></e-grid-column>
+                            <e-grid-column field="Section.Name" headerText="Section" textAlign="Left" width="120" hideAtMedia="(min-width:800px)"></e-grid-column>
+                            <e-grid-column field="Category.Name" headerText="Category" width="120" hideAtMedia="(min-width:800px)"></e-grid-column>
                             <e-grid-column field="Subject" headerText="Subject"></e-grid-column>
+                            <e-grid-column field="Status.Name" headerText="Status" width="120" hideAtMedia="(min-width:800px)"></e-grid-column>
                         </e-grid-columns>
                     </ejs-grid>
 				}

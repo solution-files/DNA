@@ -28,32 +28,18 @@ using Utilities;
 
 namespace DNA3.Controllers {
 
-    [Authorize]
     //[Authorize(AuthenticationSchemes = CertificateAuthenticationDefaults.AuthenticationScheme)]
-    public class DashboardController : Controller {
+    public class DashboardController(IConfiguration configuration, MainContext context, ILogger<DashboardController> logger, IAuth auth, ITools tools, IDNATools dnatools) : Controller {
 
         #region Variables
 
         // Services
-        private readonly IConfiguration Configuration;
-        private readonly MainContext Context;
-        private readonly ILogger<DashboardController> Logger;
-        private readonly IAuth Auth;
-        private readonly ITools Tools;
-        private readonly IDNATools DNATools;
-
-        #endregion
-
-        #region Class Methods and Events
-
-        public DashboardController(IConfiguration configuration, MainContext context, ILogger<DashboardController> logger, IAuth auth, ITools tools, IDNATools dnatools) {
-            Configuration = configuration;
-            Context = context;
-            Logger = logger;
-            Auth = auth;
-            Tools = tools;
-            DNATools = dnatools;
-        }
+        private readonly IConfiguration Configuration = configuration;
+        private readonly MainContext Context = context;
+        private readonly ILogger<DashboardController> Logger = logger;
+        private readonly IAuth Auth = auth;
+        private readonly ITools Tools = tools;
+        private readonly IDNATools DNATools = dnatools;
 
         #endregion
 
@@ -64,10 +50,12 @@ namespace DNA3.Controllers {
         [Authorize(Policy = "Administrators")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> SeedAsync() {
+            string message;
             try {
                 await DNATools.Initialize();
             } catch(Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                message = ex.Message;
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index");
         }
@@ -77,6 +65,7 @@ namespace DNA3.Controllers {
         [Authorize(Policy = "Administrators")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Initialize() {
+            string message;
             Initialize instance = default;
             try {
                 instance = new Initialize {
@@ -129,8 +118,9 @@ namespace DNA3.Controllers {
                 };
                 Site.Messages.Enqueue("<strong>WARNING:</strong> This action cannot be undone!");
             } catch (Exception ex) {
-                Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View(instance);
         }
@@ -140,6 +130,7 @@ namespace DNA3.Controllers {
         [Authorize(Policy = "Administrators")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Initialize(Initialize instance) {
+            string message;
             int rows;
             try {
                 using (SqlConnection conn = new(Configuration["ConnectionStrings:MainContext"])) {
@@ -183,121 +174,104 @@ namespace DNA3.Controllers {
 
                     // Cart
                     if (instance.Cart) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Cart", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Cart", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Category
                     if (instance.Category) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Category", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Category", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Certificate
                     if (instance.Certificate) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Certificate", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Certificate", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Client
                     if (instance.Client) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Client", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Client", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Commission
                     if (instance.Commission) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Commission", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Commission", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Customer
                     if (instance.Customer) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Customer", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Customer", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Customer Comment
                     if (instance.CustomerComment) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE CustomerComment", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE CustomerComment", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Device
                     if (instance.Device) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Device", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Device", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Disposition
                     if (instance.Disposition) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Disposition", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Disposition", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Documents
                     if (instance.Documents) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Documents", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Documents", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Facility
                     if (instance.Facility) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Facility", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Facility", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // History
                     if (instance.History) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE History", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE History", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Home Owner
                     if (instance.Homeowner) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Homeowner", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Homeowner", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Invoice
                     if (instance.Invoice) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Invoice", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Invoice", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Invoice Item
                     if (instance.InvoiceItem) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE InvoiceItem", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE InvoiceItem", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Item
                     if (instance.Item) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Item", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Item", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Material
                     if (instance.Material) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Material", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Material", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Menu
@@ -312,135 +286,116 @@ namespace DNA3.Controllers {
 
                     // Note
                     if (instance.Note) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Note", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Note", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Page
                     if (instance.Page) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Page", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Page", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Password
                     if (instance.Password) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Password", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Password", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Product
                     if (instance.Product) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Product", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Product", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Promotion
                     if (instance.Promotion) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Promotion", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Promotion", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Request
                     if (instance.Request) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Request", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Request", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Residence
                     if (instance.Residence) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Residence", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Residence", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Resource
                     if (instance.Resource) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Resource", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Resource", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Role
                     if (instance.Role) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Role", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Role", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Section
                     if (instance.Section) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Section", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Section", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Source
                     if (instance.Source) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Source", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Source", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Status
                     if (instance.Status) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Status", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Status", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Task
                     if (instance.Task) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Task", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Task", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Ticket
                     if (instance.Ticket) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Ticket", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Ticket", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // User
                     if (instance.User) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE User", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE User", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Vendor
                     if (instance.Vendor) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Vendor", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Vendor", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Workorder
                     if (instance.Workorder) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Workorder", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Workorder", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Workorder Comment
                     if (instance.WorkorderComment) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE WorkorderComment", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE WorkorderComment", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     // Zone
                     if (instance.Zone) {
-                        using (SqlCommand cmd = new("TRUNCATE TABLE Zone", conn)) {
-                            rows = cmd.ExecuteNonQuery();
-                        }
+                        using SqlCommand cmd = new("TRUNCATE TABLE Zone", conn);
+                        rows = cmd.ExecuteNonQuery();
                     }
 
                     if (conn.State == System.Data.ConnectionState.Open) {
@@ -451,16 +406,19 @@ namespace DNA3.Controllers {
 
                 Site.Messages.Enqueue("Process completed successfully");
             } catch (Exception ex) {
-                Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View(instance);
         }
 
         // Index
         [HttpGet]
+        [Authorize(Policy = "Users")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Index() {
+            string message;
             HomeView instance = new();
             try {
                 if (Utilities.Ado.DatabaseExists(Configuration["ConnectionStrings:MainContext"])) {
@@ -471,14 +429,16 @@ namespace DNA3.Controllers {
                     // Create Database, Run Migration Script, and Seed Database (Requires System Administrator Credentials)
                 }
             } catch (Exception ex) {
-                Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View(instance);
         }
 
         // Contact (Get)
         public IActionResult Contact(string type) {
+            string message;
             try {
                 var request = new Request {
                     Date = DateTime.Now,
@@ -488,8 +448,9 @@ namespace DNA3.Controllers {
                 ViewData["BodyClass"] = "";
                 return View(request);
             } catch (Exception ex) {
-                Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View();
         }
@@ -497,22 +458,23 @@ namespace DNA3.Controllers {
         // Contact (Post)
         [HttpPost]
         public async Task<IActionResult> Contact([FromForm] Request request) {
+            string message;
             try {
                 if (ModelState.IsValid) {
                     Context.Request.Add(request);
                     await Context.SaveChangesAsync();
 
                     // Create Message
-                    MailMessage message = new() {
+                    MailMessage mailmessage = new() {
                         From = new MailAddress(Configuration["Smtp:From"], Configuration["App:SalesName"]),
                         Subject = $"[{Request.HttpContext.Connection.RemoteIpAddress}] - {request.Subject}",
                         Body = request.Content,
                         BodyEncoding = System.Text.Encoding.UTF8,
                         IsBodyHtml = true
                     };
-                    message.To.Add(new MailAddress(Configuration["Smtp:From"], Configuration["App:SalesName"]));
-                    message.CC.Add(new MailAddress(request.Email, $"{request.First} {request.Last}"));
-                    message.ReplyToList.Add(new MailAddress(request.Email, $"{request.First} {request.Last}"));
+                    mailmessage.To.Add(new MailAddress(Configuration["Smtp:From"], Configuration["App:SalesName"]));
+                    mailmessage.CC.Add(new MailAddress(request.Email, $"{request.First} {request.Last}"));
+                    mailmessage.ReplyToList.Add(new MailAddress(request.Email, $"{request.First} {request.Last}"));
 
                     NetworkCredential credentials = new(Configuration["Smtp:User"], Configuration["Smtp:Password"]);
 
@@ -523,7 +485,7 @@ namespace DNA3.Controllers {
                         EnableSsl = true
                     };
 
-                    smtpclient.Send(message);
+                    smtpclient.Send(mailmessage);
 
                     Site.Messages.Enqueue("Your request was sent successfully. Check your e-mail we usually respond within minutes!");
                     return RedirectToAction("Index");
@@ -531,18 +493,20 @@ namespace DNA3.Controllers {
                     Site.Messages.Enqueue("Please correct the errors indicated below and try again.");
                 };
             } catch (Exception ex) {
-                Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View("Contact", request);
         }
 
         // Enable (MFA)
         [HttpPost]
+        [Authorize(Policy = "Users")]
         [ValidateAntiForgeryToken]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Enable(User user) {
-            String message = "";
+            String message;
             try {
                 if (ModelState.IsValid) {
                     if (user.TotpCode != null) {
@@ -563,18 +527,20 @@ namespace DNA3.Controllers {
                 ViewData["Client"] = await Context.Client.FindAsync(user.ClientId);
                 return View("Profile", user);
             } catch (Exception ex) {
-                Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex.Message);
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError("{message}", message);
             }
             return RedirectToAction("Index", "Home");
         }
 
         // Disable (MFA)
         [HttpPost]
+        [Authorize(Policy = "Users")]
         [ValidateAntiForgeryToken]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Disable(User user) {
-            String message = "";
+            String message;
             try {
                 if (ModelState.IsValid) {
                     if (user.TotpCode != null) {
@@ -596,8 +562,9 @@ namespace DNA3.Controllers {
                 ViewData["Client"] = await Context.Client.FindAsync(user.ClientId);
                 return View("Profile", user);
             } catch (Exception ex) {
-                Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex.Message);
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError("{message}", message);
             }
             return RedirectToAction("Index", "Home");
         }
@@ -619,9 +586,9 @@ namespace DNA3.Controllers {
 
         // Login (Get)
         [HttpGet]
-        [AllowAnonymous]
         [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Login() {
+            string message;
             Claimant claimant = new();
             try {
                 string url = HttpContext.Request.Query["ReturnUrl"].ToString();
@@ -638,18 +605,19 @@ namespace DNA3.Controllers {
                 claimant.ReturnUrl = url;
                 ViewData["BodyClass"] = "login-page";
             } catch (Exception ex) {
-                Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex.Message);
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError("{message}", message);
             }
             return View("SignIn", claimant);
         }
 
         // Login (Post)
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Login([FromForm] Claimant model) {
+            string message;
             try {
                 await DNATools.Initialize();
 
@@ -684,8 +652,9 @@ namespace DNA3.Controllers {
                     }
                 }
             } catch (Exception ex) {
-                Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex.Message);
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError("{message}", message);
             }
             ViewData["BodyClass"] = "login-page";
             return View("SignIn", model);
@@ -693,9 +662,9 @@ namespace DNA3.Controllers {
 
         // Register (Get)
         [HttpGet]
-        [AllowAnonymous]
         [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Register() {
+            string message;
             Registration instance = null;
             try {
                 instance = new Registration() {
@@ -703,8 +672,9 @@ namespace DNA3.Controllers {
                     Provider = "Local"
                 };
             } catch (Exception ex) {
-                Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
             }
             ViewData["BodyClass"] = "register-page";
             return View("Register", instance);
@@ -712,7 +682,6 @@ namespace DNA3.Controllers {
 
         // Register (Post)
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Register([FromForm] Registration registration) {
@@ -727,17 +696,18 @@ namespace DNA3.Controllers {
 
         // Recover Password (Get)
         [HttpGet]
-        [AllowAnonymous]
         [Authorize(Policy = "Users")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Recover() {
+            string message;
             Recover instance = null;
             try {
                 instance = new Recover {
                     Provider = "Local"
                 };
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                message = ex.Message;
+                Logger.LogError(ex, "{message}", message);
             }
             ViewData["BodyClass"] = "login-page";
             return View(instance);
@@ -749,6 +719,7 @@ namespace DNA3.Controllers {
         [Authorize(Policy = "Users")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Recover([FromForm] Recover model) {
+            string message;
             try {
                 if (ModelState.IsValid) {
                     if (await Auth.RecoverPasswordAsync(model)) {
@@ -756,8 +727,9 @@ namespace DNA3.Controllers {
                     }
                 }
             } catch (Exception ex) {
-                Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex.Message);
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError("{message}", message);
             }
             ViewData["BodyClass"] = "login-page";
             return View("Recover", model);
@@ -842,7 +814,7 @@ $@"
                 }
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex.Message);
+                Logger.LogError("{message}", ex.Message);
                 return RedirectToAction("Registration");
             }
             return RedirectToAction("Login");
@@ -860,7 +832,7 @@ $@"
                 return View(client);
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex.Message);
+                Logger.LogError("{message}", ex.Message);
             }
             return RedirectToAction("Index", "Home");
         }
@@ -885,7 +857,7 @@ $@"
                 return View("Client", client);
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex.Message);
+                Logger.LogError("{message}", ex.Message);
             }
             return RedirectToAction("Index", "Home");
         }
@@ -914,7 +886,7 @@ $@"
                 return View("Profile", user);
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex.Message);
+                Logger.LogError("{message}", ex.Message);
             }
             return RedirectToAction("Index", "Home");
         }
@@ -945,7 +917,7 @@ $@"
                 return View("Profile", user);
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex.Message);
+                Logger.LogError("{message}", ex.Message);
             }
             return RedirectToAction("Index", "Home");
         }
@@ -960,14 +932,13 @@ $@"
                 ViewBag.Notifications = await Context.Activity.FromSqlInterpolated($"SELECT TOP 12 Id, Message, MessageTemplate, Level, TimeStamp, Exception, UserId FROM Activity WHERE UserId = {User.UserId()} ORDER BY TimeStamp DESC").ToListAsync();
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex.Message);
+                Logger.LogError("{message}", ex.Message);
             }
             return PartialView("_Notifications");
         }
 
         // Logout (Get)
         [HttpGet]
-        [AllowAnonymous]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Logout() {
             try {
@@ -975,7 +946,7 @@ $@"
                 Log.Logger.ForContext("UserId", User.UserId()).Warning("Signed Out");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex.Message);
+                Logger.LogError("{message}", ex.Message);
             }
             return Redirect("/");
         }
@@ -1011,7 +982,7 @@ $@"
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
                 result = false;
             }
             return result;

@@ -20,29 +20,16 @@ using Utilities;
 namespace DNA3.Controllers {
 
     [Authorize(Policy = "Administrators")]
-    public class ClientController : Controller {
+    public class ClientController(IConfiguration configuration, MainContext context, ILogger<ClientController> logger, IHttpContextAccessor httpcontextaccessor) : Controller {
 
         #region Variables
 
         // Variables
-        private readonly IConfiguration Configuration;
-        private readonly MainContext Context;
-        private readonly ILogger<ClientController> Logger;
-        private readonly IHttpContextAccessor HttpContextAccessor;
+        private readonly IConfiguration Configuration = configuration;
+        private readonly MainContext Context = context;
+        private readonly ILogger<ClientController> Logger = logger;
+        private readonly IHttpContextAccessor HttpContextAccessor = httpcontextaccessor;
         private readonly string Title = "Client";
-        private readonly string returnUrl;
-
-        #endregion
-
-        #region Class Methods and Events
-
-        // Constructor
-        public ClientController(IConfiguration configuration, MainContext context, ILogger<ClientController> logger, IHttpContextAccessor httpcontextaccessor) {
-            Configuration = configuration;
-            Context = context;
-            Logger = logger;
-            HttpContextAccessor = httpcontextaccessor;
-        }
 
         #endregion
 

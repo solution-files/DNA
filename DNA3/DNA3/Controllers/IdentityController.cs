@@ -1,6 +1,5 @@
 ﻿#region Usings
 
-using DNA3.Classes;
 using DNA3.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,34 +18,23 @@ using Utilities;
 namespace DNA3.Controllers {
 
     [Authorize(Policy = "Administrators")]
-    public class IdentityController : Controller {
+    public class IdentityController(IConfiguration configuration, MainContext context, ILogger<IdentityController> logger, IHttpContextAccessor httpContextAccessor) : Controller {
 
 		#region Variables
 
 		// Variables
-		private readonly IConfiguration Configuration;
-		private readonly MainContext Context;
-		private readonly ILogger<IdentityController> Logger;
+		private readonly IConfiguration Configuration = configuration;
+		private readonly MainContext Context = context;
+		private readonly ILogger<IdentityController> Logger = logger;
+        private readonly IHttpContextAccessor HttpContextAccessor = httpContextAccessor;
 		private readonly string Title = "Identity";
 
-		#endregion
+        #endregion
 
-		#region Class Methods
+        #region Controller Actions
 
-		// Constructor
-		public IdentityController(IConfiguration configuration, MainContext context, ILogger<IdentityController> logger) {
-			Configuration = configuration;
-            //Context = new MainContext(new DbContextOptionsBuilder<MainContext>().Options, Configuration);
-            Context = context;
-			Logger = logger;
-		}
-
-		#endregion
-
-		#region Controller Actions
-
-		// Index (Post)
-		[ApiExplorerSettings(IgnoreApi = true)]
+        // Index (Post)
+        [ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet, HttpPost]
 		public async Task<IActionResult> Index(int id) {
 			string message;
@@ -58,7 +46,7 @@ namespace DNA3.Controllers {
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return RedirectToAction("Index", "Dashboard");
 		}
@@ -67,14 +55,15 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public IActionResult New() {
-            DNA3.Models.Login instance = new DNA3.Models.Login();
+            DNA3.Models.Login instance = new();
 			try {
 				instance.UserId = HttpContext.Session.GetInt32("UserId");
-				Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
+                HttpContextAccessor.HttpContext.Session.SetString("identityReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate New {Title}");
 			} catch (Exception ex) {
 				string message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View("Detail", instance);
 		}
@@ -83,13 +72,14 @@ namespace DNA3.Controllers {
 		[ApiExplorerSettings(IgnoreApi = true)]
 		[HttpGet]
 		public async Task<IActionResult> Edit(int? id) {
-            DNA3.Models.Login instance = new DNA3.Models.Login();
+            DNA3.Models.Login instance = new();
 			try {
 				instance = await Context.Login.FindAsync(id);
-				Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.LoginId})");
+                HttpContextAccessor.HttpContext.Session.SetString("identityReturnUrl", HttpContextAccessor.HttpContext.Request.Headers.Referer.ToString());
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} ({instance.LoginId})");
 			} catch (Exception ex) {
 				Site.Messages.Enqueue(ex.Message);
-				Logger.LogError(ex, ex.Message);
+				Logger.LogError(ex, "{message}", ex.Message);
 			}
 			return View("Detail", instance);
 		}
@@ -116,7 +106,7 @@ namespace DNA3.Controllers {
 				}
 			} catch (Exception ex) {
 				message = ex.Message;
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View("Detail", instance);
 		}
@@ -139,37 +129,53 @@ namespace DNA3.Controllers {
 				return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("UserId") });
 			} catch (Exception ex) {
 				Site.Messages.Enqueue(ex.Message);
-				Logger.LogError(ex, ex.Message);
+				Logger.LogError(ex, "{message}", ex.Message);
 			}
 			return View("Detail", instance);
 		}
 
-		// Close (Get)
-		[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpGet]
-		public IActionResult Close() {
-			string message;
-			try {
-				Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
-			} catch (Exception ex) {
-				message = ex.Message;
-				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
-			}
-			return RedirectToAction("Edit", "User", new { id = HttpContext.Session.GetInt32("UserId") });
-		}
+        // Close
+        [HttpGet, HttpPost]
+        [Authorize(Policy = "Users")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public IActionResult Close() {
+            string message;
+            try {
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
+            } catch (Exception ex) {
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
+            }
+            return RedirectPermanent(HttpContextAccessor.HttpContext.Session.GetString("identityReturnUrl"));
+        }
+
+        // Close Index
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet, HttpPost]
+        public IActionResult CloseIndex() {
+            string message;
+            try {
+                Log.Logger.ForContext("UserId", User.UserId()).Warning($"Closed {Title}");
+            } catch (Exception ex) {
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
+            }
+            return RedirectPermanent(HttpContextAccessor.HttpContext.Session.GetString("userReturnUrl"));
+        }
 
         // Change (Post)
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost]
         public IActionResult Change(int id) {
-            DNA3.Models.Password instance = new DNA3.Models.Password();
+            DNA3.Models.Password instance = new();
             try {
                 instance.LoginId = id;
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"Initiate Password Change");
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return View("Password", instance);
         }
@@ -192,7 +198,7 @@ namespace DNA3.Controllers {
                 }
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return View("Password", instance);
         }

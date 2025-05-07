@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 
 #endregion
@@ -25,10 +25,10 @@ namespace DNA3.API {
 
         #region Properties, Variables and Constants
 
-        private MainContext Context;
-        private IConfiguration Configuration;
-        private ILogger<AdoUserController> Logger;
-        string ConnectionString = "";
+        private readonly MainContext Context;
+        private readonly IConfiguration Configuration;
+        private readonly ILogger<AdoUserController> Logger;
+        private readonly string ConnectionString = "";
 
         #endregion
 
@@ -55,15 +55,15 @@ namespace DNA3.API {
         public IActionResult Download(int id) {
 
             // Create Dataset
-            DataSet ds = new DataSet("Remote");
+            DataSet ds = new("Remote");
 
             try {
 
-                using (SqlConnection conn = new SqlConnection(ConnectionString)) {
+                using (SqlConnection conn = new(ConnectionString)) {
 
                     // Add User Table
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM [User] WHERE usr_id > @Id", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
+                    using (SqlCommand cmd = new("SELECT * FROM [User] WHERE usr_id > @Id", conn)) {
+                        using (SqlDataAdapter da = new(cmd)) {
                             da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
                             da.SelectCommand.Parameters.AddWithValue("@Id", id);
                             da.Fill(ds, "User");
@@ -72,8 +72,8 @@ namespace DNA3.API {
                     }
 
                     // Add Modified Users
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM [User] WHERE usr_id <= @Id AND usr_modified = 1", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
+                    using (SqlCommand cmd = new("SELECT * FROM [User] WHERE usr_id <= @Id AND usr_modified = 1", conn)) {
+                        using (SqlDataAdapter da = new(cmd)) {
                             da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
                             da.SelectCommand.Parameters.AddWithValue("@Id", id);
                             da.Fill(ds, "User");
@@ -86,11 +86,11 @@ namespace DNA3.API {
             } catch (SqlException ex) {
                 Debug.WriteLine("Errors Count:" + ex.Errors.Count);
                 foreach (SqlError sqlerror in ex.Errors) {
-                    Logger.LogError(sqlerror.Number, sqlerror.Message);
+                    Logger.LogError("({number}) {message}", sqlerror.Number, sqlerror.Message);
                     Debug.WriteLine(sqlerror.Number + " - " + sqlerror.Message);
                 }
             } catch (Exception ex) {
-                Logger.LogInformation(String.Format("[System Controller] - User Changes: {0}", ex.Message));
+                Logger.LogInformation("[System Controller] - User Changes: {message}", ex.Message);
             }
 
             // Return completed Dataset with OK(200) Status
@@ -105,30 +105,30 @@ namespace DNA3.API {
         [HttpGet]
         public IActionResult List() {
 
-            DataSet ds = new DataSet("Remote");
+            DataSet ds = new("Remote");
 
             try {
-                using (SqlConnection conn = new SqlConnection(ConnectionString)) {
+                using (SqlConnection conn = new(ConnectionString)) {
 
                     // Add Status Table
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM [Status]", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
+                    using (SqlCommand cmd = new("SELECT * FROM [Status]", conn)) {
+                        using (SqlDataAdapter da = new(cmd)) {
                             da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
                             da.Fill(ds, "Status");
                         }
                     }
 
                     // Add Role Table
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM [Role]", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
+                    using (SqlCommand cmd = new("SELECT * FROM [Role]", conn)) {
+                        using (SqlDataAdapter da = new(cmd)) {
                             da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
                             da.Fill(ds, "Role");
                         }
                     }
 
                     // Add User Table
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM [User]", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
+                    using (SqlCommand cmd = new("SELECT * FROM [User]", conn)) {
+                        using (SqlDataAdapter da = new(cmd)) {
                             da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
                             da.Fill(ds, "User");
                         }
@@ -136,7 +136,7 @@ namespace DNA3.API {
 
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
                 return BadRequest(ex);
             }
 
@@ -152,14 +152,14 @@ namespace DNA3.API {
         [HttpGet]
         public IActionResult New() {
 
-            DataSet ds = new DataSet("Remote");
+            DataSet ds = new("Remote");
 
             try {
 
-                using (SqlConnection conn = new SqlConnection(ConnectionString)) {
+                using (SqlConnection conn = new(ConnectionString)) {
 
                     // Add Client Table
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM [Client]", conn)) {
+                    using (SqlCommand cmd = new("SELECT * FROM [Client]", conn)) {
                         using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
                             da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
                             da.Fill(ds, "Client");
@@ -185,7 +185,7 @@ namespace DNA3.API {
 
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
                 return BadRequest(ex);
             }
 
@@ -250,7 +250,7 @@ namespace DNA3.API {
 
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
                 return BadRequest(ex);
             }
 
@@ -308,7 +308,7 @@ namespace DNA3.API {
                     result = (int?)daUser.InsertCommand.Parameters["@ID"].Value ?? 0;
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
                 return BadRequest(ex);
             }
             return Ok(result);
@@ -331,7 +331,7 @@ namespace DNA3.API {
                     daUser.Update(ds, "User");
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
                 return BadRequest(ex);
             }
             return Ok();
@@ -357,7 +357,7 @@ namespace DNA3.API {
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
                 return BadRequest(ex);
             }
             return Ok("Success");
@@ -381,7 +381,7 @@ namespace DNA3.API {
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
                 return BadRequest(ex);
             }
             return Ok(ds);

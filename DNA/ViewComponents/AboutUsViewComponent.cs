@@ -11,30 +11,25 @@ using System.Threading.Tasks;
 
 namespace DNA.ViewComponents {
 
-	public class AboutUsViewComponent : ViewComponent {
+	public class AboutUsViewComponent(DNA3.Models.MainContext context, ILogger<AboutUsViewComponent> logger) : ViewComponent {
 
 		#region Variables
 
-		private readonly DNA3.Models.MainContext Context;
-		private readonly ILogger<AboutUsViewComponent> Logger;
+		private readonly DNA3.Models.MainContext Context = context;
+		private readonly ILogger<AboutUsViewComponent> Logger = logger;
 		private DNA3.Models.Page? model;
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		public AboutUsViewComponent(DNA3.Models.MainContext context, ILogger<AboutUsViewComponent> logger) {
-			Context = context;
-			Logger = logger;
-		}
-
-		public async Task<IViewComponentResult> InvokeAsync() {
-			Task<IViewComponentResult> ComponentTask = null;
+        public async Task<IViewComponentResult> InvokeAsync() {
+			Task<IViewComponentResult> ComponentTask = default;
 			try {
 				model = await Context.Page.Where(x => x.Name == "Introduction").SingleOrDefaultAsync();
 				ComponentTask = Task.FromResult((IViewComponentResult)View("AboutUs", model));
 			} catch (Exception ex) {
-				Logger.LogError(ex, ex.Message);
+				Logger.LogError(ex, "{message}", ex.Message);
 			}
 			return await ComponentTask;
 		}

@@ -1,11 +1,8 @@
-﻿@using Syncfusion.EJ2.Inputs
-@using Syncfusion.EJ2
-@using System.Text.Json;
-
+﻿@model IList<DNA3.Models.AppointmentData>
 @{
     Layout = "_Dashboard";
-    string Title = "Assistant";
-    string Plural = "Assistant";
+    string Title = "Appointment";
+    string Plural = "Appointments";
 }
 @section CSS {
 
@@ -13,30 +10,17 @@
 @section Scripts {
 
     <script>
-        function onQuery(args) {
-            fetch('/Assistant/GetGeminiResponse', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ prompt: args.prompt })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(data => {
-                var aiAssistant = document.getElementById('aiAssistant').ej2_instances[0];
-                aiAssistant.addPromptResponse(data);
-            })
-            .catch(error => {
-                console.error('Error fetching Gemini response:', error);
-                var aiAssistant = document.getElementById('aiAssistant').ej2_instances[0];
-                aiAssistant.addMessage({ text: 'Sorry, I encountered an error.', type: 'Bot' });
-            });
+
+        function ExportToExcel() {
+            var schedulerObj = document.getElementById("schedule").ej2_instances[0];
+            schedulerObj.excelExport();
         }
+
+        function ExportToPDF() {
+            var schedulerObj = document.getElementById("schedule").ej2_instances[0];
+            schedulerObj.pdfExport();
+        }
+
     </script>
 
 }
@@ -69,7 +53,9 @@
                 @await Html.PartialAsync("_Tools", new { Report = "Schedule.rdl" })
             </div>
             <div class="card-body">
-                    <ejs-aiassistview id="aiAssistant" promptRequest="onQuery" Height="700px"></ejs-aiassistview>
+                <ejs-schedule id="schedule">
+                    <e-schedule-eventsettings dataSource="Model"></e-schedule-eventsettings>
+                </ejs-schedule>
             </div>
         </div>
     </section>

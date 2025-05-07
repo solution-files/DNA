@@ -12,21 +12,12 @@ using Utilities;
 
 namespace DNA3.Controllers {
 
-    public class CheckoutController : Controller {
+    public class CheckoutController(PaypalClient paypalClient, MainContext context) : Controller {
 
         #region Variables
 
-        private readonly PaypalClient _paypalClient;
-        private readonly MainContext Context;
-
-        #endregion
-
-        #region Methods
-
-        public CheckoutController(PaypalClient paypalClient, MainContext context) {
-            this._paypalClient = paypalClient;
-            Context = context;
-        }
+        private readonly PaypalClient _paypalClient = paypalClient;
+        private readonly MainContext Context = context;
 
         #endregion
 

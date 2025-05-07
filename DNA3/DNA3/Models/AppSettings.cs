@@ -11,7 +11,7 @@ namespace DNA3.Models {
     #region AppSettings
 
     // AppSettings object = JsonConvert.DeserializeObject<AppSettings>(jsoncontent);
-    public class AppSettingsGrr {
+    public class AppSettings {
 
         [Display(Name = "Application")]
         public App App { get; set; }
@@ -122,11 +122,15 @@ namespace DNA3.Models {
         [Display(Name = "Xing Link Address")]
         public string Xing { get; set; }
 
+        [Display(Name = "Configuration File")]
+        public string Configuration { get; set; }
+
         [Display(Name = "Theme Name")]
         public string Themename { get; set; }
 
         [Display(Name = "Theme Path")]
         public string Themepath { get; set; }
+
     }
 
     #endregion

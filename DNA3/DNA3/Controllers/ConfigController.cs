@@ -20,41 +20,33 @@ using Utilities;
 namespace DNA3.Controllers {
 
     [Authorize(Policy = "Administrators")]
-    public class ConfigController : Controller {
+    public class ConfigController(IConfiguration configuration, ILogger<ConfigController> logger) : Controller {
 
         #region Variables
 
         // Variables
-        private readonly IConfiguration Configuration;
-        private readonly ILogger<ConfigController> Logger;
+        private readonly IConfiguration Configuration = configuration;
+        private readonly ILogger<ConfigController> Logger = logger;
         private readonly string Title = "Configuration";
-        private string  ConfigFile = Path.Combine(AppContext.BaseDirectory, "appSettings.json");
+        private readonly string  ConfigFile = Path.Combine(AppContext.BaseDirectory, "appSettings.json");
 
         #endregion
 
-        #region Methods
-
-        // Constructor
-        public ConfigController(IConfiguration configuration, ILogger<ConfigController> logger) {
-            Configuration = configuration;
-            Logger = logger;
-        }
-
-        #endregion
-
-        #region Actions
+        #region Controller Actions
 
         // Index (Get)
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public IActionResult Index(int? id) {
-            AppSettings instance = new AppSettings();
+            string message;
+            DNA3.Models.AppSettings instance = new();
             try {
-                instance = JsonConvert.DeserializeObject<AppSettings>(System.IO.File.ReadAllText("appsettings.json"));
+                instance = JsonConvert.DeserializeObject<DNA3.Models.AppSettings>(System.IO.File.ReadAllText("appsettings.json"));
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title}");
             } catch (Exception ex) {
-                Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                message = ex.Message;
+                Site.Messages.Enqueue(message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View("Detail", instance);
         }
@@ -63,13 +55,13 @@ namespace DNA3.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public IActionResult Save(AppSettings instance) {
+        public IActionResult Save(DNA3.Models.AppSettings instance) {
             string result;
             string message;
             try {
                 if (ModelState.IsValid) {
                     result = JsonConvert.SerializeObject(instance, Formatting.Indented);
-                    System.IO.File.WriteAllText("japsettings.json", result);
+                    System.IO.File.WriteAllText("appsettings.json", result);
                     message = "Configuration file written to application folder";
                     Site.Messages.Enqueue(message);
                     Log.Logger.ForContext("UserId", User.UserId()).Warning(message);
@@ -79,7 +71,7 @@ namespace DNA3.Controllers {
                 }
             } catch (Exception ex) {
                 message = ex.Message;
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View("Detail", instance);
         }
@@ -94,7 +86,7 @@ namespace DNA3.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return RedirectToAction("Index", "Dashboard");
         }
