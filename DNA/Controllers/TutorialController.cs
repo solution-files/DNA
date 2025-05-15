@@ -14,38 +14,28 @@ using Utilities;
 
 namespace DNA.Controllers {
 
-    public class TutorialController : Controller {
+    public class TutorialController(IConfiguration configuration, MainContext context, ILogger<TutorialController> logger) : Controller {
 
 		#region Variables
 
-		private readonly IConfiguration Configuration;
-		private readonly MainContext Context;
-		private readonly ILogger<TutorialController> Logger;
+		private readonly IConfiguration Configuration = configuration;
+		private readonly MainContext Context = context;
+		private readonly ILogger<TutorialController> Logger = logger;
 
-		#endregion
+        #endregion
 
-		#region Class Methods
+        #region Controller Actions
 
-		public TutorialController(IConfiguration configuration, MainContext context, ILogger<TutorialController> logger) {
-			Configuration = configuration;
-			Context = context;
-			Logger = logger;
-		}
-
-		#endregion
-
-		#region Controller Actions
-
-		// Index (Get)
-		public async Task<IActionResult> IndexAsync() {
+        // Index (Get)
+        public async Task<IActionResult> IndexAsync() {
 			string message;
-			List<Article> instance = new List<Article>();
+			List<Article> instance = [];
 			try {
 				instance = await Context.Article.Include(x => x.Page).Include(x => x.Section).Include(x => x.Category).ToListAsync();
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View(instance);
 		}

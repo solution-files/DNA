@@ -35,33 +35,31 @@ namespace Utilities {
 
                 // User
                 using (SqlConnection conn = new(cs)) {
-                    using (SqlCommand cmd = new("INSERT INTO [User](ClientId, First, Last, RoleId, StatusId, Persist, Comment) OUTPUT INSERTED.UserId VALUES(@ClientId, @First, @Last, @RoleId, @StatusId, @Persist, @Comment)", conn)) {
-                        cmd.Parameters.AddWithValue("@ClientId", clientid);
-                        cmd.Parameters.AddWithValue("@First", first);
-                        cmd.Parameters.AddWithValue("@Last", last);
-                        cmd.Parameters.AddWithValue("@RoleId", GetScalarValue<int>(cs, "RoleId", "Role", "Code", "User"));
-                        cmd.Parameters.AddWithValue("@StatusId", GetScalarValue<int>(cs, "StatusId", "Status", "Code", "Active"));
-                        cmd.Parameters.AddWithValue("@Persist", "true");
-                        cmd.Parameters.AddWithValue("@Comment", "Added automatically from Google Authentication Profile");
-                        conn.Open();
-                        userid = (int)cmd.ExecuteScalar();
-                        if (conn.State == ConnectionState.Open) {
-                            conn.Close();
-                        }
+                    using SqlCommand cmd = new("INSERT INTO [User](ClientId, First, Last, RoleId, StatusId, Persist, Comment) OUTPUT INSERTED.UserId VALUES(@ClientId, @First, @Last, @RoleId, @StatusId, @Persist, @Comment)", conn);
+                    cmd.Parameters.AddWithValue("@ClientId", clientid);
+                    cmd.Parameters.AddWithValue("@First", first);
+                    cmd.Parameters.AddWithValue("@Last", last);
+                    cmd.Parameters.AddWithValue("@RoleId", GetScalarValue<int>(cs, "RoleId", "Role", "Code", "User"));
+                    cmd.Parameters.AddWithValue("@StatusId", GetScalarValue<int>(cs, "StatusId", "Status", "Code", "Active"));
+                    cmd.Parameters.AddWithValue("@Persist", "true");
+                    cmd.Parameters.AddWithValue("@Comment", "Added automatically from Google Authentication Profile");
+                    conn.Open();
+                    userid = (int)cmd.ExecuteScalar();
+                    if (conn.State == ConnectionState.Open) {
+                        conn.Close();
                     }
                 }
 
                 // Login Identity
                 using (SqlConnection conn = new(cs)) {
-                    using (SqlCommand cmd = new("INSERT INTO [Login](Provider, UserId, Email, Password) VALUES (@Provider, @UserId, @Email, '')", conn)) {
-                        cmd.Parameters.AddWithValue("@Provider", "Google");
-                        cmd.Parameters.AddWithValue("@UserId", userid);
-                        cmd.Parameters.AddWithValue("@Email", email);
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        if (conn.State == ConnectionState.Open) {
-                            conn.Close();
-                        }
+                    using SqlCommand cmd = new("INSERT INTO [Login](Provider, UserId, Email, Password) VALUES (@Provider, @UserId, @Email, '')", conn);
+                    cmd.Parameters.AddWithValue("@Provider", "Google");
+                    cmd.Parameters.AddWithValue("@UserId", userid);
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    if (conn.State == ConnectionState.Open) {
+                        conn.Close();
                     }
                 }
 
@@ -77,19 +75,17 @@ namespace Utilities {
         public static string InsertFromSql(string cs, string[] pms, string sql) {
             string result;
             try {
-                using (SqlConnection conn = new(cs)) {
-                    using (SqlCommand cmd = new(sql, conn)) {
-                        foreach(string pm in pms) {
-                            var p = pm.Split("=");
-                            cmd.Parameters.AddWithValue(p[0], p[1]);
-                        }
-                        conn.Open();
-                        if (cmd.ExecuteNonQuery() > 0) {
-                            result = "Success";
-                        } else {
-                            result = "Record was not inserted. See error log for details";
-                        }
-                    }
+                using SqlConnection conn = new(cs);
+                using SqlCommand cmd = new(sql, conn);
+                foreach (string pm in pms) {
+                    var p = pm.Split("=");
+                    cmd.Parameters.AddWithValue(p[0], p[1]);
+                }
+                conn.Open();
+                if (cmd.ExecuteNonQuery() > 0) {
+                    result = "Success";
+                } else {
+                    result = "Record was not inserted. See error log for details";
                 }
             } catch (Exception ex) {
                 Log.Error(ex, ex.Message);
@@ -104,15 +100,13 @@ namespace Utilities {
             try {
                 DataTable dt = new("Generic");
                 using (SqlConnection conn = new(cs)) {
-                    using (SqlCommand cmd = new(sql, conn)) {
-                        foreach(string pm in pms) {
-                            var p = pm.Split("=");
-                            cmd.Parameters.AddWithValue(p[0], p[1]);
-                        }
-                        using (SqlDataAdapter da = new(cmd)) {
-                            da.Fill(dt);
-                        }
+                    using SqlCommand cmd = new(sql, conn);
+                    foreach (string pm in pms) {
+                        var p = pm.Split("=");
+                        cmd.Parameters.AddWithValue(p[0], p[1]);
                     }
+                    using SqlDataAdapter da = new(cmd);
+                    da.Fill(dt);
                 }
                 result = ConvertDataTable<T>(dt);
             } catch (Exception ex) {
@@ -123,7 +117,7 @@ namespace Utilities {
 
         // Convert Datatable
         private static List<T> ConvertDataTable<T>(DataTable dt) {
-            List<T> data = new();
+            List<T> data = [];
             foreach (DataRow row in dt.Rows) {
                 T item = GetItem<T>(row);
                 data.Add(item);
@@ -165,20 +159,18 @@ namespace Utilities {
         public static bool DatabaseExists(string cs) {
             bool result;
             try {
-                using (SqlConnection con = new(cs)) {
-                    string database = DatabaseNameFromConnectionString(cs);
-                    using (SqlCommand cmd = new($"SELECT 1 AS Result FROM master.sys.databases WHERE ([name] = '{database}' OR [name] = '{database}')", con)) {
-                        con.Open();
-                        object response = cmd.ExecuteScalar();
-                        if (con.State == ConnectionState.Open) {
-                            con.Close();
-                        }
-                        if (response != null) {
-                            result = true;
-                        } else {
-                            result = false;
-                        }
-                    }
+                using SqlConnection con = new(cs);
+                string database = DatabaseNameFromConnectionString(cs);
+                using SqlCommand cmd = new($"SELECT 1 AS Result FROM master.sys.databases WHERE ([name] = '{database}' OR [name] = '{database}')", con);
+                con.Open();
+                object response = cmd.ExecuteScalar();
+                if (con.State == ConnectionState.Open) {
+                    con.Close();
+                }
+                if (response != null) {
+                    result = true;
+                } else {
+                    result = false;
                 }
             } catch(Exception ex) {
                 result = false;
@@ -192,19 +184,17 @@ namespace Utilities {
             bool result;
             try {
                 string database = DatabaseNameFromConnectionString(cs);
-                using (SqlConnection con = new(cs)) {
-                    using (SqlCommand cmd = new($"SELECT 1 AS Result FROM sys.tables AS T INNER JOIN sys.schemas AS S ON T.schema_id = S.schema_id WHERE S.Name = '{database}' AND T.Name = '{table}';", con)) {
-                        con.Open();
-                        object response = cmd.ExecuteScalar();
-                        if (con.State == ConnectionState.Open) {
-                            con.Close();
-                        }
-                        if (response != null) {
-                            result = true;
-                        } else {
-                            result = false;
-                        }
-                    }
+                using SqlConnection con = new(cs);
+                using SqlCommand cmd = new($"SELECT 1 AS Result FROM sys.tables AS T INNER JOIN sys.schemas AS S ON T.schema_id = S.schema_id WHERE S.Name = '{database}' AND T.Name = '{table}';", con);
+                con.Open();
+                object response = cmd.ExecuteScalar();
+                if (con.State == ConnectionState.Open) {
+                    con.Close();
+                }
+                if (response != null) {
+                    result = true;
+                } else {
+                    result = false;
                 }
             } catch (Exception ex) {
                 result = false;
@@ -217,17 +207,15 @@ namespace Utilities {
         public static T GetScalarValue<T>(string connectionstring, string attribute, string entity, string field, string value) {
             T ReturnValue = default;
             try {
-                using (SqlConnection con = new(connectionstring)) {
-                    using (SqlCommand cmd = new($"SELECT [{attribute}] FROM [{entity}] WHERE [{field}] = '{value}'", con)) {
-                        con.Open();
-                        object result = cmd.ExecuteScalar();
-                        if (con.State == ConnectionState.Open) {
-                            con.Close();
-                        }
-                        if (result != null) {
-                            ReturnValue = (T)result;
-                        }
-                    }
+                using SqlConnection con = new(connectionstring);
+                using SqlCommand cmd = new($"SELECT [{attribute}] FROM [{entity}] WHERE [{field}] = '{value}'", con);
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                if (con.State == ConnectionState.Open) {
+                    con.Close();
+                }
+                if (result != null) {
+                    ReturnValue = (T)result;
                 }
             } catch(Exception ex) {
                 Log.Error(ex, ex.Message);

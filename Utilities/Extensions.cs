@@ -21,9 +21,9 @@ namespace Utilities {
 
         #region Variables and Constants
 
-        private static string _paraBreak = "\r\n\r\n";
-        private static string _link = "<a href=\"{0}\">{1}</a>";
-        private static string _linkNoFollow = "<a href=\"{0}\" rel=\"nofollow\">{1}</a>";
+        private static readonly string _paraBreak = "\r\n\r\n";
+        private static readonly string _link = "<a href=\"{0}\">{1}</a>";
+        private static readonly string _linkNoFollow = "<a href=\"{0}\" rel=\"nofollow\">{1}</a>";
 
         #endregion
 
@@ -74,40 +74,19 @@ namespace Utilities {
 
         // Has Sufficient Authority
         public static bool HasSufficientAuthority(this IPrincipal user, string RequestedAuthority) {
-            int RequestedLevel = 0;
-            int ActualLevel = 0;
             bool Result = false;
-
-            switch (RequestedAuthority) {
-                case "Admin":
-                    RequestedLevel = 3;
-                    break;
-                case "Manager":
-                    RequestedLevel = 2;
-                    break;
-                case "User":
-                    RequestedLevel = 1;
-                    break;
-                default:
-                    RequestedLevel = 0;
-                    break;
-            }
-
-            switch (user.Role()) {
-                case "Admin":
-                    ActualLevel = 3;
-                    break;
-                case "Manager":
-                    ActualLevel = 2;
-                    break;
-                case "User":
-                    ActualLevel = 1;
-                    break;
-                default:
-                    ActualLevel = 0;
-                    break;
-            }
-
+            var RequestedLevel = RequestedAuthority switch {
+                "Admin" => 3,
+                "Manager" => 2,
+                "User" => 1,
+                _ => 0,
+            };
+            var ActualLevel = user.Role() switch {
+                "Admin" => 3,
+                "Manager" => 2,
+                "User" => 1,
+                _ => 0,
+            };
             if (ActualLevel >= RequestedLevel) {
                 Result = true;
             }
@@ -178,7 +157,7 @@ namespace Utilities {
         }
 
         public static string ToHtml(this string s, bool nofollow) {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             int pos = 0;
             while (pos < s.Length) {
@@ -187,7 +166,7 @@ namespace Utilities {
                 pos = s.IndexOf(_paraBreak, start);
                 if (pos < 0)
                     pos = s.Length;
-                string para = s.Substring(start, pos - start).Trim();
+                string para = s[start..pos].Trim();
 
                 // Encode non-empty paragraph
                 if (para.Length > 0)
@@ -227,7 +206,7 @@ namespace Utilities {
                 if (pos < 0)
                     pos = s.Length;
                 // Copy text before link
-                sb.Append(s.Substring(start, pos - start));
+                sb.Append(s.AsSpan(start, pos - start));
                 if (pos < s.Length) {
                     string label, link;
 
@@ -235,11 +214,11 @@ namespace Utilities {
                     pos = s.IndexOf("]]", start);
                     if (pos < 0)
                         pos = s.Length;
-                    label = s.Substring(start, pos - start);
+                    label = s[start..pos];
                     int i = label.IndexOf("][");
                     if (i >= 0) {
-                        link = label.Substring(i + 2);
-                        label = label.Substring(0, i);
+                        link = label[(i + 2)..];
+                        label = label[..i];
                     } else {
                         link = label;
                     }
@@ -265,7 +244,7 @@ namespace Utilities {
         public static T GetObjectFromJson<T>(this ISession session, string key) {
             var value = session.GetString(key);
 
-            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
+            return value == null ? default : JsonConvert.DeserializeObject<T>(value);
         }
 
         #endregion

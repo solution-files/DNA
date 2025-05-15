@@ -87,7 +87,7 @@ namespace DNA.Controllers {
 			} catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View();
 		}
@@ -101,7 +101,7 @@ namespace DNA.Controllers {
             } catch (Exception ex) {
 				message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View();
 		}
@@ -117,7 +117,7 @@ namespace DNA.Controllers {
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View(instance);
         }
@@ -138,7 +138,7 @@ namespace DNA.Controllers {
                 };
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             ViewBag.ContactPage = await Context.Page.Where(x => x.Name == "Contact").FirstOrDefaultAsync();
             ViewBag.FeatureList = await Context.Article.Include(x => x.Section).Where(x => x.Section.Name == "App Features").OrderBy(x => x.Weight).ToListAsync();
@@ -160,7 +160,7 @@ namespace DNA.Controllers {
 			} catch (Exception ex) {
 				string message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View(instance);
 		}
@@ -174,7 +174,7 @@ namespace DNA.Controllers {
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View();
         }
@@ -191,7 +191,7 @@ namespace DNA.Controllers {
             } catch (Exception ex) {
 				string message = ex.Message;
 				Site.Messages.Enqueue(message);
-				Logger.LogError(ex, message);
+				Logger.LogError(ex, "{message}", message);
 			}
 			return View(instance);
 		}
@@ -207,7 +207,7 @@ namespace DNA.Controllers {
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View();
         }
@@ -223,7 +223,7 @@ namespace DNA.Controllers {
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View();
         }
@@ -239,7 +239,7 @@ namespace DNA.Controllers {
             } catch (Exception ex) {
                 string message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View();
         }
@@ -361,7 +361,7 @@ namespace DNA.Controllers {
                 result = result.AppendLine($"</table>");
                 result = result.AppendLine($"<p>{request.Content}</p>");
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return result.ToString();
         }
@@ -393,7 +393,7 @@ namespace DNA.Controllers {
                 smtpclient.Send(message);
 
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
                 result = false;
             }
             return result;

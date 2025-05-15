@@ -40,7 +40,7 @@ namespace Utilities {
                 latitude = toolkitLocation.Point.Coordinates[0];
                 longitude = toolkitLocation.Point.Coordinates[1];
             }
-            return $"{latitude.ToString()}:{longitude.ToString()}";
+            return $"{latitude}:{longitude}";
         }
 
         #endregion

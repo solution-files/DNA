@@ -5,6 +5,7 @@ using DNA3.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -12,7 +13,6 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
 using System.Data;
-using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -83,15 +83,15 @@ namespace DNA3.API {
                         var key = Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]);
                         var expiration = DateTime.UtcNow.AddDays(Convert.ToDouble(Configuration["Jwt:ExpireDays"]));
                         var tokenDescriptor = new SecurityTokenDescriptor {
-                            Subject = new ClaimsIdentity(new Claim[]
-                            {
+                            Subject = new ClaimsIdentity(
+                            [
                             new Claim(ClaimTypes.Name, claimant.UserId.ToString()),
                             new Claim(ClaimTypes.Email, claimant.Email),
                             new Claim("Full", string.Format("{0} {1}", claimant.First, claimant.Last)),
                             new Claim("First", claimant.First),
                             new Claim("Last", claimant.Last),
                             new Claim("Role", claimant.RoleCode)
-                            }),
+                            ]),
                             Expires = expiration,
                             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                         };
@@ -110,7 +110,7 @@ namespace DNA3.API {
                 }
 
             } catch (Exception ex) {
-                Logger.LogError(ex.Message);
+                Logger.LogError("{message}", ex.Message);
                 claimant.StatusMessage = ex.Message;
                 return new ContentResult {
                     Content = JsonConvert.SerializeObject(claimant),
@@ -137,38 +137,34 @@ namespace DNA3.API {
 
             try {
 
-                using (SqlConnection conn = new(ConnectionString)) {
+                using SqlConnection conn = new(ConnectionString);
 
-                    // Add Status Table
-                    using (SqlCommand cmd = new("SELECT * FROM [Status] WHERE sta_id > @Id", conn)) {
-                        using (SqlDataAdapter da = new(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.SelectCommand.Parameters.AddWithValue("@Id", id);
-                            da.Fill(ds, "Status");
-                            Ado.SetAdded(ref ds, "Status");
-                        }
-                    }
+                // Add Status Table
+                using (SqlCommand cmd = new("SELECT * FROM [Status] WHERE sta_id > @Id", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.SelectCommand.Parameters.AddWithValue("@Id", id);
+                    da.Fill(ds, "Status");
+                    Ado.SetAdded(ref ds, "Status");
+                }
 
-                    // Add Modified Status Codes
-                    using (SqlCommand cmd = new("SELECT * FROM [Status] WHERE sta_id <= @Id AND sta_modified = 1", conn)) {
-                        using (SqlDataAdapter da = new(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.SelectCommand.Parameters.AddWithValue("@Id", id);
-                            da.Fill(ds, "Status");
-                            Ado.SetModified(ref ds, "Status");
-                        }
-                    }
-
+                // Add Modified Status Codes
+                using (SqlCommand cmd = new("SELECT * FROM [Status] WHERE sta_id <= @Id AND sta_modified = 1", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.SelectCommand.Parameters.AddWithValue("@Id", id);
+                    da.Fill(ds, "Status");
+                    Ado.SetModified(ref ds, "Status");
                 }
 
             } catch (SqlException ex) {
                 Debug.WriteLine("Errors Count:" + ex.Errors.Count);
                 foreach (SqlError sqlerror in ex.Errors) {
-                    Logger.LogError(sqlerror.Number, sqlerror.Message);
+                    Logger.LogError(sqlerror.Number, "{message}", sqlerror.Message);
                     Debug.WriteLine(sqlerror.Number + " - " + sqlerror.Message);
                 }
             } catch (Exception ex) {
-                Logger.LogInformation(String.Format("[System Controller] - Status Changes: {0}", ex.Message));
+                Logger.LogInformation("[System Controller] - Status Changes: {message}", ex.Message);
             }
 
             // Return completed Dataset with OK(200) Status
@@ -184,38 +180,34 @@ namespace DNA3.API {
 
             try {
 
-                using (SqlConnection conn = new(ConnectionString)) {
+                using SqlConnection conn = new(ConnectionString);
 
-                    // Add User Table
-                    using (SqlCommand cmd = new("SELECT * FROM [User] WHERE usr_id > @Id", conn)) {
-                        using (SqlDataAdapter da = new(cmd)) {
-                            //da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.SelectCommand.Parameters.AddWithValue("@Id", id);
-                            da.Fill(ds, "User");
-                            Ado.SetAdded(ref ds, "User");
-                        }
-                    }
+                // Add User Table
+                using (SqlCommand cmd = new("SELECT * FROM [User] WHERE usr_id > @Id", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    //da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.SelectCommand.Parameters.AddWithValue("@Id", id);
+                    da.Fill(ds, "User");
+                    Ado.SetAdded(ref ds, "User");
+                }
 
-                    // Add Modified Users
-                    using (SqlCommand cmd = new("SELECT * FROM [User] WHERE usr_id <= @Id AND usr_modified = 1", conn)) {
-                        using (SqlDataAdapter da = new(cmd)) {
-                            //da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.SelectCommand.Parameters.AddWithValue("@Id", id);
-                            da.Fill(ds, "User");
-                            Ado.SetModified(ref ds, "User");
-                        }
-                    }
-
+                // Add Modified Users
+                using (SqlCommand cmd = new("SELECT * FROM [User] WHERE usr_id <= @Id AND usr_modified = 1", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    //da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.SelectCommand.Parameters.AddWithValue("@Id", id);
+                    da.Fill(ds, "User");
+                    Ado.SetModified(ref ds, "User");
                 }
 
             } catch (SqlException ex) {
                 Debug.WriteLine("Errors Count:" + ex.Errors.Count);
                 foreach (SqlError sqlerror in ex.Errors) {
-                    Logger.LogError(sqlerror.Number, sqlerror.Message);
+                    Logger.LogError(sqlerror.Number, "{message}", sqlerror.Message);
                     Debug.WriteLine(sqlerror.Number + " - " + sqlerror.Message);
                 }
             } catch (Exception ex) {
-                Logger.LogInformation(String.Format("[System Controller] - User Changes: {0}", ex.Message));
+                Logger.LogInformation("[System Controller] - User Changes: {message}", ex.Message);
             }
 
             // Return completed Dataset with OK(200) Status
@@ -231,38 +223,34 @@ namespace DNA3.API {
 
             try {
 
-                using (SqlConnection conn = new(ConnectionString)) {
+                using SqlConnection conn = new(ConnectionString);
 
-                    // Add Login Table
-                    using (SqlCommand cmd = new("SELECT * FROM [Login] WHERE lgn_id > @Id", conn)) {
-                        using (SqlDataAdapter da = new(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.SelectCommand.Parameters.AddWithValue("@Id", id);
-                            da.Fill(ds, "Login");
-                            Ado.SetAdded(ref ds, "Login");
-                        }
-                    }
+                // Add Login Table
+                using (SqlCommand cmd = new("SELECT * FROM [Login] WHERE lgn_id > @Id", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.SelectCommand.Parameters.AddWithValue("@Id", id);
+                    da.Fill(ds, "Login");
+                    Ado.SetAdded(ref ds, "Login");
+                }
 
-                    // Add Modified Logins
-                    using (SqlCommand cmd = new("SELECT * FROM [Login] WHERE lgn_id <= @Id AND lgn_modified = 1", conn)) {
-                        using (SqlDataAdapter da = new(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.SelectCommand.Parameters.AddWithValue("@Id", id);
-                            da.Fill(ds, "Login");
-                            Ado.SetModified(ref ds, "Login");
-                        }
-                    }
-
+                // Add Modified Logins
+                using (SqlCommand cmd = new("SELECT * FROM [Login] WHERE lgn_id <= @Id AND lgn_modified = 1", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.SelectCommand.Parameters.AddWithValue("@Id", id);
+                    da.Fill(ds, "Login");
+                    Ado.SetModified(ref ds, "Login");
                 }
 
             } catch (SqlException ex) {
                 Debug.WriteLine("Errors Count:" + ex.Errors.Count);
                 foreach (SqlError sqlerror in ex.Errors) {
-                    Logger.LogError(sqlerror.Number, sqlerror.Message);
+                    Logger.LogError(sqlerror.Number, "{message}", sqlerror.Message);
                     Debug.WriteLine(sqlerror.Number + " - " + sqlerror.Message);
                 }
             } catch (Exception ex) {
-                Logger.LogInformation(String.Format("[System Controller] - Login Changes: {0}", ex.Message));
+                Logger.LogInformation("[System Controller] - Login Changes: {message}", ex.Message);
             }
 
             // Return completed Dataset with OK(200) Status
@@ -279,11 +267,11 @@ namespace DNA3.API {
             } catch (SqlException ex) {
                 Debug.WriteLine("Errors Count:" + ex.Errors.Count);
                 foreach (SqlError sqlerror in ex.Errors) {
-                    Logger.LogError(sqlerror.Number, sqlerror.Message);
+                    Logger.LogError(sqlerror.Number, "{message}", sqlerror.Message);
                     Debug.WriteLine(sqlerror.Number + " - " + sqlerror.Message);
                 }
             } catch (Exception ex) {
-                Logger.LogInformation(String.Format("[System Controller] - Login Changes: {0}", ex.Message));
+                Logger.LogInformation("[System Controller] - Login Changes: {message}", ex.Message);
             }
 
             // Return completed Dataset with OK(200) Status

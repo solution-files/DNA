@@ -30,6 +30,8 @@ namespace DNA3.Models {
 
         #region Mapped
 
+        public virtual DbSet<AppointmentType> AppointmentType { get; set; }
+        public virtual DbSet<Appointment> Appointment { get; set; }
         public virtual DbSet<Project> Project { get; set; }
         public virtual DbSet<Deviceservice> Deviceservice { get; set; }
         public virtual DbSet<Service> Service { get; set; }
@@ -118,6 +120,24 @@ namespace DNA3.Models {
             modelBuilder.Entity<Databases>().HasKey(e => e.database_id);
             modelBuilder.Entity<DailyServiceSummary>().HasNoKey();
             modelBuilder.Entity<MonthlyServiceSummary>().HasNoKey();
+
+            modelBuilder.Entity<Appointment>(entity => {
+                entity.Property(e => e.AppointmentId).UseIdentityColumn(10000, 1);
+
+                entity.Property(e => e.StartTime).HasColumnType("datetime");
+
+                entity.Property(e => e.StartTimeZone).HasMaxLength(30);
+
+                entity.Property(e => e.EndTime).HasColumnType("datetime");
+
+                entity.Property(e => e.EndTimeZone).HasMaxLength(30);
+
+                entity.Property(e => e.Location).HasMaxLength(100);
+
+                entity.Property(e => e.Subject).HasMaxLength(300);
+
+                entity.Property(e => e.RecurrenceRule).HasMaxLength(100);
+            });
 
             modelBuilder.Entity<Project>(entity => {
                 entity.Property(e => e.ProjectId).UseIdentityColumn(10000, 1);

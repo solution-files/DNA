@@ -9,26 +9,22 @@ using System.Threading.Tasks;
 
 namespace DNA3.ViewComponents {
 
-    public class MessagesViewComponent : ViewComponent {
+    public class MessagesViewComponent(ILogger<MessagesViewComponent> logger) : ViewComponent {
 
         #region Variables
 
-        private readonly ILogger<MessagesViewComponent> Logger;
+        private readonly ILogger<MessagesViewComponent> Logger = logger;
 
         #endregion
 
         #region Methods
-
-        public MessagesViewComponent(ILogger<MessagesViewComponent> logger) {
-            Logger = logger;
-        }
 
         public async Task<IViewComponentResult> InvokeAsync() {
             Task<IViewComponentResult> ComponentTask = null;
             try {
                 ComponentTask = Task.FromResult((IViewComponentResult)View("Messages"));
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return await ComponentTask;
         }

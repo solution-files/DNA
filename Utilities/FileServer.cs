@@ -14,7 +14,7 @@ namespace Utilities {
             if (!IsNetworkDrive(path)) return path;   // If it's not a network path, just return the path unchanged
 
             string rval = path;
-            string driveprefix = path.Substring(0, 2);
+            string driveprefix = path[..2];
             string unc;
 
             if (driveprefix != "\\") {
@@ -28,13 +28,13 @@ namespace Utilities {
                 }
             }
 
-            if (rval == null) { rval = path; }
+            rval ??= path;
 
             return rval;
         }
 
         public static bool IsNetworkDrive(string path) {
-            FileInfo f = new FileInfo(path);
+            FileInfo f = new(path);
             string driveRoot = Path.GetPathRoot(f.FullName); // Example return "C:\"
             // find the drive 
             System.IO.DriveInfo[] drives = System.IO.DriveInfo.GetDrives();

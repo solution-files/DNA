@@ -14,7 +14,7 @@ namespace DNA3.Classes {
         #region Methods
 
         public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context) {
-            List<System.Collections.Generic.KeyValuePair<string, OpenApiPathItem>> nonMobileRoutes = swaggerDoc.Paths.Where(x => x.Key.ToString().ToLower().Contains("public")).ToList();
+            List<System.Collections.Generic.KeyValuePair<string, OpenApiPathItem>> nonMobileRoutes = [.. swaggerDoc.Paths.Where(x => x.Key.ToString().ToLower().Contains("public"))];
             nonMobileRoutes.ForEach(x => { swaggerDoc.Paths.Remove(x.Key); });
         }
 

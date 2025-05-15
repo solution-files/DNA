@@ -24,7 +24,7 @@ namespace DNA.ViewComponents {
         #region Methods
 
         public async Task<IViewComponentResult> InvokeAsync() {
-			Task<IViewComponentResult> ComponentTask = default;
+			Task<IViewComponentResult>? ComponentTask = default;
 			try {
 				model = await Context.Page.Where(x => x.Name == "Introduction").SingleOrDefaultAsync();
 				ComponentTask = Task.FromResult((IViewComponentResult)View("AboutUs", model));

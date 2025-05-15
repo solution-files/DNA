@@ -5,11 +5,11 @@ using DNA3.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Data;
-using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 
 #endregion
@@ -23,7 +23,7 @@ namespace DNA3.API {
     [ApiController]
     public class AdoUserController : Controller {
 
-        #region Properties, Variables and Constants
+        #region Variables
 
         private readonly MainContext Context;
         private readonly IConfiguration Configuration;
@@ -59,28 +59,24 @@ namespace DNA3.API {
 
             try {
 
-                using (SqlConnection conn = new(ConnectionString)) {
+                using SqlConnection conn = new(ConnectionString);
 
-                    // Add User Table
-                    using (SqlCommand cmd = new("SELECT * FROM [User] WHERE usr_id > @Id", conn)) {
-                        using (SqlDataAdapter da = new(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.SelectCommand.Parameters.AddWithValue("@Id", id);
-                            da.Fill(ds, "User");
-                            Data.SetAdded(ref ds, "User");
-                        }
-                    }
+                // Add User Table
+                using (SqlCommand cmd = new("SELECT * FROM [User] WHERE usr_id > @Id", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.SelectCommand.Parameters.AddWithValue("@Id", id);
+                    da.Fill(ds, "User");
+                    Data.SetAdded(ref ds, "User");
+                }
 
-                    // Add Modified Users
-                    using (SqlCommand cmd = new("SELECT * FROM [User] WHERE usr_id <= @Id AND usr_modified = 1", conn)) {
-                        using (SqlDataAdapter da = new(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.SelectCommand.Parameters.AddWithValue("@Id", id);
-                            da.Fill(ds, "User");
-                            Data.SetModified(ref ds, "User");
-                        }
-                    }
-
+                // Add Modified Users
+                using (SqlCommand cmd = new("SELECT * FROM [User] WHERE usr_id <= @Id AND usr_modified = 1", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.SelectCommand.Parameters.AddWithValue("@Id", id);
+                    da.Fill(ds, "User");
+                    Data.SetModified(ref ds, "User");
                 }
 
             } catch (SqlException ex) {
@@ -108,32 +104,27 @@ namespace DNA3.API {
             DataSet ds = new("Remote");
 
             try {
-                using (SqlConnection conn = new(ConnectionString)) {
+                using SqlConnection conn = new(ConnectionString);
 
-                    // Add Status Table
-                    using (SqlCommand cmd = new("SELECT * FROM [Status]", conn)) {
-                        using (SqlDataAdapter da = new(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.Fill(ds, "Status");
-                        }
-                    }
+                // Add Status Table
+                using (SqlCommand cmd = new("SELECT * FROM [Status]", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.Fill(ds, "Status");
+                }
 
-                    // Add Role Table
-                    using (SqlCommand cmd = new("SELECT * FROM [Role]", conn)) {
-                        using (SqlDataAdapter da = new(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.Fill(ds, "Role");
-                        }
-                    }
+                // Add Role Table
+                using (SqlCommand cmd = new("SELECT * FROM [Role]", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.Fill(ds, "Role");
+                }
 
-                    // Add User Table
-                    using (SqlCommand cmd = new("SELECT * FROM [User]", conn)) {
-                        using (SqlDataAdapter da = new(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.Fill(ds, "User");
-                        }
-                    }
-
+                // Add User Table
+                using (SqlCommand cmd = new("SELECT * FROM [User]", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.Fill(ds, "User");
                 }
             } catch (Exception ex) {
                 Logger.LogError(ex, "{message}", ex.Message);
@@ -156,33 +147,28 @@ namespace DNA3.API {
 
             try {
 
-                using (SqlConnection conn = new(ConnectionString)) {
+                using SqlConnection conn = new(ConnectionString);
 
-                    // Add Client Table
-                    using (SqlCommand cmd = new("SELECT * FROM [Client]", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.Fill(ds, "Client");
-                        }
-                    }
+                // Add Client Table
+                using (SqlCommand cmd = new("SELECT * FROM [Client]", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.Fill(ds, "Client");
+                }
 
 
-                    // Add Role Table
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM [Role]", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.Fill(ds, "Role");
-                        }
-                    }
+                // Add Role Table
+                using (SqlCommand cmd = new("SELECT * FROM [Role]", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.Fill(ds, "Role");
+                }
 
-                    // Add Status Table
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM [Status]", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.Fill(ds, "Status");
-                        }
-                    }
-
+                // Add Status Table
+                using (SqlCommand cmd = new("SELECT * FROM [Status]", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.Fill(ds, "Status");
                 }
             } catch (Exception ex) {
                 Logger.LogError(ex, "{message}", ex.Message);
@@ -202,52 +188,45 @@ namespace DNA3.API {
         [HttpGet]
         public IActionResult Open(int id) {
 
-            DataSet ds = new DataSet("Remote");
+            DataSet ds = new("Remote");
 
             try {
 
-                using (SqlConnection conn = new SqlConnection(ConnectionString)) {
+                using SqlConnection conn = new(ConnectionString);
 
-                    // Add Client Table
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM [Client]", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.Fill(ds, "Client");
-                        }
-                    }
+                // Add Client Table
+                using (SqlCommand cmd = new("SELECT * FROM [Client]", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.Fill(ds, "Client");
+                }
 
-                    // Add Role Table
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM [Role]", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.Fill(ds, "Role");
-                        }
-                    }
+                // Add Role Table
+                using (SqlCommand cmd = new("SELECT * FROM [Role]", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.Fill(ds, "Role");
+                }
 
-                    // Add Status Table
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM [Status]", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.Fill(ds, "Status");
-                        }
-                    }
+                // Add Status Table
+                using (SqlCommand cmd = new("SELECT * FROM [Status]", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.Fill(ds, "Status");
+                }
 
-                    // Add Login Table
-                    using (SqlCommand cmd = new SqlCommand($"SELECT * FROM [Login] WHERE lgn_usrid = {id}", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.Fill(ds, "Login");
-                        }
-                    }
+                // Add Login Table
+                using (SqlCommand cmd = new($"SELECT * FROM [Login] WHERE lgn_usrid = {id}", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.Fill(ds, "Login");
+                }
 
-                    // Add User Table
-                    using (SqlCommand cmd = new SqlCommand($"SELECT * FROM [User] WHERE usr_id = {id}", conn)) {
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.Fill(ds, "User");
-                        }
-                    }
-
+                // Add User Table
+                using (SqlCommand cmd = new($"SELECT * FROM [User] WHERE usr_id = {id}", conn)) {
+                    using SqlDataAdapter da = new(cmd);
+                    da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                    da.Fill(ds, "User");
                 }
             } catch (Exception ex) {
                 Logger.LogError(ex, "{message}", ex.Message);
@@ -270,43 +249,42 @@ namespace DNA3.API {
             SqlParameter spResponse;
             int? result = 0;
             try {
-                using (SqlConnection conn = new SqlConnection(ConnectionString)) {
-                    SqlDataAdapter daUser = new SqlDataAdapter("SELECT * FROM [User]", conn) {
-                        MissingSchemaAction = MissingSchemaAction.AddWithKey
-                    };
-                    SqlCommandBuilder cbUser = new SqlCommandBuilder(daUser);
-                    daUser.UpdateCommand = cbUser.GetUpdateCommand().Clone();
-                    daUser.DeleteCommand = cbUser.GetDeleteCommand().Clone();
-                    daUser.InsertCommand = new SqlCommand("UserInsert", conn) {
-                        CommandType = CommandType.StoredProcedure
-                    };
-                    daUser.InsertCommand.Parameters.Add("@usr_cliid", SqlDbType.Int, 0, "usr_cliid");
-                    daUser.InsertCommand.Parameters.Add("@usr_first", SqlDbType.VarChar, 30, "usr_first");
-                    daUser.InsertCommand.Parameters.Add("@usr_last", SqlDbType.VarChar, 30, "usr_last");
-                    daUser.InsertCommand.Parameters.Add("@usr_title", SqlDbType.VarChar, 30, "usr_title");
-                    daUser.InsertCommand.Parameters.Add("@usr_name", SqlDbType.VarChar, 30, "usr_name");
-                    daUser.InsertCommand.Parameters.Add("@usr_locid", SqlDbType.Int, 0, "usr_locid");
-                    daUser.InsertCommand.Parameters.Add("@usr_dptid", SqlDbType.Int, 0, "usr_dptid");
-                    daUser.InsertCommand.Parameters.Add("@usr_srcid", SqlDbType.VarChar, 30, "usr_srcid");
-                    daUser.InsertCommand.Parameters.Add("@usr_email", SqlDbType.VarChar, 160, "usr_email");
-                    daUser.InsertCommand.Parameters.Add("@usr_password", SqlDbType.VarChar, 100, "usr_password");
-                    daUser.InsertCommand.Parameters.Add("@usr_note", SqlDbType.VarChar, 300, "usr_note");
-                    daUser.InsertCommand.Parameters.Add("@usr_rolid", SqlDbType.Int, 0, "usr_rolid");
-                    daUser.InsertCommand.Parameters.Add("@usr_role", SqlDbType.VarChar, 30, "usr_role");
-                    daUser.InsertCommand.Parameters.Add("@usr_persist", SqlDbType.Int, 0, "usr_persist");
-                    daUser.InsertCommand.Parameters.Add("@usr_card", SqlDbType.VarChar, 4, "usr_card");
-                    daUser.InsertCommand.Parameters.Add("@usr_staid", SqlDbType.Int, 0, "usr_staid");
-                    daUser.InsertCommand.Parameters.Add("@usr_token", SqlDbType.VarChar, 128, "usr_token");
-                    daUser.InsertCommand.Parameters.Add("@usr_tokendate", SqlDbType.DateTime, 0, "usr_tokendate");
-                    daUser.InsertCommand.Parameters.Add("@usr_identity", SqlDbType.NVarChar, 128, "usr_identity");
-                    spId = daUser.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0);
-                    spId.Direction = ParameterDirection.Output;
-                    spResponse = daUser.InsertCommand.Parameters.Add("@Response", SqlDbType.VarChar, 300);
-                    spResponse.Direction = ParameterDirection.Output;
-                    cbUser.Dispose();
-                    daUser.Update(ds, "User");
-                    result = (int?)daUser.InsertCommand.Parameters["@ID"].Value ?? 0;
-                }
+                using SqlConnection conn = new(ConnectionString);
+                SqlDataAdapter daUser = new("SELECT * FROM [User]", conn) {
+                    MissingSchemaAction = MissingSchemaAction.AddWithKey
+                };
+                SqlCommandBuilder cbUser = new(daUser);
+                daUser.UpdateCommand = cbUser.GetUpdateCommand().Clone();
+                daUser.DeleteCommand = cbUser.GetDeleteCommand().Clone();
+                daUser.InsertCommand = new SqlCommand("UserInsert", conn) {
+                    CommandType = CommandType.StoredProcedure
+                };
+                daUser.InsertCommand.Parameters.Add("@usr_cliid", SqlDbType.Int, 0, "usr_cliid");
+                daUser.InsertCommand.Parameters.Add("@usr_first", SqlDbType.VarChar, 30, "usr_first");
+                daUser.InsertCommand.Parameters.Add("@usr_last", SqlDbType.VarChar, 30, "usr_last");
+                daUser.InsertCommand.Parameters.Add("@usr_title", SqlDbType.VarChar, 30, "usr_title");
+                daUser.InsertCommand.Parameters.Add("@usr_name", SqlDbType.VarChar, 30, "usr_name");
+                daUser.InsertCommand.Parameters.Add("@usr_locid", SqlDbType.Int, 0, "usr_locid");
+                daUser.InsertCommand.Parameters.Add("@usr_dptid", SqlDbType.Int, 0, "usr_dptid");
+                daUser.InsertCommand.Parameters.Add("@usr_srcid", SqlDbType.VarChar, 30, "usr_srcid");
+                daUser.InsertCommand.Parameters.Add("@usr_email", SqlDbType.VarChar, 160, "usr_email");
+                daUser.InsertCommand.Parameters.Add("@usr_password", SqlDbType.VarChar, 100, "usr_password");
+                daUser.InsertCommand.Parameters.Add("@usr_note", SqlDbType.VarChar, 300, "usr_note");
+                daUser.InsertCommand.Parameters.Add("@usr_rolid", SqlDbType.Int, 0, "usr_rolid");
+                daUser.InsertCommand.Parameters.Add("@usr_role", SqlDbType.VarChar, 30, "usr_role");
+                daUser.InsertCommand.Parameters.Add("@usr_persist", SqlDbType.Int, 0, "usr_persist");
+                daUser.InsertCommand.Parameters.Add("@usr_card", SqlDbType.VarChar, 4, "usr_card");
+                daUser.InsertCommand.Parameters.Add("@usr_staid", SqlDbType.Int, 0, "usr_staid");
+                daUser.InsertCommand.Parameters.Add("@usr_token", SqlDbType.VarChar, 128, "usr_token");
+                daUser.InsertCommand.Parameters.Add("@usr_tokendate", SqlDbType.DateTime, 0, "usr_tokendate");
+                daUser.InsertCommand.Parameters.Add("@usr_identity", SqlDbType.NVarChar, 128, "usr_identity");
+                spId = daUser.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0);
+                spId.Direction = ParameterDirection.Output;
+                spResponse = daUser.InsertCommand.Parameters.Add("@Response", SqlDbType.VarChar, 300);
+                spResponse.Direction = ParameterDirection.Output;
+                cbUser.Dispose();
+                daUser.Update(ds, "User");
+                result = (int?)daUser.InsertCommand.Parameters["@ID"].Value ?? 0;
             } catch (Exception ex) {
                 Logger.LogError(ex, "{message}", ex.Message);
                 return BadRequest(ex);
@@ -323,13 +301,12 @@ namespace DNA3.API {
         [HttpPost]
         public IActionResult SaveAll([FromBody] DataSet ds) {
             try {
-                using (SqlConnection conn = new SqlConnection(ConnectionString)) {
-                    SqlDataAdapter daUser = new SqlDataAdapter("SELECT * FROM [User]", conn) {
-                        MissingSchemaAction = MissingSchemaAction.AddWithKey
-                    };
-                    SqlCommandBuilder cbUser = new SqlCommandBuilder(daUser);
-                    daUser.Update(ds, "User");
-                }
+                using SqlConnection conn = new(ConnectionString);
+                SqlDataAdapter daUser = new("SELECT * FROM [User]", conn) {
+                    MissingSchemaAction = MissingSchemaAction.AddWithKey
+                };
+                SqlCommandBuilder cbUser = new(daUser);
+                daUser.Update(ds, "User");
             } catch (Exception ex) {
                 Logger.LogError(ex, "{message}", ex.Message);
                 return BadRequest(ex);
@@ -346,16 +323,14 @@ namespace DNA3.API {
         [HttpPost]
         public IActionResult Delete(int id) {
             try {
-                using (SqlConnection conn = new SqlConnection(ConnectionString)) {
-                    using (SqlCommand cmd = new SqlCommand()) {
-                        cmd.Connection = conn;
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.CommandText = "StatementDelete";
-                        cmd.CommandTimeout = 30;
-                        cmd.Parameters.AddWithValue("@StatementId", id);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
+                using SqlConnection conn = new(ConnectionString);
+                using SqlCommand cmd = new();
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "StatementDelete";
+                cmd.CommandTimeout = 30;
+                cmd.Parameters.AddWithValue("@StatementId", id);
+                cmd.ExecuteNonQuery();
             } catch (Exception ex) {
                 Logger.LogError(ex, "{message}", ex.Message);
                 return BadRequest(ex);
@@ -368,18 +343,15 @@ namespace DNA3.API {
         public IActionResult Report() {
             var ds = new DataSet();
             try {
-                using (SqlConnection conn = new SqlConnection(ConnectionString)) {
-                    using (SqlCommand cmd = new SqlCommand()) {
-                        cmd.Connection = conn;
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.CommandText = "UserListReport";
-                        cmd.CommandTimeout = 30;
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
-                            da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-                            da.Fill(ds, "UserListReport");
-                        }
-                    }
-                }
+                using SqlConnection conn = new(ConnectionString);
+                using SqlCommand cmd = new();
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "UserListReport";
+                cmd.CommandTimeout = 30;
+                using SqlDataAdapter da = new(cmd);
+                da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                da.Fill(ds, "UserListReport");
             } catch (Exception ex) {
                 Logger.LogError(ex, "{message}", ex.Message);
                 return BadRequest(ex);

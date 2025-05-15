@@ -28,19 +28,19 @@ namespace DNA3.Classes {
 
         // Get Claims List
         public static List<Claim> GetClaimsList(Login claimant) {
-            List<Claim> claims = new();
+            List<Claim> claims = [];
             try {
-                claims = new List<Claim> {
-                    new Claim("lgnid", claimant.LoginId.ToString()),
-                    new Claim("usrid", claimant.UserId.ToString()),
-                    new Claim("cliid", claimant.User.ClientId.ToString()),
-                    new Claim("first", claimant.User.First),
-                    new Claim("last", claimant.User.Last),
-                    new Claim("full", claimant.User.First + ' ' + claimant.User.Last),
-                    new Claim("email", claimant.Email),
-                    new Claim("role", claimant.User.Role.Code),
-                    new Claim(ClaimTypes.Email, claimant.Email)
-                };
+                claims = [
+                    new("lgnid", claimant.LoginId.ToString()),
+                    new("usrid", claimant.UserId.ToString()),
+                    new("cliid", claimant.User.ClientId.ToString()),
+                    new("first", claimant.User.First),
+                    new("last", claimant.User.Last),
+                    new("full", claimant.User.First + ' ' + claimant.User.Last),
+                    new("email", claimant.Email),
+                    new("role", claimant.User.Role.Code),
+                    new(ClaimTypes.Email, claimant.Email)
+                ];
             } catch (Exception ex) {
                 Log.Error(ex, ex.Message);
             }
@@ -101,8 +101,7 @@ namespace DNA3.Classes {
         /// <returns>A random string</returns>
         public static string GenerateRandomPassword(PasswordOptions opts = null) {
 
-            if (opts == null) {
-                opts = new PasswordOptions() {
+            opts ??= new PasswordOptions() {
                     RequiredLength = 10,
                     RequiredUniqueChars = 1,
                     RequireDigit = true,
@@ -110,12 +109,11 @@ namespace DNA3.Classes {
                     RequireNonAlphanumeric = true,
                     RequireUppercase = true
                 };
-            }
 
-            string[] randomChars = new[] { "ABCDEFGHJKLMNOPQRSTUVWXYZ", "abcdefghijkmnopqrstuvwxyz", "0123456789", "!@$?_-" };
+            string[] randomChars = ["ABCDEFGHJKLMNOPQRSTUVWXYZ", "abcdefghijkmnopqrstuvwxyz", "0123456789", "!@$?_-"];
 
             Random rand = new(Environment.TickCount);
-            List<char> chars = new();
+            List<char> chars = [];
 
             if (opts.RequireUppercase) {
                 chars.Insert(rand.Next(0, chars.Count), randomChars[0][rand.Next(0, randomChars[0].Length)]);
@@ -138,7 +136,7 @@ namespace DNA3.Classes {
                 chars.Insert(rand.Next(0, chars.Count), rcs[rand.Next(0, rcs.Length)]);
             }
 
-            return new string(chars.ToArray());
+            return new string([.. chars]);
         }
 
         /// <summary>
@@ -149,7 +147,7 @@ namespace DNA3.Classes {
         public static String CreateHash(string value) {
             string result;
             try {
-                result = (BitConverter.ToString(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(value))).Replace("-", "")).ToUpper();
+                result = (Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value)))).ToUpper();
             } catch {
                 result = null;
             }
@@ -206,7 +204,7 @@ namespace DNA3.Classes {
         /// <returns>A human readable representation of the input value as a string</returns>
         /// <remarks>From StackOverflow.com</remarks>
         public static String BytesToString(long byteCount) {
-            string[] suf = new[] { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
+            string[] suf = ["B", "KB", "MB", "GB", "TB", "PB", "EB"];
             if (byteCount == 0)
                 return "0 " + suf[0];
             long bytes = Math.Abs(byteCount);
@@ -256,7 +254,7 @@ namespace DNA3.Classes {
             string ReturnValue = SourceString;
             try {
                 int EndPosition = SourceString.IndexOf(StringIndex);
-                ReturnValue = SourceString.Substring(0, EndPosition);
+                ReturnValue = SourceString[..EndPosition];
             } catch {
             }
             return ReturnValue;
@@ -269,7 +267,7 @@ namespace DNA3.Classes {
         /// <returns>The numeric portion of a string only</returns>
         public static string[] NumericStringElements(string[] Elements) {
             string[] ReturnValue = null;
-            List<string> Result = new();
+            List<string> Result = [];
             try {
                 foreach (var Element in Elements) {
                     for (var n = 1; n <= Element.Length; n++) {
@@ -280,7 +278,7 @@ namespace DNA3.Classes {
                     }
                 }
                 if (Result.Count > 0)
-                    ReturnValue = Result.ToArray();
+                    ReturnValue = [.. Result];
             } catch {
                 ReturnValue = null;
             }

@@ -6,7 +6,13 @@ using Utilities;
 
 #endregion
 
+#region Directives
+
 #nullable disable
+
+#endregion
+
+#region Class
 
 namespace DNA3.Models {
     public partial class Vendor {
@@ -79,3 +85,5 @@ namespace DNA3.Models {
 	}
 
 }
+
+#endregion

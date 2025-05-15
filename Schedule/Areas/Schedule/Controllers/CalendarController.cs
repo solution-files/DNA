@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Schedule.Models;
 using Serilog;
 using Syncfusion.EJ2.Base;
 using System;
@@ -38,30 +40,95 @@ namespace Schedule.Controllers {
 
         #region Controller Actions
 
-        #region Page Editing
-
         // Index
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Index() {
-            string message;
             try {
-                List<AppointmentData> result =
-                [
-                    new AppointmentData { Id = 1, Subject = "Explosion of Betelgeuse Star", StartTime = new DateTime(2025, 4, 11, 9, 30, 0), EndTime = new DateTime(2025, 4, 11, 11, 0, 0) },
-                    new AppointmentData { Id = 2, Subject = "Thule Air Crash Report", StartTime = new DateTime(2025, 4, 12, 12, 0, 0), EndTime = new DateTime(2025, 4, 12, 14, 0, 0) },
-                    new AppointmentData { Id = 3, Subject = "Blue Moon Eclipse", StartTime = new DateTime(2025, 4, 13, 9, 30, 0), EndTime = new DateTime(2025, 4, 13, 11, 0, 0) },
-                    new AppointmentData { Id = 4, Subject = "Meteor Showers in 2022", StartTime = new DateTime(2025, 4, 14, 13, 0, 0), EndTime = new DateTime(2025, 4, 14, 14, 30, 0) },
-                    new AppointmentData { Id = 5, Subject = "Milky Way as Melting pot", StartTime = new DateTime(2025, 4, 15, 12, 0, 0), EndTime = new DateTime(2025, 4, 15, 14, 0, 0) },
-                ];
                 Log.Logger.ForContext("UserId", User.UserId()).Warning($"View {Title} Overview");
-                return View(result);
             } catch (Exception ex) {
-                message = ex.Message;
-                Site.Messages.Enqueue(message);
-                Logger.LogError(ex, "{message}", message);
+                Site.Messages.Enqueue(ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
-            return RedirectToAction("Index", "Dashboard");
+            return View();
+        }
+
+        #endregion
+
+        #region Scheduler Methods
+
+        [HttpPost]
+        public async Task<List<Appointment>> LoadData([FromBody] Params param) {
+            List<Appointment> result = [];
+            try {
+                DateTime start = (param.CustomStart != new DateTime()) ? param.CustomStart : param.StartDate;
+                DateTime end = (param.CustomEnd != new DateTime()) ? param.CustomEnd : param.EndDate;
+                ViewBag.AppointmentTypes = await Context.AppointmentType.OrderBy(x => x.Name).ToListAsync();
+                result = [.. Context.Appointment.Where(app => (app.StartTime >= start && app.StartTime <= end) || (app.RecurrenceRule != null && app.RecurrenceRule != ""))];
+            } catch (Exception ex) {
+                Site.Messages.Enqueue(ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
+            }
+            return result;
+        }
+
+        [HttpPost]
+        public List<Appointment> UpdateData([FromBody] EditParams param) {
+            try {
+                if (param.action == "insert" || (param.action == "batch" && param.added.Count > 0)) {
+                    int intMax = Context.Appointment.ToList().Count > 0 ? Context.Appointment.ToList().Max(p => p.AppointmentId) : 1;
+                    for (var i = 0; i < param.added.Count; i++) {
+                        var value = (param.action == "insert") ? param.value : param.added[i];
+                        Appointment appt = new() {
+                            StartTime = value.StartTime.ToUniversalTime(),
+                            EndTime = value.EndTime.ToUniversalTime(),
+                            Subject = value.Subject,
+                            Location = value.Location,
+                            AllDay = value.AllDay,
+                            StartTimeZone = value.StartTimeZone,
+                            EndTimeZone = value.EndTimeZone,
+                            RecurrenceRule = value.RecurrenceRule,
+                            Description = value.Description,
+                        };
+                        Context.Appointment.Add(appt);
+                        Context.SaveChanges();
+                    }
+                }
+                if (param.action == "update" || (param.action == "batch" && param.changed.Count > 0)) {
+                    var value = (param.action == "update") ? param.value : param.changed[0];
+                    var filterData = Context.Appointment.Where(c => c.AppointmentId == Convert.ToInt32(value.AppointmentId));
+                    if (filterData.Any()) {
+                        Appointment appt = Context.Appointment.Single(A => A.AppointmentId == Convert.ToInt32(value.AppointmentId));
+                        appt.StartTime = value.StartTime.ToLocalTime();
+                        appt.EndTime = value.EndTime.ToLocalTime();
+                        appt.StartTimeZone = value.StartTimeZone;
+                        appt.EndTimeZone = value.EndTimeZone;
+                        appt.Subject = value.Subject;
+                        appt.Location = value.Location;
+                        appt.AllDay = value.AllDay;
+                        appt.RecurrenceRule = value.RecurrenceRule;
+                        appt.Description = value.Description;
+                    }
+                    Context.SaveChanges();
+                }
+                if (param.action == "remove" || (param.action == "batch" && param.deleted.Count > 0)) {
+                    if (param.action == "remove") {
+                        int key = Convert.ToInt32(param.key);
+                        Appointment? appt = Context.Appointment.Where(c => c.AppointmentId == key).FirstOrDefault();
+                        if (appt != null) Context.Appointment.Remove(appt);
+                    } else {
+                        foreach (var apps in param.deleted) {
+                            Appointment? appt = Context.Appointment.Where(c => c.AppointmentId == apps.AppointmentId).FirstOrDefault();
+                            if (appt != null) Context.Appointment.Remove(appt);
+                        }
+                    }
+                    Context.SaveChanges();
+                }
+            } catch(Exception ex) {
+                Site.Messages.Enqueue(ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
+            }
+            return [.. Context.Appointment];
         }
 
         #endregion
@@ -85,9 +152,6 @@ namespace Schedule.Controllers {
 
         #endregion
 
-        #endregion
-
     }
-
 
 }

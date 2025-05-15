@@ -7,7 +7,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 #endregion
 
+#region Directives
+
 // #nullable disable
+
+#endregion
+
+#region Class
 
 namespace DNA3.Models {
 
@@ -87,3 +93,5 @@ namespace DNA3.Models {
     }
 
 }
+
+#endregion

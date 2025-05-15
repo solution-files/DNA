@@ -23,12 +23,12 @@ namespace Utilities {
         public static bool EmailAddressExists(string EmailAddress, string SmtpServer = "gmail-smtp-in.l.google.com") {
             bool ReturnValue;
             try {
-                TcpClient tClient = new TcpClient(SmtpServer, 25);
+                TcpClient tClient = new(SmtpServer, 25);
                 string CRLF = "\r\n";
                 byte[] dataBuffer;
                 string ResponseString;
                 NetworkStream netStream = tClient.GetStream();
-                StreamReader reader = new StreamReader(netStream);
+                StreamReader reader = new(netStream);
                 ResponseString = reader.ReadLine();
                 dataBuffer = Strings.BytesFromString("HELO KirtanHere" + CRLF);
                 netStream.Write(dataBuffer, 0, dataBuffer.Length);
@@ -39,7 +39,7 @@ namespace Utilities {
                 dataBuffer = Strings.BytesFromString("RCPT TO:<" + EmailAddress.Trim() + ">" + CRLF);
                 netStream.Write(dataBuffer, 0, dataBuffer.Length);
                 ResponseString = reader.ReadLine();
-                if (int.Parse(ResponseString.Substring(0, 3)) == 550) {
+                if (int.Parse(ResponseString[..3]) == 550) {
                     ReturnValue = false;
                 } else {
                     ReturnValue = true;
@@ -56,14 +56,12 @@ namespace Utilities {
         // Internet Active
         public static bool InternetActive(int timeoutMs = 3000, string url = null) {
             try {
-                if (url == null) {
-                    url = "http://mit.edu";
-                }
+                url ??= "http://mit.edu";
                 var request = (HttpWebRequest)WebRequest.Create(url);
                 request.KeepAlive = false;
                 request.Timeout = timeoutMs;
-                using (var response = (HttpWebResponse)request.GetResponse())
-                    return true;
+                using var response = (HttpWebResponse)request.GetResponse();
+                return true;
             } catch {
                 return false;
             }
@@ -89,11 +87,10 @@ namespace Utilities {
         public static string GetLocalIpAddress() {
             string result = "";
             try {
-                using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0)) {
-                    socket.Connect("admin.clicktickdone.com", 1024);
-                    IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
-                    result = endPoint.Address.ToString();
-                }
+                using Socket socket = new(AddressFamily.InterNetwork, SocketType.Dgram, 0);
+                socket.Connect("admin.clicktickdone.com", 1024);
+                IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+                result = endPoint.Address.ToString();
             } catch (Exception ex) {
                 Log.Error(ex, ex.Message);
                 result = ex.Message;

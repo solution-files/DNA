@@ -1,0 +1,5 @@
+﻿Schedule
+
+Custom Reports
+Integrate Syncfusion Color Picker Component (Replaces text field)
+End user selectable ToUniversalTime() or ToLocalTime()

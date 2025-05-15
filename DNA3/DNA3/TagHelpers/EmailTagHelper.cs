@@ -8,21 +8,17 @@ using Microsoft.Extensions.Configuration;
 namespace DNA3.TagHelpers {
 
     [HtmlTargetElement("email")]
-    public class EmailTagHelper : TagHelper {
+    public class EmailTagHelper(IConfiguration configuration) : TagHelper {
 
         #region Properties and Variables
 
         public string to { get; set; }
 
-        private readonly IConfiguration Configuration;
+        private readonly IConfiguration Configuration = configuration;
 
         #endregion
 
         #region Class Methods
-
-        public EmailTagHelper(IConfiguration configuration) {
-            Configuration = configuration;
-        }
 
         public override void Process(TagHelperContext context, TagHelperOutput output) {
             output.TagName = "a";    // Replaces <email> with <a> tag

@@ -12,20 +12,15 @@ using System.Threading.Tasks;
 
 namespace DNA3.Hubs {
 
-    public class NotificationHub : Hub {
+    public class NotificationHub(ILogger<NotificationHub> logger) : Hub {
 
         #region Variables
 
-        private readonly ILogger<NotificationHub> Logger;
+        private readonly ILogger<NotificationHub> Logger = logger;
 
         #endregion
 
         #region Class Methods
-
-        // Constructor
-        public NotificationHub(ILogger<NotificationHub> logger) {
-            Logger = logger;
-        }
 
         // On Connect (Async)
         public override System.Threading.Tasks.Task OnConnectedAsync() {
@@ -44,7 +39,7 @@ namespace DNA3.Hubs {
             try {
                 await Clients.OthersInGroup(GetGroupName()).SendAsync("displayMessage", type, content, title);
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
         }
 

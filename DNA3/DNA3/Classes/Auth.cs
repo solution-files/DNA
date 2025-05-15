@@ -33,25 +33,14 @@ namespace DNA3.Classes {
 
     #endregion
 
-    public class Auth : IAuth {
+    public class Auth(IConfiguration configuration, MainContext context, ILogger<Auth> logger, IHttpContextAccessor contextaccessor) : IAuth {
 
         #region Variables
 
-        private readonly IConfiguration Configuration;
-        private readonly MainContext Context;
-        private readonly ILogger<Auth> Logger;
-        private readonly IHttpContextAccessor ContextAccessor;
-
-        #endregion
-
-        #region Class Methods
-
-        public Auth(IConfiguration configuration, MainContext context, ILogger<Auth> logger, IHttpContextAccessor contextaccessor) {
-            Configuration = configuration;
-            Context = context;
-            Logger = logger;
-            ContextAccessor = contextaccessor;
-        }
+        private readonly IConfiguration Configuration = configuration;
+        private readonly MainContext Context = context;
+        private readonly ILogger<Auth> Logger = logger;
+        private readonly IHttpContextAccessor ContextAccessor = contextaccessor;
 
         #endregion
 
@@ -85,7 +74,7 @@ namespace DNA3.Classes {
                 result = ex.Message;
                 certcontext.Fail(result);
                 Site.Messages.Enqueue(result);
-                Logger.LogError(ex, result);
+                Logger.LogError(ex, "{message}", result);
             }
             return result;
         }
@@ -139,7 +128,7 @@ If you have questions or need further assistance, please contact {Configuration[
                 }
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return result;
         }
@@ -170,7 +159,7 @@ If you have questions or need further assistance, please contact {Configuration[
                         Avitar = "",
                         StatusId = Ado.GetScalarValue<int>(Configuration["ConnectionStrings:MainContext"], "StatusId", "Status", "Code", "Active"),
                         Comment = $"Added via Account Registration Manager on {DateTime.Now}",
-                        Users = new List<User>()
+                        Users = []
                     };
 
                     var user = new User {
@@ -182,7 +171,7 @@ If you have questions or need further assistance, please contact {Configuration[
                         Persist = true,
                         Token = token,
                         TokenDate = DateTime.Now.AddMinutes(60),
-                        Logins = new List<Login>()
+                        Logins = []
                     };
 
                     // Respects Password Options object configured in Startup.cs
@@ -232,7 +221,7 @@ If you have questions or need further assistance, please contact {Configuration[
 
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
                 result = false;
             }
             return result;
@@ -257,7 +246,7 @@ If you have questions or need further assistance, please contact {Configuration[
                 client.Send(message);
             } catch (Exception ex) {
                 Site.Messages.Enqueue(ex.Message);
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
                 result = false;
             }
             return result;

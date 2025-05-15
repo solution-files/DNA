@@ -75,20 +75,18 @@ namespace DNA3.Controllers {
             string message;
             StringContent content;
             try {
-                using (HttpClient client = new()) {
-                    client.BaseAddress = new Uri(Configuration["Gemini:APIEndPoint"]);
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Add("x-goog-api-key", Configuration["Gemini:APIKey"]);
-                    var JsonPayload = JsonConvert.SerializeObject(instance);
-                    content = new StringContent(JsonPayload, Encoding.UTF8, MediaTypeHeaderValue.Parse("application/json"));
-                    HttpResponseMessage response = await client.PostAsync(client.BaseAddress.ToString(), content);
-                    if (response.IsSuccessStatusCode) {
-                        result = await response.Content.ReadAsStringAsync();
-                    } else {
-                        string errorContent = await response.Content.ReadAsStringAsync();
-                        throw new ArgumentException($"Error posting form data: {response.StatusCode}, {errorContent}");
-                    }
-
+                using HttpClient client = new();
+                client.BaseAddress = new Uri(Configuration["Gemini:APIEndPoint"]);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("x-goog-api-key", Configuration["Gemini:APIKey"]);
+                var JsonPayload = JsonConvert.SerializeObject(instance);
+                content = new StringContent(JsonPayload, Encoding.UTF8, MediaTypeHeaderValue.Parse("application/json"));
+                HttpResponseMessage response = await client.PostAsync(client.BaseAddress.ToString(), content);
+                if (response.IsSuccessStatusCode) {
+                    result = await response.Content.ReadAsStringAsync();
+                } else {
+                    string errorContent = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException($"Error posting form data: {response.StatusCode}, {errorContent}");
                 }
             } catch(Exception ex) {
                 message = ex.Message;

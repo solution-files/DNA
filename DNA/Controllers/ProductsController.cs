@@ -15,23 +15,13 @@ using Utilities;
 
 namespace DNA.Controllers {
 
-    public class ProductsController : Controller {
+    public class ProductsController(IConfiguration configuration, MainContext context, ILogger<ProductsController> logger) : Controller {
 
         #region Variables
 
-        private readonly IConfiguration Configuration;
-        private readonly MainContext Context;
-        private readonly ILogger<ProductsController> Logger;
-
-        #endregion
-
-        #region Class Methods
-
-        public ProductsController(IConfiguration configuration, MainContext context, ILogger<ProductsController> logger) {
-            Configuration = configuration;
-            Context = context;
-            Logger = logger;
-        }
+        private readonly IConfiguration Configuration = configuration;
+        private readonly MainContext Context = context;
+        private readonly ILogger<ProductsController> Logger = logger;
 
         #endregion
 
@@ -40,13 +30,13 @@ namespace DNA.Controllers {
         // Detail (Get)
         public async Task<IActionResult> Detail(int? id) {
             string message;
-            Product? instance = new Product();
+            Product? instance = new();
             try {
                 instance = await Context.Product.Include(x => x.Status).Where(x => x.ProductId == id).SingleOrDefaultAsync();
             } catch (Exception ex) {
                 message = ex.Message;
                 Site.Messages.Enqueue(message);
-                Logger.LogError(ex, message);
+                Logger.LogError(ex, "{message}", message);
             }
             return View(instance);
         }

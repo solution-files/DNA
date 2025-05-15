@@ -20,9 +20,9 @@ namespace Utilities {
 
         // Valid Password Rules
         public static string ValidPasswordRules(PasswordOptions opts = null) {
-            StringBuilder result = new StringBuilder();
+            StringBuilder result = new();
             try {
-                if (opts == null) opts = new PasswordOptions() {
+                opts ??= new PasswordOptions() {
                     RequiredLength = Conf.AppSetting<int>("PasswordRules:RequiredLength"),
                     RequiredUniqueChars = Conf.AppSetting<int>("PasswordRules:RequiredUniqueChars"),
                     RequireDigit = Conf.AppSetting<bool>("PasswordRules:RequiedDigit"),
@@ -61,7 +61,7 @@ namespace Utilities {
         public static string ValidPasswordOptions(string value, PasswordOptions opts = null) {
             string result = "";
             try {
-                if (opts == null) opts = new PasswordOptions() {
+                opts ??= new PasswordOptions() {
                     RequiredLength = 8,
                     RequiredUniqueChars = 6,
                     RequireDigit = true,
@@ -73,13 +73,13 @@ namespace Utilities {
                 if (value.Length < opts.RequiredLength) {
                     result = $"Must be at least {opts.RequiredLength} characters";
                 } else if (opts.RequireUppercase) {
-                    if (value.Count(char.IsUpper) < 1) {
+                    if (!value.Any(char.IsUpper)) {
                         result = "Must include an upper case character";
                     } else if (opts.RequireLowercase) {
-                        if (value.Count(char.IsLower) < 1) {
+                        if (!value.Any(char.IsLower)) {
                             result = "Must include a lower case character";
                         } else if (opts.RequireDigit) {
-                            if (value.Count(char.IsNumber) < 1) {
+                            if (!value.Any(char.IsNumber)) {
                                 result = "Must include a numeric value";
                             } else if (opts.RequireNonAlphanumeric) {
                                 if (value.Count(char.IsPunctuation) + value.Count(char.IsSymbol) < 1) {
@@ -99,7 +99,7 @@ namespace Utilities {
 
         // Generate Random Password
         public static string GenerateRandomPassword(PasswordOptions opts = null) {
-            if (opts == null) opts = new PasswordOptions() {
+            opts ??= new PasswordOptions() {
                 RequiredLength = 8,
                 RequiredUniqueChars = 3,
                 RequireDigit = true,
@@ -108,15 +108,15 @@ namespace Utilities {
                 RequireUppercase = true
             };
 
-            string[] randomChars = new[] {
+            string[] randomChars = [
                 "ABCDEFGHJKLMNOPQRSTUVWXYZ",    // uppercase 
 				"abcdefghijkmnopqrstuvwxyz",    // lowercase
 				"0123456789",                   // digits
 				"~!@#$%*_-"                        // non-alphanumeric
-			};
+			];
 
-            CryptoRandom rand = new CryptoRandom();
-            List<char> chars = new List<char>();
+            CryptoRandom rand = new();
+            List<char> chars = [];
 
             if (opts.RequireUppercase) {
                 chars.Insert(rand.Next(0, chars.Count), randomChars[0][rand.Next(0, randomChars[0].Length)]);
@@ -140,7 +140,7 @@ namespace Utilities {
                     rcs[rand.Next(0, rcs.Length)]);
             }
 
-            return new string(chars.ToArray());
+            return new string([.. chars]);
         }
 
         // Create Hash
@@ -150,7 +150,7 @@ namespace Utilities {
             int Pbkdf2Iterations = 310000;
             string result;
             try {
-                RNGCryptoServiceProvider cryptoProvider = new RNGCryptoServiceProvider();
+                RNGCryptoServiceProvider cryptoProvider = new();
                 byte[] salt = new byte[SaltByteSize];
                 cryptoProvider.GetBytes(salt);
                 byte[] hash = GetPbkdf2Bytes(value, salt, Pbkdf2Iterations, HashByteSize);
@@ -168,7 +168,7 @@ namespace Utilities {
             int Pbkdf2Index = 2;
             bool result;
             try {
-                char[] delimiter = { ':' };
+                char[] delimiter = [':'];
                 string[] split = correctHash.Split(delimiter);
                 int iterations = Int32.Parse(split[IterationIndex]);
                 byte[] salt = Convert.FromBase64String(split[SaltIndex]);
@@ -183,7 +183,7 @@ namespace Utilities {
 
         // Get PBKDF2 Bytes
         private static byte[] GetPbkdf2Bytes(string password, byte[] salt, int iterations, int outputBytes) {
-            Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(password, salt) {
+            Rfc2898DeriveBytes pbkdf2 = new(password, salt) {
                 IterationCount = iterations
             };
             return pbkdf2.GetBytes(outputBytes);
@@ -204,30 +204,29 @@ namespace Utilities {
 
         // Create Self-Signed Certificate
         public static void CreateSelfSignedCertificate(string name) {
-            using (RSA rsa = RSA.Create()) {
-                CertificateRequest request = new(
-                    $"CN={name}",
-                    rsa,
-                    HashAlgorithmName.SHA256,
-                    RSASignaturePadding.Pkcs1);
-                request.CertificateExtensions.Add(new X509BasicConstraintsExtension(
-                    false, false, 0, true));
-                request.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(
-                    new OidCollection { new Oid("1.3.6.1.5.5.7.3.1") }, true));
-                DateTimeOffset notBefore = DateTimeOffset.UtcNow;
-                DateTimeOffset notAfter = notBefore.AddYears(1);
-                X509Certificate2 certificate = request.CreateSelfSigned(notBefore, notAfter);
-                string certFilePath = $"{name}.pfx";
-                string certPassword = ""; // Set a password to protect the private key
-                File.WriteAllBytes(certFilePath, certificate.Export(X509ContentType.Pfx, certPassword));
-            }
+            using RSA rsa = RSA.Create();
+            CertificateRequest request = new(
+                $"CN={name}",
+                rsa,
+                HashAlgorithmName.SHA256,
+                RSASignaturePadding.Pkcs1);
+            request.CertificateExtensions.Add(new X509BasicConstraintsExtension(
+                false, false, 0, true));
+            request.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(
+                [new Oid("1.3.6.1.5.5.7.3.1")], true));
+            DateTimeOffset notBefore = DateTimeOffset.UtcNow;
+            DateTimeOffset notAfter = notBefore.AddYears(1);
+            X509Certificate2 certificate = request.CreateSelfSigned(notBefore, notAfter);
+            string certFilePath = $"{name}.pfx";
+            string certPassword = ""; // Set a password to protect the private key
+            File.WriteAllBytes(certFilePath, certificate.Export(X509ContentType.Pfx, certPassword));
         }
 
         // Get Certificate From Store
         private static X509Certificate2 GetCertificateFromStore(string certName) {
 
             // Get the certificate store for the current user.
-            X509Store store = new X509Store(StoreLocation.CurrentUser);
+            X509Store store = new(StoreLocation.CurrentUser);
             try {
                 store.Open(OpenFlags.ReadOnly);
                 X509Certificate2Collection certCollection = store.Certificates;

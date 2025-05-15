@@ -70,7 +70,7 @@ namespace Utilities {
         public static string NumericValue(string value) {
             string result;
             try {
-                result = new String(value.Where(Char.IsDigit).ToArray());
+                result = new String([.. value.Where(Char.IsDigit)]);
             } catch {
                 result = value;
             }
@@ -84,7 +84,7 @@ namespace Utilities {
 
         // Bytes To String
         public static String BytesToString(long byteCount) {
-            string[] suf = new[] { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
+            string[] suf = ["B", "KB", "MB", "GB", "TB", "PB", "EB"];
             if (byteCount == 0)
                 return "0 " + suf[0];
             long bytes = Math.Abs(byteCount);
@@ -130,7 +130,7 @@ namespace Utilities {
             string ReturnValue = SourceString;
             try {
                 int EndPosition = SourceString.IndexOf(StringIndex);
-                ReturnValue = SourceString.Substring(0, EndPosition);
+                ReturnValue = SourceString[..EndPosition];
             } catch {
             }
             return ReturnValue;
@@ -221,7 +221,7 @@ namespace Utilities {
             string result;
             try {
                 result = JsonConvert.DeserializeObject<JToken>(json.ToString())[name].ToString();
-            } catch(Exception ex) {
+            } catch {
                 result = json.ToString();
             }
             return result;

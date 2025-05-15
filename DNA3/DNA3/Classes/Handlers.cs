@@ -2,7 +2,6 @@
 
 using DNA3.Models;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -24,7 +23,7 @@ namespace DNA3.Classes {
 
         #region Authentication
 
-        public static async System.Threading.Tasks.Task GoogleOnTicketReceived(TicketReceivedContext context) {
+        public static System.Threading.Tasks.Task GoogleOnTicketReceived(TicketReceivedContext context) {
             try {
                 Claimant claimant = Utilities.Ado.ListFromSql<DNA3.Models.Claimant>(Utilities.Site.ConnectionString, [$"@Email={context.Principal.EmailAddress()}"], "SELECT l.LoginId, l.Provider, l.UserId, u.ClientId, l.Email, u.First, u.Last, s.Code AS StatusCode, r.Code as RoleCode FROM [Login] AS l INNER JOIN [User] AS u ON l.UserId = u.UserId INNER JOIN [Status] AS s ON u.StatusId = s.StatusId INNER JOIN [Role] AS r ON u.RoleId = r.RoleId WHERE l.Provider = 'Google' AND l.Email = @Email").FirstOrDefault();
                 if (claimant == null) {
@@ -64,9 +63,11 @@ namespace DNA3.Classes {
                         }
                     }
                 }
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 Log.Error(ex, ex.Message);
             }
+
+            return System.Threading.Tasks.Task.CompletedTask;
         }
 
         #endregion

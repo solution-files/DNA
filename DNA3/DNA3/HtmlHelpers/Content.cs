@@ -15,7 +15,7 @@ namespace DNA3.HtmlHelpers {
             if (length == 0) {
                 return new HtmlString(text);
             } else {
-                return new HtmlString(text.Substring(0, length));
+                return new HtmlString(text[..length]);
             }
         }
 

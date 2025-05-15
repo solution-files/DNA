@@ -15,6 +15,8 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 #endregion
 
@@ -77,7 +79,9 @@ if (string.IsNullOrEmpty(appurl)) {
 
 // Services 
 var services = builder.Services;
-services.AddControllersWithViews();
+services.AddControllersWithViews()
+    .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = null; });
+
 services.AddMvc();
 
 // Dashboard Assembly Part
@@ -141,6 +145,7 @@ services.AddAuthentication(options => {
     googleOptions.ClientSecret = googleClientSecret;
     googleOptions.Scope.Add("email");
     googleOptions.Scope.Add("profile");
+    googleOptions.Scope.Add("https://www.googleapis.com/auth/calendar.events");
     googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "EmailAddress");
     googleOptions.Events.OnTicketReceived += Handlers.GoogleOnTicketReceived;
 });

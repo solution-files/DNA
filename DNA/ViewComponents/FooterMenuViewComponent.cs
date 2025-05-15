@@ -11,24 +11,18 @@ using System.Threading.Tasks;
 
 namespace DNA.ViewComponents {
 
-	public class FooterMenuViewComponent : ViewComponent {
+	public class FooterMenuViewComponent(DNA3.Models.MainContext context, ILogger<FooterMenuViewComponent> logger) : ViewComponent {
 
 		#region Variables
 
-		private readonly DNA3.Models.MainContext Context;
-		private readonly ILogger<FooterMenuViewComponent> Logger;
+		private readonly DNA3.Models.MainContext Context = context;
+		private readonly ILogger<FooterMenuViewComponent> Logger = logger;
 		private DNA3.Models.Menu? model;
 
-		#endregion
+        #endregion
 
-		#region Methods
-
-		public FooterMenuViewComponent(DNA3.Models.MainContext context, ILogger<FooterMenuViewComponent> logger) {
-			Context = context;
-			Logger = logger;
-		}
-
-		public async Task<IViewComponentResult> InvokeAsync(string MenuCode, string Class, string ShowIcon) {
+        #region Methods
+        public async Task<IViewComponentResult> InvokeAsync(string MenuCode, string Class, string ShowIcon) {
 			Task<IViewComponentResult>? ComponentTask = null;
 			try {
 				ShowIcon ??= "False";
@@ -37,7 +31,7 @@ namespace DNA.ViewComponents {
 				model = await Context.Menu.Include(x => x.Actions).Where(x => x.Code == MenuCode).SingleOrDefaultAsync();
 				ComponentTask = Task.FromResult((IViewComponentResult)View("FooterMenu", model));
 			} catch (Exception ex) {
-				Logger.LogError(ex, ex.Message);
+				Logger.LogError(ex, "{message}", ex.Message);
 			}
 			return await ComponentTask;
 		}

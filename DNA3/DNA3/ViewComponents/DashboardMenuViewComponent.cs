@@ -11,35 +11,28 @@ using System.Threading.Tasks;
 
 namespace DNA3.ViewComponents {
 
-	public class DashboardMenuViewComponent : ViewComponent {
+	public class DashboardMenuViewComponent(Models.MainContext context, ILogger<DashboardMenuViewComponent> logger) : ViewComponent {
 
 		#region Variables
 
-		private readonly DNA3.Models.MainContext Context;
-		private readonly ILogger<DashboardMenuViewComponent> Logger;
+		private readonly DNA3.Models.MainContext Context = context;
+		private readonly ILogger<DashboardMenuViewComponent> Logger = logger;
 		private Models.Menu model;
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		public DashboardMenuViewComponent(Models.MainContext context, ILogger<DashboardMenuViewComponent> logger) {
-			Context = context;
-			Logger = logger;
-		}
-
-		public async Task<IViewComponentResult> InvokeAsync(string MenuCode, string Class, string ShowIcon) {
+        public async Task<IViewComponentResult> InvokeAsync(string MenuCode, string Class, string ShowIcon) {
 			Task<IViewComponentResult> ComponentTask = null;
 			try {
-				if (ShowIcon == null) {
-					ShowIcon = "False";
-				}
+				ShowIcon ??= "False";
 				ViewData["Class"] = Class;
 				ViewData["ShowIcon"] = ShowIcon;
 				model = await Context.Menu.Include(x => x.Actions).ThenInclude(x => x.Role).Where(x => x.Code == MenuCode).SingleOrDefaultAsync();
 				ComponentTask = Task.FromResult((IViewComponentResult)View("DashboardMenu", model));
 			} catch (Exception ex) {
-				Logger.LogError(ex, ex.Message);
+				Logger.LogError(ex, "{message}", ex.Message);
 			}
 			return await ComponentTask;
 		}

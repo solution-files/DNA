@@ -13,25 +13,19 @@ using System.Threading.Tasks;
 
 namespace DNA3.Classes {
 
-    public sealed class PaypalClient {
+    public sealed class PaypalClient(string clientId, string clientSecret, string mode) {
 
         #region Variables
 
-        public string Mode { get; }
-        public string ClientId { get; }
-        public string ClientSecret { get; }
+        public string Mode { get; } = mode;
+        public string ClientId { get; } = clientId;
+        public string ClientSecret { get; } = clientSecret;
 
         public string BaseUrl => Mode == "Live" ? "https://api-m.paypal.com" : "https://api-m.sandbox.paypal.com";
 
         #endregion
 
         #region Methods
-
-        public PaypalClient(string clientId, string clientSecret, string mode) {
-            ClientId = clientId;
-            ClientSecret = clientSecret;
-            Mode = mode;
-        }
 
         private async Task<AuthResponse> Authenticate() {
             var auth = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}"));
@@ -64,18 +58,14 @@ namespace DNA3.Classes {
 
             var request = new CreateOrderRequest {
                 intent = "CAPTURE",
-                purchase_units = new List<PurchaseUnit>
-                {
-                    new()
-                    {
+                purchase_units = [new() {
                         reference_id = reference,
-                        amount = new Amount
-                        {
+                        amount = new Amount {
                             currency_code = currency,
                             value = value
                         }
                     }
-                }
+                ]
             };
 
             var httpClient = new HttpClient();
@@ -124,7 +114,7 @@ namespace DNA3.Classes {
 
     public sealed class CreateOrderRequest {
         public string intent { get; set; }
-        public List<PurchaseUnit> purchase_units { get; set; } = new();
+        public List<PurchaseUnit> purchase_units { get; set; } = [];
     }
 
     public sealed class CreateOrderResponse {

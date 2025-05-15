@@ -1,23 +1,20 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿#region Usings
+
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Threading.Tasks;
-using System.Web;
+
+#endregion
 
 namespace DNA3.Classes {
 
     // To use this middleware, add UseAppendQueryString() as the last middleware of the pipeline in Program.cs
+    #region Methods
 
-    public class AppendQueryStringMiddleware {
-        private readonly RequestDelegate _next;
-
-        public AppendQueryStringMiddleware(RequestDelegate next) {
-            _next = next;
-        }
+    public class AppendQueryStringMiddleware(RequestDelegate next) {
+        private readonly RequestDelegate _next = next;
 
         public async Task InvokeAsync(HttpContext context) {
             var url = context.Request.GetDisplayUrl();
@@ -38,5 +35,7 @@ namespace DNA3.Classes {
             return builder.UseMiddleware<AppendQueryStringMiddleware>();
         }
     }
+
+    #endregion
 
 }

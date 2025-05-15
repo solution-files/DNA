@@ -19,20 +19,10 @@ using Utilities.Models;
 
 namespace Utilities {
 
-    public class Comm : BackgroundService {
+    public class Comm(ILogger<Comm> logger) : BackgroundService {
 
         #region Variables
-
-        private readonly ILogger<Comm> Logger;
         private HttpResponseMessage Response;
-
-        #endregion
-
-        #region Methods
-
-        public Comm(ILogger<Comm> logger) {
-            Logger = logger;
-        }
 
         #endregion
 
@@ -40,32 +30,31 @@ namespace Utilities {
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
             try {
-                Device device = new Device {
+                Device device = new() {
                     Hostname = Environment.MachineName,
                     Ipv4 = Utilities.Network.GetLocalIpAddress()
                 };
 
                 string endpoint = "https://admin.clicktickdone.com/api/device";
-                Logger.LogInformation($"Endpoint set to: {endpoint}");
+                logger.LogInformation("Endpoint set to: {endpoint}", endpoint);
 
                 while (!stoppingToken.IsCancellationRequested) {
 
                     if (Network.InternetActive()) {
 
-                        HttpClientHandler handler = new HttpClientHandler {
+                        HttpClientHandler handler = new() {
                             ClientCertificateOptions = ClientCertificateOption.Manual,
                             SslProtocols = SslProtocols.Tls12
                         };
                         handler.ClientCertificates.Add(new X509Certificate2("CTD.pfx"));
 
-                        using (HttpClient client = new HttpClient(handler)) {
-                            StringContent content = new StringContent(JsonConvert.SerializeObject(device), Encoding.UTF8, "application/json");
-                            Response = await client.PostAsync(endpoint, content, stoppingToken);
-                            if (Response.StatusCode == HttpStatusCode.OK) {
-                                Logger.LogInformation($"Connected via {device.Ipv4}");
-                            } else {
-                                Logger.LogWarning("Connection failed");
-                            }
+                        using HttpClient client = new(handler);
+                        StringContent content = new(JsonConvert.SerializeObject(device), Encoding.UTF8, "application/json");
+                        Response = await client.PostAsync(endpoint, content, stoppingToken);
+                        if (Response.StatusCode == HttpStatusCode.OK) {
+                            logger.LogInformation("Connected via {device}", device.Ipv4);
+                        } else {
+                            logger.LogWarning("Connection failed");
                         }
                     }
 
@@ -73,7 +62,7 @@ namespace Utilities {
                     await Task.Delay(10000, stoppingToken);
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                logger.LogError(ex, "{message}", ex.Message);
                 Console.WriteLine(ex.Message);
             }
         }

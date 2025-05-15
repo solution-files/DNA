@@ -12,22 +12,17 @@ using System.Threading.Tasks;
 
 namespace DNA3.ViewComponents {
 
-    public class ToplevelMenuViewComponent : ViewComponent {
+    public class ToplevelMenuViewComponent(Models.MainContext context, ILogger<ToplevelMenuViewComponent> logger) : ViewComponent {
 
         #region Variables
 
-        private readonly DNA3.Models.MainContext Context;
-        private readonly ILogger<ToplevelMenuViewComponent> Logger;
+        private readonly DNA3.Models.MainContext Context = context;
+        private readonly ILogger<ToplevelMenuViewComponent> Logger = logger;
         private IList<Models.Menu> model;
 
         #endregion
 
         #region Methods
-
-        public ToplevelMenuViewComponent(Models.MainContext context, ILogger<ToplevelMenuViewComponent> logger) {
-            Context = context;
-            Logger = logger;
-        }
 
         public async Task<IViewComponentResult> InvokeAsync() {
             Task<IViewComponentResult> ComponentTask = null;
@@ -35,7 +30,7 @@ namespace DNA3.ViewComponents {
                 model = await Context.Menu.Include(x => x.Role).OrderBy(x => x.Weight).Where(x => x.TopLevel == true).ToListAsync();
                 ComponentTask = Task.FromResult((IViewComponentResult)View("ToplevelMenu", model));
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return await ComponentTask;
         }

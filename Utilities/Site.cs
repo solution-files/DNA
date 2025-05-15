@@ -20,7 +20,7 @@ namespace Utilities {
 
         #region System Variables
 
-        public static Queue<String> Messages = new Queue<String>();
+        public static Queue<String> Messages = new();
         public static String CurrentFilter = "";
         public static string Controller = "";
         public static string Action = "";
@@ -82,7 +82,7 @@ namespace Utilities {
         /// <returns>The numeric portion of a string only</returns>
         public static string[] NumericStringElements(string[] Elements) {
             string[] ReturnValue = null;
-            List<string> Result = new List<string>();
+            List<string> Result = [];
             try {
                 foreach (var Element in Elements) {
                     for (var n = 1; n <= Element.Length; n++) {
@@ -93,7 +93,7 @@ namespace Utilities {
                     }
                 }
                 if (Result.Count > 0)
-                    ReturnValue = Result.ToArray();
+                    ReturnValue = [.. Result];
             } catch {
                 ReturnValue = null;
             }

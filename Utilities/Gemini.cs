@@ -13,7 +13,7 @@ namespace Utilities {
     public class Gemini {
 
         public static string EncodeFormData(Dictionary<string, string> data) {
-            List<string> pairs = new List<string>();
+            List<string> pairs = [];
             foreach (var pair in data) {
                 pairs.Add($"{HttpUtility.UrlEncode(pair.Key)}={HttpUtility.UrlEncode(pair.Value)}");
             }

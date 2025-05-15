@@ -26,7 +26,7 @@ namespace DNA3.TagHelpers {
 		}
 
 		public override void Process(TagHelperContext context, TagHelperOutput output) {
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new();
 			sb.AppendLine("<div class='row'>");
 			sb.AppendLine("<div class='col d-flex flex-column justify-content-center align-items-center'>");
 			sb.AppendLine($"<i class='{icon} fa-10x my-3'></i>");

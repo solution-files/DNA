@@ -13,7 +13,7 @@ namespace Utilities {
         #region Methods
 
         public static T AppSetting<T>(string Key) {
-            T ReturnValue = default(T);
+            T ReturnValue = default;
             try {
                 var builder = new ConfigurationBuilder()
                                 .SetBasePath(Directory.GetCurrentDirectory())

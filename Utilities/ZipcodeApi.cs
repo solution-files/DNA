@@ -13,7 +13,7 @@ namespace Utilities {
         #region Methods
 
         public static void Main() {
-            XDocument requestDoc = new XDocument(
+            XDocument requestDoc = new(
                 new XElement("ZipCodeLookupRequest",
                     new XAttribute("USERID", ""),
                     new XElement("Revision", "1"),

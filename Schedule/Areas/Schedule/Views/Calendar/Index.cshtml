@@ -1,26 +1,154 @@
-﻿@model IList<DNA3.Models.AppointmentData>
+﻿@model dynamic
 @{
     Layout = "_Dashboard";
     string Title = "Appointment";
     string Plural = "Appointments";
+
+    var dataManager = new DataManager() {
+                Url = "/Schedule/Calendar/LoadData",
+                CrudUrl = "/Schedule/Calendar/UpdateData",
+                Adaptor = "UrlAdaptor",
+                CrossDomain = true
+            };
+
 }
+
 @section CSS {
 
 }
+
 @section Scripts {
 
     <script>
 
+        document.getElementById("print-btn").addEventListener("click", function () {
+            var scheduleObj = document.getElementById('schedule').ej2_instances[0];
+            scheduleObj.print();
+        })
+
         function ExportToExcel() {
             var schedulerObj = document.getElementById("schedule").ej2_instances[0];
-            schedulerObj.excelExport();
+            schedulerObj.exportToExcel();
         }
 
-        function ExportToPDF() {
-            var schedulerObj = document.getElementById("schedule").ej2_instances[0];
-            schedulerObj.pdfExport();
+        function OnEventRendered(args) {
+            var categoryColor;
+            if (args.data.Category == "Install") {
+                categoryColor = 'green';
+            } else if (args.data.Category == "UnAssigned") {
+                categoryColor = 'blue';
+            }
+            args.element.style.backgroundColor = categoryColor;
+        }
+        
+        function onPopupOpen(args) {
+            if (args.type === 'Editor') {
+                var statusElement = args.element.querySelector('#EventType');
+                if (!statusElement.classList.contains('e-dropdownlist')) {
+                    var dropDownListObject = new ej.dropdowns.DropDownList({
+                        placeholder: 'Choose status', value: statusElement.value,
+                        dataSource: ['New', 'Requested', 'Confirmed']
+                    });
+                    dropDownListObject.appendTo(statusElement);
+                    statusElement.setAttribute('name', 'EventType');
+                }
+                var startElement = args.element.querySelector('#StartTime');
+                if (!startElement.classList.contains('e-datetimepicker')) {
+                    new ej.calendars.DateTimePicker({ value: new Date(startElement.value) || new Date() }, startElement);
+                }
+                var endElement = args.element.querySelector('#EndTime');
+                if (!endElement.classList.contains('e-datetimepicker')) {
+                    new ej.calendars.DateTimePicker({ value: new Date(endElement.value) || new Date() }, endElement);
+                }
+            }
         }
 
+    </script>
+
+    <style>
+        .custom-event-editor .e-textlabel {
+            padding-right: 15px;
+            text-align: right;
+        }
+
+        .custom-event-editor td {
+            padding: 7px;
+            padding-right: 16px;
+        }
+    </style>
+
+    <script id="EventEditorTemplate" type="text/x-template">
+        <table class="custom-event-editor" width="100%" cellpadding="5">
+            <tbody>
+                <tr>
+                    <td class="e-textlabel">Subject</td>
+                    <td colspan="4">
+                        <input type="text" id="Subject" name="Subject" class="e-field e-input" style="width: 100%" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="e-textlabel">Location</td>
+                    <td colspan="4">
+                        <input type="text" id="Location" name="Location" class="e-field e-input" style="width: 100%" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="e-textlabel">Description</td>
+                    <td colspan="4">
+                        <input type="text" id="Description" name="Description" class="e-field e-input" style="width: 100%" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="e-textlabel">From</td>
+                    <td colspan="4">
+                        <input type="text" id="StartTime" name="StartTime" class="e-field"  />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="e-textlabel">To</td>
+                    <td colspan="4">
+                        <input type="text" id="EndTime" name="EndTime" class="e-field" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </script>
+    <style>
+        .e-schedule-form table tr td {
+            padding: 5px;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        var appointmentTypeData = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.AppointmentTypes))');
+
+        function onPopupOpen(args) {
+            if (args.type === 'Editor') {
+                var startElement = args.element.querySelector('#StartTime');
+                if (!startElement.classList.contains('e-datetimepicker')) {
+                    new ej.calendars.DateTimePicker({ value: new Date(startElement.value) || new Date() }, startElement);
+                }
+                var endElement = args.element.querySelector('#EndTime');
+                if (!endElement.classList.contains('e-datetimepicker')) {
+                    new ej.calendars.DateTimePicker({ value: new Date(endElement.value) || new Date() }, endElement);
+                }
+            }
+        }
+
+        function onDataBinding(args) {
+            // Before Load the data to the scheduler need to convert the string to array
+            let data = args.result;
+            let scheduleData = [];
+            data.forEach(element => {
+                let res = element.CategoryId.split(',');
+                element.CategoryId = res.map(function (x) {
+                    return parseInt(x, 10);
+                });
+                scheduleData.push(element);
+            });
+            args.result = scheduleData;
+        }
     </script>
 
 }
@@ -50,11 +178,37 @@
         <div class="card card-primary">
             <div class="card-header border-0">
                 <h3 class="card-title">@Plural</h3>
-                @await Html.PartialAsync("_Tools", new { Report = "Schedule.rdl" })
+                <div class="card-tools">
+                    <a href="#" class="btn btn-tool btn-sm" onclick="ExportToExcel()">
+                        <i class="fas fa-file-excel" title="Export to Excel"></i>
+                    </a>
+                    <a href="#" class="btn btn-tool btn-sm">
+                        <i class="fas fa-envelope" title="E-Mail Report"></i>
+                    </a>
+                    <button type="button" id="print-btn" class="btn btn-tool btn-sm">
+                        <i class="fas fa-print" title="Preview Report"></i>
+                    </button>
+                    <a asp-action="CloseIndex" class="btn btn-tool btn-sm">
+                        <i class="fas fa-xmark" title="Close"></i>
+                    </a>
+                </div>
             </div>
             <div class="card-body">
-                <ejs-schedule id="schedule">
-                    <e-schedule-eventsettings dataSource="Model"></e-schedule-eventsettings>
+                <ejs-schedule id="schedule" startHour="06:00" endHour="19:00" allowKeyboardInteraction="true" allowClipboard="true" eventRendered="OnEventRendered" popupOpen="onPopupOpen" editorTemplate="#EventEditorTemplate">
+                    <e-schedule-workhours highlight="true" start="08:00" end="17:00"></e-schedule-workhours>
+                    <e-schedule-eventsettings dataSource="dataManager">
+                        <e-eventsettings-fields id="AppointmentId">
+                            <e-field-subject name="Subject"></e-field-subject>
+                            <e-field-location name="Location"></e-field-location>
+                            <e-field-description name="Description"></e-field-description>
+                            <e-field-starttime name="StartTime"></e-field-starttime>
+                            <e-field-starttimezone name="StartTimeZone"></e-field-starttimezone>
+                            <e-field-endtime name="EndTime"></e-field-endtime>
+                            <e-field-endtimezone name="EndTimeZone"></e-field-endtimezone>
+                            <e-field-recurrencerule name="RecurrenceRule"></e-field-recurrencerule>
+                            <e-field-isallday name="AllDay"></e-field-isallday>
+                        </e-eventsettings-fields>
+                    </e-schedule-eventsettings>
                 </ejs-schedule>
             </div>
         </div>

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 #endregion
 
-namespace DNA3 {
+namespace DNA3.Classes {
 
     public class PaginatedList<T> : List<T> {
 
@@ -26,18 +26,18 @@ namespace DNA3 {
             PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
 
-            this.AddRange(items);
+            AddRange(items);
         }
 
         public bool HasPreviousPage {
             get {
-                return (PageIndex > 1);
+                return PageIndex > 1;
             }
         }
 
         public bool HasNextPage {
             get {
-                return (PageIndex < TotalPages);
+                return PageIndex < TotalPages;
             }
         }
 

@@ -9,19 +9,15 @@ using System.Threading.Tasks;
 
 namespace DNA3.ViewComponents {
 
-    public class EditIconViewComponent : ViewComponent {
+    public class EditIconViewComponent(ILogger<EditIconViewComponent> logger) : ViewComponent {
 
         #region Variables
 
-        private readonly ILogger<EditIconViewComponent> Logger;
+        private readonly ILogger<EditIconViewComponent> Logger = logger;
 
         #endregion
 
         #region Methods
-
-        public EditIconViewComponent(ILogger<EditIconViewComponent> logger) {
-            Logger = logger;
-        }
 
         public async Task<IViewComponentResult> InvokeAsync(string controller, string action, string id, string css, string title) {
             Task<IViewComponentResult> ComponentTask = null;
@@ -33,7 +29,7 @@ namespace DNA3.ViewComponents {
                 ViewData["Title"] = title;
                 ComponentTask = Task.FromResult((IViewComponentResult)View("EditIcon"));
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return await ComponentTask;
         }

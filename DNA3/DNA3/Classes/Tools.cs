@@ -33,22 +33,17 @@ namespace DNA3.Classes {
 
     #region Class
 
-    public class Tools : ITools {
+    public class Tools(MainContext context, ILogger<Tools> logger) : ITools {
 
         #region Services
 
         // Services
-        private MainContext Context { get; set; }
-        private ILogger<Tools> Logger { get; set; }
+        private MainContext Context { get; set; } = context;
+        private ILogger<Tools> Logger { get; set; } = logger;
 
         #endregion
 
         #region Methods
-
-        public Tools(MainContext context, ILogger<Tools> logger) {
-            Context = context;
-            Logger = logger;
-        }
 
         // Get Source Key Value
         public async Task<int> GetSourceKeyValue(string value) {
@@ -61,7 +56,7 @@ namespace DNA3.Classes {
                     result = instance.SourceId;
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return result;
         }
@@ -77,7 +72,7 @@ namespace DNA3.Classes {
                     result = instance.DispositionId;
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return result;
         }
@@ -93,7 +88,7 @@ namespace DNA3.Classes {
                     result = instance.PageId;
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return result;
         }
@@ -109,7 +104,7 @@ namespace DNA3.Classes {
                     result = instance.SectionId;
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return result;
         }
@@ -125,7 +120,7 @@ namespace DNA3.Classes {
                     result = instance.CategoryId;
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return result;
         }
@@ -141,7 +136,7 @@ namespace DNA3.Classes {
                     result = instance.StatusId;
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return result;
         }
@@ -157,7 +152,7 @@ namespace DNA3.Classes {
                     result = instance.TableId;
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return result;
         }
@@ -173,7 +168,7 @@ namespace DNA3.Classes {
                     result = instance.RoleId;
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return result;
         }
@@ -189,7 +184,7 @@ namespace DNA3.Classes {
                     result = instance.MenuId;
                 }
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return result;
         }
@@ -198,9 +193,9 @@ namespace DNA3.Classes {
         public IList<Assembly> GetAssemblyList() {
             IList<Assembly> result = default;
             try {
-                result = AppDomain.CurrentDomain.GetAssemblies().Where(x => !x.FullName.Contains("Microsoft") && !x.FullName.Contains("System") && !x.FullName.Contains("Serilog") && !x.FullName.Contains("Telerik") && !x.FullName.Contains("Syncfusion") && !x.FullName.Contains("Netstandard") && !x.FullName.Contains("Swashbuckle")).OrderBy(x => x.FullName).ToList();
+                result = [.. AppDomain.CurrentDomain.GetAssemblies().Where(x => !x.FullName.Contains("Microsoft") && !x.FullName.Contains("System") && !x.FullName.Contains("Serilog") && !x.FullName.Contains("Telerik") && !x.FullName.Contains("Syncfusion") && !x.FullName.Contains("Netstandard") && !x.FullName.Contains("Swashbuckle")).OrderBy(x => x.FullName)];
             } catch (Exception ex) {
-                Logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, "{message}", ex.Message);
             }
             return result;
         }

@@ -305,8 +305,8 @@ namespace DNA3.Models {
         public string String;
         public WriteToClass WriteToClass;
 
-        public static implicit operator WriteToElement(string String) => new WriteToElement { String = String };
-        public static implicit operator WriteToElement(WriteToClass WriteToClass) => new WriteToElement { WriteToClass = WriteToClass };
+        public static implicit operator WriteToElement(string String) => new() { String = String };
+        public static implicit operator WriteToElement(WriteToClass WriteToClass) => new() { WriteToClass = WriteToClass };
     }
 
     public partial class WriteToClass {
